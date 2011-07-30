@@ -15,6 +15,9 @@ attributes = {'color': ('red', 'green', 'purple'),
               'shading': ('solid', 'open', 'striped')}
 
 
+PRESSED_SET_TIMEOUT = datetime.timedelta(seconds=5)
+
+
 class Game(models.Model):
 
     uid = models.CharField(max_length=36, unique=True)
@@ -68,8 +71,18 @@ class GameSession(models.Model):
     state = models.IntegerField(default=0)
     #user = models.ForeignKey(User)
     user = models.CharField(max_length=50) # Session key
+    set_pressed_dt = models.DateTimeField(null=True)
     sets_found = models.IntegerField(default=0)
     failures = models.IntegerField(default=0)
+
+    def press_set(self):
+        self.set_pressed_dt = datetime.datetime.now()
+        self.state = State.SET_PRESSED
+
+    def set_in_time(self):
+        return self.set_pressed_dt + PRESSED_SET_TIMEOUT > \
+            datetime.datetime.now() if self.set_pressed_dt else \
+            False
 
     def serialize(self, current_user_id):
         return {'game': self.game_id,

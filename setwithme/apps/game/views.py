@@ -3,7 +3,7 @@ import datetime
 import uuid
 from django.contrib.sessions.models import Session
 from django.views.decorators.http import require_POST
-from game.models import Game, GameSession
+from game.models import Game, GameSession, State
 from users.models import WaitingUser
 from annoying.decorators import ajax_request, render_to
 from django.shortcuts import redirect
@@ -53,3 +53,24 @@ def status(request, game_id):
     return {'users': users,
             'cards': []}
 
+
+@ajax_request
+def put_set(request, game_id):
+    game = Game.objects.get(uid=game_id)
+    self_id = request.session.session_key
+    if not game.gamesession_set.filter(state=State.SET_PRESSED).count():
+        gs = game.gamesession_set.get(user=self_id)
+        gs.press_set()
+    return {'success': True}
+
+
+@ajax_request
+def show_set(request, game_id):
+    game = Game.objects.get(uid=game_id)
+    self_id = request.session.session_key
+    gs = game.gamesession_set.get(user=self_id)
+    if gs.set_in_time():
+        # TODO: check if set was correct
+        # Process set, remove cards, return new
+        pass
+    return {'success': True}
