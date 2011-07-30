@@ -70,6 +70,12 @@ SetWithMe.Poller.prototype = {
 
 SetWithMe.searchGame = function() {
     var poller = new SetWithMe.Poller('/game/create/');
+    poller.onSuccess = function(data) {
+        if (data.status == 302) {
+            window.location.replace(data.url);
+            poller.stop();
+        }
+    };
     poller.start();
 };
 

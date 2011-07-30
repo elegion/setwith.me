@@ -31,7 +31,7 @@ def start_game(request):
         filter(user=user_id, client_state=ClientState.ACTIVE)
     if qs.count():
         gs = qs.all()[0]
-        return {'status': '302',
+        return {'status': 302,
                 'url': reverse(game_screen, kwargs={'game_id': gs.game.uid})}
     wu = WaitingUser.objects.get_or_create(user=user_id)[0].update()
     last_poll_guard = datetime.datetime.now() - \
@@ -56,7 +56,7 @@ def start_game(request):
 def status(request, game_id):
     game = Game.objects.get(uid=game_id)
     self_id = request.session.session_key
-    GameSession.objects.get(game=game_id, user=self_id).update()
+    GameSession.objects.get(game=game, user=self_id).update()
     users = [gs.serialize(self_id) for gs in \
         game.gamesession_set.all()]
     desc_cards = game.desk_cards_list
