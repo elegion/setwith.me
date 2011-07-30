@@ -6,7 +6,7 @@ from django.db import models
 from game.constants import *
 
 
-random_id = lambda : unicode(uuid.uuid4().hex)
+get_uid = lambda : unicode(uuid.uuid4().hex)
 
 
 attributes_order = ('color', 'symbol', 'number', 'shading')
@@ -101,7 +101,7 @@ class GameSession(models.Model):
     client_state = models.IntegerField(default=ClientState.ACTIVE)
     #user = models.ForeignKey(User)
     user = models.CharField(max_length=50) # Session key
-    set_pressed_dt = models.DateTimeField(null=True)
+    set_pressed_dt = models.DateTimeField(null=True, blank=True)
     sets_found = models.IntegerField(default=0)
     failures = models.IntegerField(default=0)
     last_access = models.DateTimeField(default=datetime.datetime.now)

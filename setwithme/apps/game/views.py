@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import uuid
 from django.core.urlresolvers import reverse
-from game.models import Game, GameSession, State, ClientState
-from game.utils import Card
-from users.models import WaitingUser
 from annoying.decorators import ajax_request, render_to
 
+from game.models import Game, GameSession, State, ClientState, get_uid
+from game.utils import Card
+from users.models import WaitingUser
 from game.constants import *
 
 @render_to('game/game_screen.html')
@@ -29,7 +28,7 @@ def start_game(request):
         exclude(user=user_id).all()
     if opponents:
         opponent = opponents[0]
-        game_id = unicode(uuid.uuid4().hex)
+        game_id = get_uid()
         game = Game.objects.create(uid=game_id)
         GameSession.objects.create(game=game, user=user_id)
         GameSession.objects.create(game=game, user=opponent.user)
