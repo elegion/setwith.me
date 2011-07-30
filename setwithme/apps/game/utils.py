@@ -10,7 +10,7 @@ class Card:
     attributes = SortedDict([
         ('count', ('one', 'two', 'three'),),
         ('symbol', ('oval', 'diamond', 'squiggle'),),
-        ('shading', ('solid', 'opened', 'striped')),
+        ('shading', ('solid', 'open', 'striped')),
         ('color', ('red', 'green', 'blue'))
     ])
 
