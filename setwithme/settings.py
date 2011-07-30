@@ -174,12 +174,16 @@ AUTH_PROFILE_MODULE = 'users.UserProfile'
 
 SESSION_SAVE_EVERY_REQUEST = True
 
-FACEBOOK_APP_ID = '129235007167183'
-FACEBOOK_SECRET_KEY = '1f56b1a80e1d1dfb2d82c5953cf52043'
+FACEBOOK_APP_ID = '154919794582072'
+FACEBOOK_SECRET_KEY = '2f8f1719fa39fc05be74a33e28474091'
+
+# Local settings:
+# FACEBOOK_APP_ID = '129235007167183'
+# FACEBOOK_SECRET_KEY = '1f56b1a80e1d1dfb2d82c5953cf52043'
 
 AUTHENTICATION_BACKENDS = (
-    'django_facebook.auth.FacebookProfileBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'django_facebook.auth.FacebookProfileBackend',
     'core.anon_backend.AnonymousBackend',
 )
 
