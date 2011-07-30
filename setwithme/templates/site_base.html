@@ -17,6 +17,13 @@
         </div>
     </div>
 
+    <div style="position: absolute; left: 0; right: 0">
+      <div>{{ request.user.username }}</div>
+      <div>{{ request.user.first_name }}</div>
+      <div>{{ request.user.last_name }}</div>
+    </div>
+
+
     <div class="content">
         <div class="wrapper_width">
         {% block content %}

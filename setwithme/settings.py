@@ -115,6 +115,12 @@ MIDDLEWARE_CLASSES = (
     'core.middleware.CookieAuthMiddleware',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.request',
+)
+
+
 INTERNAL_IPS = ('127.0.0.1',)
 
 ROOT_URLCONF = 'setwithme.urls'
