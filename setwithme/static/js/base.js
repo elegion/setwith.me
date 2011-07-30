@@ -235,7 +235,7 @@ SetWithMe.Game = {
         var i,
             changedCards = {};
         for (i = 0; i < this._cards.length; i++) {
-            if (this._cards[i] !== newCards[i]) {
+            if (this._cards[i].id !== newCards[i].id) {
                 changedCards[i] = newCards[i];
             }
         }
@@ -317,6 +317,7 @@ SetWithMe.Game = {
         if (this._cards) {
             if (!$.isEmptyObject(this._getChangedCards(data.cards))) {
                 this._cards = data.cards;
+                this._renderCards();
                 // TODO re-render changed cards
             }
         } else {
