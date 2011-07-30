@@ -290,7 +290,7 @@ SetWithMe.Game = {
     _onCardClick: function() {
         var setIds,
             $card = $(this),
-            $activeCards = $('.active', this._cardsContainer);
+            $activeCards = $('.active', SetWithMe.Game._cardsContainer);
         if (!SetWithMe.Game._markingSet) {
             return ;
         }
