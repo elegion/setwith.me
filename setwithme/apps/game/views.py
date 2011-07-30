@@ -2,7 +2,7 @@
 from django.core.urlresolvers import reverse
 from annoying.decorators import ajax_request, render_to
 
-from game.models import Game, GameSession, State, ClientConnectionState, get_uid
+from game.models import Game, GameSession, GameSessionState, ClientConnectionState, get_uid
 from game.utils import Card
 from users.models import WaitingUser
 from game.constants import *
@@ -58,7 +58,9 @@ def get_status(request, game_id):
 def put_set_mark(request, game_id):
     game = Game.objects.get(id=game_id)
     self_id = request.session.session_key
-    if not game.gamesession_set.filter(state=State.SET_PRESSED).count():
+    if not game.gamesession_set.\
+            filter(state=GameSessionState.SET_PRESSED).\
+            count():
         gs = game.gamesession_set.get(user=self_id)
         gs.press_set()
     return {'success': True}
