@@ -88,14 +88,17 @@ def check_set(request, game_id):
             gs.state = GameSessionState.SET_PENALTY
             gs.sets_found -= 1
             gs.save()
+            result = {'success': False, 'msg': 'Not SET!'}
         else:
             gs.state = GameSessionState.IDLE
             gs.sets_found += 1
             gs.save()
             # Remove cards from desc list
             game.drop_cards(*ids_lst)
+            result = {'success': True, 'msg': 'SET!'}
         # Update status to IDLE for other game sessions:
         for gs_other in game.gamesession_set.exclude(user=request.user).all():
             gs_other.state = GameSessionState.IDLE
             gs_other.save()
-    return {'success': True}
+        return result
+    return {'success': False, 'msg': 'Not in time!'}
