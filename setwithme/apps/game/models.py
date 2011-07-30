@@ -149,6 +149,7 @@ class GameSession(models.Model):
     def press_set(self):
         self.set_pressed_dt = datetime.datetime.now()
         self.state = GameSessionState.SET_PRESSED
+        self.save()
 
     def set_received_in_time(self):
         return self.set_pressed_dt + PRESSED_SET_TIMEOUT > \
@@ -157,7 +158,7 @@ class GameSession(models.Model):
 
     def serialize(self, current_user_id):
         return {'game': self.game_id,
-                'state': self.get_state_display(),
+                'state': self._get_game_state(),
                 'client_state': self._get_client_state(),
                 'user_id': self.user.id,
                 'me': self.user.id == current_user_id,
@@ -169,6 +170,17 @@ class GameSession(models.Model):
         self.last_access = datetime.datetime.now()
         self.client_state = ClientConnectionState.ACTIVE
         self.save()
+
+    def _fix_game_state(self):
+        now = datetime.datetime.now()
+        if self.set_pressed_dt and \
+            self.set_pressed_dt + PRESSED_SET_TIMEOUT > now:
+            self.state = GameSessionState.IDLE
+            self.save()
+
+    def _get_game_state(self):
+        self._fix_game_state()
+        return self.state
 
     def _get_client_state(self):
         now = datetime.datetime.now()

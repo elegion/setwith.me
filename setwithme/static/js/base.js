@@ -172,33 +172,45 @@ SetWithMe.Game = {
         this._setButton.addClass('disabled');
         this._setButtonLabel.text('Show us set bellow...');
         this._startCountDown();
+        this._sendPutSet();
     },
 
     _checkSet: function($cards) {
         console.debug($cards, $cards.attr('class'));
-        var valid,
+        var valid = true,
             setIds = [],
             count = [],
             symbol = [],
             shading = [],
-            color = [];
+            color = [],
+            attrs = [[],[],[],[]];
         $cards.each(function(i, elem) {
             var className = elem.className.replace(/\s?(card|active)\s?/gi, ''),
                 props = className.split(' ');
             setIds.push(elem.id);
-            count.push(props[0]);
-            symbol.push(props[1]);
-            shading.push(props[2]);
-            color.push(props[3]);
+            for (var i=0; i<4; i++) {
+                attrs[i].push(props[i]);
+            }
         });
-        valid = $.unique(count).length +
-                $.unique(symbol).length +
-                $.unique(shading).length +
-                $.unique(color).length > 9;
+        for(var i=0; i<attrs.length && valid; i++) {
+            if ($.unique(attrs[i]) == 2) {
+                valid = false;
+            }
+        }
         if (valid) {
             return setIds.join(',');
         }
         return false;
+    },
+
+    _sendPutSet: function() {
+        $.ajax({
+            headers: {
+                'X-CSRFToken': this._CSRFToken
+            },
+            url: '/game/put_set_mark/' + this._id,
+            type: 'POST'
+        })
     },
 
     _sendSet: function(data) {
@@ -212,7 +224,7 @@ SetWithMe.Game = {
             },
             url: '/game/check_set/' + this._id,
             type: 'POST'
-        })
+        });
     },
 
     /**
@@ -290,6 +302,9 @@ SetWithMe.Game = {
             $activeCards = $activeCards.add($card);
             if (setIds = SetWithMe.Game._checkSet($activeCards)) {
                 SetWithMe.Game._sendSet(setIds);
+            } else {
+                SetWithMe.Game._setButtonLabel.text('The cards you are checked is not a set');
+                SetWithMe.Game._stopCountDown();
             }
         }
     },
@@ -319,7 +334,7 @@ SetWithMe.Game = {
             $('#p' + data.game.leader).clone().appendTo($('#js_user_place'));
             this.uninit();
             $('.winner_plate').show();
-        }        
+        }
     }
 };
 

@@ -5,4 +5,5 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('core.views',
     url(r'^$', 'home', name='home'),
     url(r'^lobby/$', 'lobby', name='lobby'),
+    url(r'^login/(?P<provider>facebook|anon)$', 'login'),
 )
