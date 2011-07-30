@@ -13,7 +13,8 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Serge Travin', 'serge.travin@gmail.com'),
+    ('Anatoly Larin', 'me@alarin.ru'),
 )
 
 MANAGERS = ADMINS
@@ -131,7 +132,13 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 
+    # Third-party apps
+    'south',
+
+    # Our apps
     'core',
+    'users',
+    'game',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -160,6 +167,10 @@ LOGGING = {
 
 SITE_NAME = 'Setwithme'
 SITE_DOMAIN = 'setwith.me'
+
+AUTH_PROFILE_MODULE = 'users.UserProfile'
+
+SESSION_SAVE_EVERY_REQUEST = True
 
 try:
     from settings_local import *

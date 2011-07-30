@@ -9,9 +9,11 @@ urlpatterns = patterns('',
     # Serve static media
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
-    # Examples:
+
     url(r'^$', 'core.views.home', name='home'),
-    # url(r'^setwithme/', include('setwithme.foo.urls')),
+
+    url(r'^users/', include('users.urls')),
+    url(r'^game/', include('game.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
