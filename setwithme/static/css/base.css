@@ -318,7 +318,7 @@ a.pseudo:hover {
         text-shadow: 0 1px 1px #888e93;
     }
     .game .cards_left #js_cards_left {
-        text-shadow: 0 2px 1px #888e93;
+        text-shadow: 0 1px 1px #888e93;
         border-radius: 25px;
         padding: 5px 10px;
         background: #464d53;
@@ -396,5 +396,5 @@ a.pseudo:hover {
     .players .sets {
         margin: 0.1em 0 0 0;
         font-size: 0.8em;
-        display: block;
+        display: inline-block;
     }
