@@ -69,8 +69,8 @@ SetWithMe.Poller.prototype = {
 };
 
 SetWithMe.searchGame = function() {
-//    var poller = new SetWithMe.Poller('/game/create/');
-//    poller.start();
+    var poller = new SetWithMe.Poller('/game/create/');
+    poller.start();
 };
 
 SetWithMe.Game = {}
