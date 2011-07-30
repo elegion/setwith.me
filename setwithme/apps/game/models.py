@@ -153,4 +153,7 @@ class GameSession(models.Model):
 
     @property
     def name(self):
-        return self.user.username
+        if self.user.first_name or self.user.last_name:
+            return u"%s %s" % (self.user.first_name, self.user.last_name)
+        else:
+            return self.user.username
