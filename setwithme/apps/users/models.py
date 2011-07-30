@@ -10,7 +10,7 @@ class UserProfile(models.Model):
 
 class WaitingUser(models.Model):
 
-    user = models.CharField(max_length=36)
+    user = models.ForeignKey(User)
     last_poll = models.DateTimeField(default=datetime.datetime.now)
 
     def update(self):

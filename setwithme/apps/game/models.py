@@ -2,6 +2,7 @@
 import random
 import uuid
 from django.db import models
+from django.contrib.auth.models import User
 
 from game.constants import *
 
@@ -112,8 +113,7 @@ class GameSession(models.Model):
         max_length=50,
         default=ClientConnectionState.ACTIVE,
         choices=ClientConnectionStateChoices)
-    #user = models.ForeignKey(User)
-    user = models.CharField(max_length=50) # Session key
+    user = models.ForeignKey(User)
     set_pressed_dt = models.DateTimeField(null=True, blank=True)
     sets_found = models.IntegerField(default=0)
     failures = models.IntegerField(default=0)
@@ -132,8 +132,8 @@ class GameSession(models.Model):
         return {'game': self.game_id,
                 'state': self.get_state_display(),
                 'client_state': self._get_client_state(),
-                'user_id': self.user,
-                'me': self.user == current_user_id,
+                'user_id': self.user.id,
+                'me': self.user.id == current_user_id,
                 'sets_found': self.sets_found,
                 'failures': self.failures,
                 'user_name': self.name}
@@ -153,4 +153,4 @@ class GameSession(models.Model):
 
     @property
     def name(self):
-        return self.user[:4]
+        return self.user.username
