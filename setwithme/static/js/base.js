@@ -188,3 +188,40 @@ SetWithMe.Game = {
          '</li>'
     }
 };
+
+SetWithMe.attributes =  {
+    'count': ['one', 'two', 'three'],
+    'symbol': ['oval', 'diamond', 'squiggle'],
+    'shading': ['solid', 'opened', 'striped'],
+    'color': ['red', 'green', 'blue']
+}
+
+SetWithMe.generateSet = function() {
+    //generates random set
+    var result = [[],[],[]];
+    var i = 0;
+    for(attr in SetWithMe.attributes) {
+        var similar = Math.random() > 0.5;
+        var num = Math.ceil(Math.random() * 3) - 1;
+        for (var j=0; j<result.length; j++) {
+            result[j][i] = similar ? SetWithMe.attributes[attr][num]: SetWithMe.attributes[attr][j];
+        }
+        i += 1;
+    }
+    return [result[0].join(' '), result[1].join(' '), result[2].join(' ')]
+}
+
+$(function() {
+    $('#js_header_cards').click(function() {
+       $('#js_header_cards').fadeOut(function() {
+       var set = SetWithMe.generateSet();
+       for (var i=0; i < $('#js_header_cards .card').length; i++) {
+           $('#js_header_cards .card')[i].setAttribute('class', 'mini card ' + set[i]);
+       }});
+       $('#js_header_cards').fadeIn();
+    });
+
+    $('#js_rotate_logo').click(function(){
+        $('#js_header_cards').click();
+    });
+});
