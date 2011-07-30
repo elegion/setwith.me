@@ -272,15 +272,15 @@ a.pseudo:hover {
     .game .card_list .card {
         float: left;
         margin: 10px;
-        cursor: pointer;
         -webkit-transition: border-color 0.1s ease-in;
         -o-transition: border-color 0.1s ease-in;
         -moz-transition: border-color 0.1s ease-in;
     }
 
-    .game .card_list .card:hover,
+    .game .card_list.active .card:hover,
     .game .card_list .card.active {
         border-color: #464d53;
+        cursor: pointer;
     }
 
 .game .bottom {
@@ -336,29 +336,36 @@ a.pseudo:hover {
     width: 270px;
 }
 
-.players li {
+.players .player.idle {
+    opacity: 0.6;
+}
+.players .player.lost {
+    opacity: 0.2;
+}
+
+.player {
     overflow: hidden;
     margin: 1em 0 0;
 }
-.players .info {
+.player .info {
     float: left;
     margin-left: 15px;
-    width: 180px;
+    width: 150px;
     overflow: hidden;
 }
-    .players .photo {
+    .player .photo {
         float: left;
         border: 4px solid #454b51;
         border-radius: 5px;
     }
-    .players .photo div {
+    .player .photo div {
         width: 60px;
         height: 60px;
     }
-    .players .photo img {
+    .player .photo img {
         margin: 0 auto;
     }
-    .players .name {
+    .player .name {
         font-family: 'Lobster', cursive;
         font-size: 1.1em;
         color: #454c52;
@@ -370,40 +377,41 @@ a.pseudo:hover {
         max-width: 170px;
         overflow: hidden;
     }
-    .players .player.active {
+    .player.set_presed {
         color: #FFF;
         position: relative;
         left: -30px;
     }
-        .players .player.active .name {
+        .player.set_presed .name {
             color: #FFF;
         }
-        .players .player.active .photo {
+        .player.set_presed .photo {
             border-color: #FFF;
         }
-        .player.active .photo div {
+        .player.set_presed .photo div {
             padding-left: 30px;
             background: #FFF no-repeat 5px 50% url(../images/set_vertical.png);
         }
-    .players .player.penalty {
+    .player.set_penalty {
         position: relative;
         left: -30px;
     }
-        .players .player.penalty .name {
+        .player.set_penalty .name {
             color: #FFF;
         }
-        .players .player.penalty .photo {
+        .player.set_penalty .photo {
             border-color: #444b51;
         }
-        .player.penalty .photo div {
+        .player.set_penalty .photo div {
             padding-left: 30px;
             background: #444b51 no-repeat 5px 50% url(../images/set_vertical.png);
         }
 
-    .players .sets {
-        margin: 0.1em 0 0 0;
+    .player .sets {
+        margin: 0.5em 0 0 0;
         font-size: 0.8em;
         display: block;
+        clear: both;
     }
 
 .game .winner_plate {
@@ -424,8 +432,14 @@ a.pseudo:hover {
 .game .winner_plate h1 {
     margin: 0;
 }
-.game .winner_plate a {
+.game .winner_plate a.playagain {
     color: white;
     position: absolute;
     bottom: 2em;
 }
+.game .winner_plate .player {
+    margin: 2em 0 0 2em;
+}
+    .game .winner_plate .player .name {
+        color: #FF0;
+    }

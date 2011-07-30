@@ -39,8 +39,8 @@ SetWithMe.Poller.prototype = {
      * @param {Object} data
      */
     _onSuccess: function(data) {
-        this.onSuccess(data);
         this._timer = setTimeout(this._request.bind(this), SetWithMe.REQUEST_INTERVAL);
+        this.onSuccess(data);
     },
 
     onSuccess: function() {},
@@ -140,9 +140,11 @@ SetWithMe.Game = {
         if (this._timeLeft < 0) {
             this._timeLeft = SetWithMe.SET_CHOOSE_TIME;
             this._countDownLabel.text(this._timeLeft);
+            this._cardsContainer.addClass('active');
         } else if (this._timeLeft === 0) {
             this._stopCountDown();
             this._setButtonLabel.text('You should choose set faster. Try it next time');
+            this._cardsContainer.removeClass('active');
         } else {
             this._countDownLabel.text(--this._timeLeft);
         }
@@ -269,7 +271,7 @@ SetWithMe.Game = {
                 $player = $('#p' + player.user_id);
             }
             $player.find('.sets .count').text(player.sets_found);
-            $player[0].className = 'player ' + player.state;
+            $player[0].className = 'player ' + player.client_state.toLowerCase();
         }
     },
 
@@ -307,16 +309,14 @@ SetWithMe.Game = {
             this._renderCards();
         }
 
-        if (!this._users) {
-            this._renderPlayers(data.users);
-        }
+        this._renderPlayers(data.users);
         this._users = data.users;
 
         this._cardsLeftLabel.text(data.cards_left);
 
         //game ending
         if (data.game.is_finished) {
-            $('#p' + data.game.leader).appendTo($('#js_user_place'));
+            $('#p' + data.game.leader).clone().appendTo($('#js_user_place'));
             this.uninit();
             $('.winner_plate').show();
         }        

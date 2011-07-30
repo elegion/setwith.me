@@ -169,9 +169,13 @@ class GameSession(models.Model):
     def _get_client_state(self):
         now = datetime.datetime.now()
         if self.last_access + CLIENT_LOST_TIMEOUT < now:
-            return ClientConnectionState.LOST
+            self.client_state = ClientConnectionState.LOST
+            self.save()
+            return self.client_state
         if self.last_access + CLIENT_IDLE_TIMEOUT < now:
-            return ClientConnectionState.IDLE
+            self.client_state = ClientConnectionState.IDLE
+            self.save()
+            return self.client_state 
         return ClientConnectionState.ACTIVE
 
     @property
