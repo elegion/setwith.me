@@ -46,6 +46,7 @@ a.pseudo:hover {
 .footer {
     height: 100px;
     background: #4d545a url(../images/bg.png);
+    height: 100px;
     overflow: hidden;
     padding: 15px 0 0 0;
     clear: both;

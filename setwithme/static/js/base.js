@@ -96,6 +96,9 @@ SetWithMe.Game.init = function(gameId) {
      * @param {String} id
      */
     init: function(id) {
+        this.$cards = $('#js_cards');
+        this.$users = $('#js_players');
+        this.$cardsLeft = $('#js_cards_left');
         this._cardsContainer = $('#js_cards');
         this._id = id;
         this._poller = new SetWithMe.Poller('/game/get_status/' + this._id);
@@ -167,27 +170,26 @@ SetWithMe.Game.init = function(gameId) {
             this._cards = data.cards;
             this._renderCards();
         }
-    }
+        var player = null;
+        for(var i=0; i<data.users.length; i++) {
+            player = data.users[i];
+            var $player = $('#p'+player.user_id);
+            if (!$player.length) {
+                SetWithMe.Game.$users.append($(this._renderPlayer(player)));
+                $player = $('#p' + player.user_id);
+            }
+            $player.find('.sets .count').text(player.sets_found);
+            $player[0].class = 'player ' + player.state;
+        }        
+    },
 
-    var player = null;
-    for(var i=0; i<status.users.length; i++) {
-        player = status.users[i];
-        var $player = $('#p'+player.user_id);
-        if (!$player.length) {
-            SetWithMe.Game.$users.append($(SetWithMe.Game.renderPlayer(player)));
-            $player = $('#p' + player.user_id);
-        }
-        $player.find('.sets .count').text(player.sets_found);
-        $player[0].class = 'player ' + player.state;
+    _renderPlayer: function(player) {
+        return '<li class="player" id="p' + player.user_id + '">'+
+             '<div class="photo"><div><img src="/static/images/nophoto.png"></div></div>'+
+             '<div class="info">'+
+             '<a href="#" class="name">'+ player.user_name +'</a>'+
+             '<span class="sets"><span class="count"></span> sets</a>'+
+             '</div>'
+         '</li>'
     }
-}
-
-SetWithMe.Game.renderPlayer = function(player) {
-    return '<li class="player" id="p' + player.user_id + '">'+
-         '<div class="photo"><div><img src="/static/images/nophoto.png"></div></div>'+
-         '<div class="info">'+
-         '<a href="#" class="name">'+ player.user_name +'</a>'+
-         '<span class="sets"><span class="count"></span> sets</a>'+
-         '</div>'
-     '</li>'
 };
