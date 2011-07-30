@@ -265,6 +265,7 @@ a.pseudo:hover {
 .game .card_list {
     margin: 40px 0;
     width: 550px;
+    height: 552px;
     float: left;
 }
     .game .card_list .card {
@@ -288,11 +289,12 @@ a.pseudo:hover {
 }
 
     .game .set_button {
-        width: 500px;
-        margin: 0 15px 0 15px;
+        width: 516px;
+        margin: 0 7px;
         float: left;
         font-size: 1.5em;
     }
+    .game .set_button:active,
     .game .set_button.disabled {
         background: #464D53;
         color: #9a9a9a;
