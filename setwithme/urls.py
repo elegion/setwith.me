@@ -11,6 +11,7 @@ urlpatterns = patterns('',
         {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
 
     url(r'^$', 'core.views.home', name='home'),
+    url(r'^stub/$', 'core.views.stub', name='stub'),
 
     url(r'^users/', include('users.urls')),
     url(r'^game/', include('game.urls')),
