@@ -52,7 +52,10 @@ def get_status(request, game_id):
             'cards': [{'id': card_id,
                        'class': Card(id=card_id).as_text()} \
                         for card_id in desc_cards],
-            'cards_left': rem_cards_cnt}
+            'cards_left': rem_cards_cnt,
+            'game': {
+                'is_finished': game.is_finished(),
+                'leader': game.leader}}
 
 
 @ajax_request

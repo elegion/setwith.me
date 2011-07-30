@@ -5,6 +5,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from game.constants import *
+from setwithme.apps.game.utils import is_set, Card
 
 
 get_uid = lambda : unicode(uuid.uuid4().hex)
@@ -18,7 +19,6 @@ attributes = {'color': ('red', 'green', 'purple'),
 
 
 class Game(models.Model):
-
     id = models.CharField(max_length=36, primary_key=True)
     finished = models.BooleanField(default=False)
     start = models.DateTimeField(default=datetime.datetime.now)
@@ -76,6 +76,29 @@ class Game(models.Model):
         self.desk_cards_list = dcl
         return res
 
+    def has_sets(self):
+        #FIXME: cache that and update on cards removal
+        cards = sorted(self.desk_cards_list)
+        for ncard1, card1 in enumerate(cards):
+            for ncard2, card2 in enumerate(cards[ncard1+1:]):
+                for ncard3, card3 in enumerate(cards[ncard2+ncard1+1+1:]):
+                    if is_set(Card(id=card1), Card(id=card2), Card(id=card3)):
+                        return True
+        return False
+
+    def is_finished(self):
+        has_cards = len(self.remaining_cards) > 0
+        has_sets = self.has_sets()
+        active_players = self.gamesession_set.exclude(client_state=ClientConnectionState.LOST).count()
+        is_finished = (active_players < 2) or (not has_cards and not has_sets)
+        return is_finished
+
+    @property
+    def leader(self):
+        """Determines leading user, can be user after game end for determining winner"""
+        return max(self.gamesession_set.exclude(client_state=ClientConnectionState.LOST)\
+            .values_list('sets_found', 'pk', 'user'))[2]
+
 
 class GameSessionState:
     IDLE = "IDLE"
@@ -92,8 +115,8 @@ GameSessionStateChoices = (
 
 class ClientConnectionState:
     ACTIVE = "ACTIVE"
-    IDLE = "IDLE"
-    LOST = "LOST"
+    IDLE = "IDLE" #no status requests in 30 sec
+    LOST = "LOST" #no status requests in 60 sec
 
 
 ClientConnectionStateChoices = (

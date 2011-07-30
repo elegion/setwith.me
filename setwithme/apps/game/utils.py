@@ -54,6 +54,6 @@ def is_set(first, second, third):
     return all(match(
         getattr(first, a_name),
         getattr(second, a_name),
-        getattr(third, a_name)) for a_name in Card.attributes)
+        getattr(third, a_name)) for a_name in Card.attributes.keys())
 
 
