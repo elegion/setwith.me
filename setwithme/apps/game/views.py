@@ -2,7 +2,7 @@
 import datetime
 import uuid
 from django.contrib.sessions.models import Session
-from django.views.decorators.http import require_POST
+from django.core.urlresolvers import reverse
 from game.models import Game, GameSession, State, ClientState
 from game.utils import Card
 from users.models import WaitingUser
@@ -31,7 +31,8 @@ def start_game(request):
         filter(user=user_id, client_state=ClientState.ACTIVE)
     if qs.count():
         gs = qs.all()[0]
-        return redirect(game_screen, game_id=gs.game_id)
+        return {'status': '302',
+                'url': reverse(game_screen, kwargs={'game_id': gs.game.uid})}
     wu = WaitingUser.objects.get_or_create(user=user_id)[0].update()
     last_poll_guard = datetime.datetime.now() - \
                       datetime.timedelta(seconds=WAITING_USER_TIMEOUT)
@@ -40,13 +41,14 @@ def start_game(request):
         exclude(user=user_id).all()
     if opponents:
         opponent = opponents[0]
-        game_id = unicode(uuid.uuid4())
+        game_id = unicode(uuid.uuid4().hex)
         game = Game.objects.create(uid=game_id)
         GameSession.objects.create(game=game, user=user_id)
         GameSession.objects.create(game=game, user=opponent.user)
         wu.delete()
         opponent.delete()
-        return redirect(game_screen, game_id=game_id)
+        return {'status': '302',
+                'url': reverse(game_screen, kwargs={'game_id': game_id})}
     return {'status': 'polling'}
 
 

@@ -5,7 +5,7 @@ import random
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
-random_id = lambda : unicode(uuid.uuid4())
+random_id = lambda : unicode(uuid.uuid4().hex)
 
 
 attributes_order = ('color', 'symbol', 'number', 'shading')
