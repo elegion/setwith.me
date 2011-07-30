@@ -10,7 +10,7 @@ class Migration(DataMigration):
         "Write your forwards methods here."
         import uuid
         for game in orm.Game.objects.all():
-            game.uid = unicode(uuid.uuid4())
+            game.uid = unicode(uuid.uuid4().hex)
             game.save()
 
 

@@ -27,7 +27,7 @@ a.pseudo:hover {
 /* 1.1 Header */
 .header {
     height: 85px;
-    background: #4d545a;
+    background: #4d545a url(../images/bg.png);
 }
 
     .header .cards {
@@ -44,8 +44,8 @@ a.pseudo:hover {
     }
 /* 1.2 Footer */
 .footer {
-    background: #4d545a;
     height: 100px;
+    background: #4d545a url(../images/bg.png);
     overflow: hidden;
     padding: 15px 0 0 0;
     clear: both;
@@ -153,6 +153,9 @@ a.pseudo:hover {
     border: 7px solid #FFF;
     border-radius: 5px;
     background: #f1f1f1;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
     .card.two i {
         height: 90px;
@@ -205,7 +208,7 @@ a.pseudo:hover {
     .card.mini {
         width: 40px;
         height: 60px;
-        border-radius: 5px;
+        border-radius: 2px;
         border-width: 4px;
     }
         .card.mini i {
@@ -250,9 +253,14 @@ a.pseudo:hover {
     .game .card_list .card {
         float: left;
         margin: 10px;
+        cursor: pointer;
+        -webkit-transition: border-color 0.1s ease-in;
+        -o-transition: border-color 0.1s ease-in;
+        -moz-transition: border-color 0.1s ease-in;
     }
 
-    .game .card_list .card:hover {
+    .game .card_list .card:hover,
+    .game .card_list .card.active {
         border-color: #464d53;
     }
 
