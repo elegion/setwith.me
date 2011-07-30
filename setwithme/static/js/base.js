@@ -5,6 +5,20 @@ $.extend(SetWithMe, {
     SET_CHOOSE_TIME: 10
 });
 
+
+SetWithMe.initFacebookLogin = function() {
+    var $login_form = $('#js_facebook_login'),
+    $login_button = $login_form.find('.js_submit');
+    $login_button.click(function(event) {
+        event.preventDefault();
+        FB.login(function(response) {
+            if (response && response.status == 'connected') {
+                window.location.replace('/login/facebook/');
+            }
+        });
+    });
+};
+
 /**
  * @constructor
  * @param {String} u

@@ -3,7 +3,10 @@ import uuid
 from annoying.decorators import render_to
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import authenticate
+from django.views.decorators.http import require_POST
 
 @render_to('core/index.html')
 def home(request):
@@ -17,10 +20,10 @@ def lobby(request):
     }
 
 
-def login(request, provider):
-    if provider == 'facebook':
-        _facebook_login(request)
-    elif provider == 'anon':
+@require_POST
+def login(request):
+    provider = request.POST.get('provider', '')
+    if provider == 'anon':
         _anon_login(request)
     else:
         raise NotImplementedError('Provider %s login method not implemented' %
@@ -28,25 +31,24 @@ def login(request, provider):
     return redirect(home)
 
 
-def _facebook_login(request):
-    fb = request.facebook
-    if fb and fb.uid and fb.graph:
-        user, created = User.objects.get_or_create(username=fb.uid)
-        if created:
-            me = fb.graph.get_object('me')
-            if me:
-                if me.get('first_name'): user.first_name = me['first_name']
-                if me.get('last_name'): user.last_name = me['last_name']
-                if me.get('email'): user.email = me['email']
-                user.save()
+def logout(request):
+    auth_logout(request)
+    return redirect('/')
+
+
+def _anon_login(request):
+    user = authenticate()
+    if user:
+        auth_login(request, user)
         return True
     return False
 
 
-def _anon_login(request):
-    user_uuid = unicode(uuid.uuid4().hex)[:30]
-    user, created = User.objects.get_or_create(
-        username=user_uuid,
-        defaults={'first_name': 'Anon %s' % (user_uuid[:4],)})
-    login(request, user)
-    return True
+def login_facebook(request):
+    fb = request.facebook
+    if fb and fb.uid and fb.graph:
+        user = authenticate(
+            fb_uid=fb.uid,
+            fb_graphtoken=fb.access_token)
+        auth_login(request, user)
+    return redirect('/')

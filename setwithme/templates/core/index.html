@@ -11,7 +11,19 @@
     <p>You should notice three cards "set" with color, form, count and fill all different
     or all the same faster than your <i>opponent</i>.</p>
     <p><a href="#logo" class="pseudo" id="js_rotate_logo">See&nbsp;logo</a> for examples.</p>
-    <a href="{% url lobby %}" class="play big_button" id="js_play_btn">Play!</a>
-    <fb:login-button autologoutlink="true"></fb:login-button>
+    {% if request.user.is_authenticated %}
+      <a href="{% url lobby %}" class="play big_button" id="js_play_btn">Play!</a>
+    {% else %}
+      <form id="js_facebook_login" action="{% url core.views.login %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="provider" value="facebook">
+        <button type="submit" class="js_submit">Login via Facebook</button>
+      </form>
+      <form action="{% url core.views.login %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="provider" value="anon">
+        <button type="submit">Login as anon</button>
+      </form>
+    {% endif %}
 </div>
 {% endblock %}

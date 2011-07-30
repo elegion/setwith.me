@@ -112,7 +112,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'core.facebook_sdk.SetWithMeFacebookMiddleware',
-    'core.middleware.CookieAuthMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

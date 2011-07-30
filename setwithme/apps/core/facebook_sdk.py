@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import urllib
 import urllib2
+
+from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth.models import User
+
 import facebook
-import datetime
-from django.conf import settings
-from django.contrib import auth
 from django_facebook.middleware import FacebookMiddleware
 
 
@@ -140,6 +141,7 @@ class DjangoFacebook(object):
     def __init__(self, user):
         self.user = user
         self.uid = user['uid']
+        self.access_token = user['access_token']
         self.graph = GraphAPI(user['access_token'])
 
 
@@ -152,17 +154,23 @@ class SetWithMeFacebookMiddleware(FacebookMiddleware):
     def process_request(self, request):
         fb_user = self.get_fb_user(request)
         request.facebook = DjangoFacebook(fb_user) if fb_user else None
-        if settings.DEBUG:
-            if fb_user and 'expires' in fb_user:
-                expires_dt = datetime.datetime.fromtimestamp(
-                    float(fb_user['expires']))
-        if fb_user and request.user.is_anonymous():
-            user = auth.authenticate(
-                fb_uid=fb_user['uid'],
-                fb_graphtoken=fb_user['access_token'])
-            if user:
-                user.last_login = datetime.datetime.now()
-                user.save()
-                request.user = user
         return None
 
+class FacebookProfileBackend(ModelBackend):
+    """ Authenticate a facebook user and autopopulate facebook data into the users profile. """
+    def authenticate(self, fb_uid=None, fb_graphtoken=None):
+        """ If we receive a facebook uid then the cookie has already been validated. """
+        if fb_uid and fb_graphtoken:
+            user, created = User.objects.get_or_create(username=fb_uid)
+            if created:
+                # It would be nice to replace this with an asynchronous request
+                graph = facebook.GraphAPI(fb_graphtoken)
+                me = graph.get_object('me')
+                if me:
+                    if me.get('first_name'): user.first_name = me['first_name']
+                    if me.get('last_name'): user.last_name = me['last_name']
+                    if me.get('email'): user.email = me['email']
+                    # TODO: load profile picture from facebook
+                    user.save()
+            return user
+        return None

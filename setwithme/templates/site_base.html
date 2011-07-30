@@ -7,9 +7,15 @@
     <div class="header">
         <div class="wrapper_width">
             <div class="loginbox">
-              <div>{{ request.user.username }}</div>
-              <div>{{ request.user.first_name }}</div>
-              <div>{{ request.user.last_name }}</div>
+              {% if request.user.is_authenticated %}
+                <div>{{ request.user.username }}</div>
+                <div>{{ request.user.first_name }}</div>
+                <div>{{ request.user.last_name }}</div>
+                <form action="{% url core.views.logout %}" method="POST">
+                  {% csrf_token %}
+                  <button type="submit">Logout</button>
+                </form>
+              {% endif %}
             </div>
             <a href="/">
                 <img class="logo" id="js_logo" src="{% media 'images/setwithme_logo.png' %}" alt="setwith.me logo">
