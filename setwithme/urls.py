@@ -11,6 +11,8 @@ urlpatterns = patterns('',
         {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
     # Examples:
     url(r'^$', 'core.views.home', name='home'),
+
+    url(r'^users/$', include('users.urls')),
     # url(r'^setwithme/', include('setwithme.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

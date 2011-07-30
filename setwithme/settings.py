@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 
     'core',
+    'users',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -160,6 +161,8 @@ LOGGING = {
 
 SITE_NAME = 'Setwithme'
 SITE_DOMAIN = 'setwith.me'
+
+AUTH_PROFILE_MODULE = 'users.UserProfile'
 
 try:
     from settings_local import *
