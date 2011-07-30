@@ -5,7 +5,7 @@ $.extend(SetWithMe, {
 });
 
 /**
- *
+ * @constructor
  * @param {String} u
  * @param {String} m
  */
@@ -33,14 +33,29 @@ SetWithMe.Poller.prototype = {
         })
     },
 
+    /**
+     *
+     * @param {Object} data
+     */
     _onSuccess: function(data) {
         window.console && console.debug('SUCCESS:', data);
+        this.onSuccess(data);
         this._timer = setTimeout(this._request.bind(this), SetWithMe.REQUEST_INTERVAL);
     },
 
+    onSuccess: function() {},
+
+    /**
+     *
+     * @param {} jqXHR
+     * @param {String} textStatus
+     */
     _onError: function(jqXHR, textStatus) {
         window.console && console.error('Error:', textStatus);
+        this.onError();
     },
+
+    onError: function() {},
 
     start: function() {
         this._request();
@@ -54,7 +69,6 @@ SetWithMe.Poller.prototype = {
 };
 
 SetWithMe.searchGame = function() {
-    $('div.info').fadeOut('fast', function() {
-        $('div.searching').fadeIn('fast');
-    });
+//    var poller = new SetWithMe.Poller('/game/create/');
+//    poller.start();
 };

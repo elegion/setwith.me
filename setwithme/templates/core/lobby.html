@@ -1,0 +1,20 @@
+{% extends "site_base.html" %}
+
+{% block bodyclass %}main{% endblock %}
+
+{% block extrajs %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(SetWithMe.searchGame);
+    </script>
+{% endblock %}
+
+{% block content %}
+<div class="searching">
+    <h1>Searching for opponents...</h1>
+    <div class="card one red solid oval"><i><b></b></i></div>
+    <div class="card two blue striped diamond"><i><b></b></i></div>
+    <div class="card three green open squiggle"><i><b></b></i></div>
+    <div class="note">{{ message }}</div>
+</div>
+{% endblock %}

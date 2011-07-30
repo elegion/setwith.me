@@ -2,14 +2,7 @@
 
 {% block bodyclass %}main{% endblock %}
 
-{% block extrajs %}
-    {{ block.super }}
-    <script type="text/javascript">
-        $(function() {
-            $('#js_play_btn').click(SetWithMe.searchGame);
-        });
-    </script>
-{% endblock %}
+{% block extrajs %}{% endblock %}
 
 {% block content %}
 <div class="info">
@@ -17,13 +10,6 @@
     <p>You should notice three cards "set" with color, form, count and fill all different
     or all the same faster than your <i>opponent</i>.</p>
     <p><a href="#logo" class="pseudo" id="js_rotate_logo">See&nbsp;logo</a> for examples.</p>
-    <a href="#" class="play" id="js_play_btn">Play!</a>
-</div>
-<div class="searching">
-    <h1>Searching for opponents...</h1>
-    <div class="card one red solid oval"><i><b></b></i></div>
-    <div class="card two blue striped diamond"><i><b></b></i></div>
-    <div class="card three green open squiggle"><i><b></b></i></div>
-    <div class="note">Set is designed by Marsha Falco in 1974 and published by Set Enterprises in 1991</div>
+    <a href="{% url lobby %}" class="play" id="js_play_btn">Play!</a>
 </div>
 {% endblock %}
