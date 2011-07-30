@@ -400,4 +400,11 @@ $(function() {
                 $jsSearching.fadeIn(1500);
             })}, 2000);
     }
+    $('.js_chat_message_form').ajaxForm({
+        'success': function(data) {
+            console.log('message form success');
+        }
+    });
 });
+
+

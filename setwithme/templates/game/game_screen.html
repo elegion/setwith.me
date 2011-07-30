@@ -19,6 +19,15 @@
     <div id="js_users"></div>
 
     <ul class="players" id="js_players"></ul>
+  
+    <div class="chat_container">
+      <ul class="chat_messages"></ul>
+      <form action="{% url chat.views.put_message game_id %}" method="POST" class="js_chat_message_form">
+        {% csrf_token %}
+        <input type="text" name="message" placeholder="{% trans 'Enter message here...' %}">
+        <button type="submit">{% trans 'Send' %}</button>
+      </form>
+    </div>
 
     <div class="winner_plate">
     <h1>Game over. And winner is...</h1>

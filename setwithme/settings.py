@@ -147,6 +147,7 @@ INSTALLED_APPS = (
     'core',
     'users',
     'game',
+    'chat',
 )
 
 # A sample logging configuration. The only tangible logging

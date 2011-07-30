@@ -6,6 +6,8 @@ from game.models import Game, GameSession, GameSessionState, ClientConnectionSta
 from game.utils import Card, is_set
 from users.models import WaitingUser
 from game.constants import *
+from chat.models import ChatMessage
+
 
 @render_to('game/game_screen.html')
 def game_screen(request, game_id):
@@ -43,6 +45,12 @@ def start_game(request):
 def get_status(request, game_id):
     game = Game.objects.get(id=game_id)
     GameSession.objects.get(game=game, user=request.user).update()
+    chat_qs = ChatMessage.objects.filter(room=game)
+    ts = request.REQUEST.get('ts', '')
+    if ts:
+        chat_qs = chat_qs.filter(timestamp__gte=float(ts))
+    else:
+        chat_qs = chat_qs.all()[0:10]
     users = [gs.serialize(request.user.id) for gs in \
         game.gamesession_set.all()]
     desc_cards = game.desk_cards_list
@@ -55,7 +63,8 @@ def get_status(request, game_id):
             'cards_left': rem_cards_cnt,
             'game': {
                 'is_finished': game.is_finished(),
-                'leader': game.leader}}
+                'leader': game.leader},
+            'chat': [cm.get_serialized(request.user) for cm in chat_qs]}
 
 
 @ajax_request

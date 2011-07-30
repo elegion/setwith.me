@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^', include('core.urls')),
     url(r'^users/', include('users.urls')),
     url(r'^game/', include('game.urls')),
+    url(r'^chat/', include('chat.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     #url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
