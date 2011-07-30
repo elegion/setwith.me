@@ -43,6 +43,11 @@ a.pseudo:hover {
         float: left;
         padding: 20px 0;
     }
+.header .loginbox {
+    float: right;
+    font-size: 0.7em;
+    margin: 20px 0 0 0;
+}
 /* 1.2 Footer */
 .footer {
     height: 100px;

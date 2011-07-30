@@ -6,22 +6,22 @@
 <div class="wrapper">
     <div class="header">
         <div class="wrapper_width">
-        <a href="/">
-            <img class="logo" id="js_logo" src="{% media 'images/setwithme_logo.png' %}" alt="setwith.me logo">
-        </a>
-        <ul class="cards" id="js_header_cards">
-            <li class="mini card one oval solid red"><i><b></b></i></li>
-            <li class="mini card two diamond striped blue"><i><b></b></i></li>
-            <li class="mini card three squiggle open green"><i><b></b></i></li>
-        </ul>
+            <div class="loginbox">
+              <div>{{ request.user.username }}</div>
+              <div>{{ request.user.first_name }}</div>
+              <div>{{ request.user.last_name }}</div>
+            </div>
+            <a href="/">
+                <img class="logo" id="js_logo" src="{% media 'images/setwithme_logo.png' %}" alt="setwith.me logo">
+            </a>
+            <ul class="cards" id="js_header_cards">
+                <li class="mini card one oval solid red"><i><b></b></i></li>
+                <li class="mini card two diamond striped blue"><i><b></b></i></li>
+                <li class="mini card three squiggle open green"><i><b></b></i></li>
+            </ul>
         </div>
     </div>
 
-    <div style="position: absolute; left: 0; right: 0">
-      <div>{{ request.user.username }}</div>
-      <div>{{ request.user.first_name }}</div>
-      <div>{{ request.user.last_name }}</div>
-    </div>
 
 
     <div class="content">
