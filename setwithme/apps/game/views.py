@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from annoying.decorators import ajax_request, render_to
 
 from game.models import Game, GameSession, GameSessionState, ClientConnectionState, get_uid
-from game.utils import Card
+from game.utils import Card, is_set
 from users.models import WaitingUser
 from game.constants import *
 
@@ -73,8 +73,29 @@ def put_set_mark(request, game_id):
 def check_set(request, game_id):
     game = Game.objects.get(id=game_id)
     gs = game.gamesession_set.get(user=request.user)
-    if gs.set_in_time():
-        # TODO: check if set was correct
-        # Process set, remove cards, return new
-        pass
+    if gs.set_received_in_time():
+        ids = request.REQUEST.get('ids')
+        if not ids:
+            return {'success': False, 'msg': 'Empty ids'}
+        ids_lst = ids.split(',')
+        if len(ids_lst) != 3:
+            return {'success': False, 'msg': 'Ids len != 3'}
+        desk_cards_lst = game.desk_cards_list
+        if not all(card_id in desk_cards_lst for card_id in ids_lst):
+            return {'success': False, 'msg': 'Not all card were on desk'}
+        cards = [Card(id=card_id) for card_id in ids_lst]
+        if not is_set(*cards):
+            gs.state = GameSessionState.SET_PENALTY
+            gs.sets_found -= 1
+            gs.save()
+        else:
+            gs.state = GameSessionState.IDLE
+            gs.sets_found += 1
+            gs.save()
+        # Update status to IDLE for other game sessions:
+        for gs_other in game.gamesession_set.exclude(user=request.user).all():
+            gs_other.state = GameSessionState.IDLE
+            gs_other.save()
+        # Remove cards from desc list
+        game.drop_cards(*ids_lst)
     return {'success': True}

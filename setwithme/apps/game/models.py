@@ -18,19 +18,20 @@ attributes = {'color': ('red', 'green', 'purple'),
               'shading': ('solid', 'open', 'striped')}
 
 
+def default_remaining_cards():
+    ids = range(81)
+    random.shuffle(ids)
+    return ','.join(map(str, ids))
+
+
 class Game(models.Model):
     id = models.CharField(max_length=36, primary_key=True)
     finished = models.BooleanField(default=False)
     start = models.DateTimeField(default=datetime.datetime.now)
     end = models.DateTimeField(null=True, default=None)
-    remaining_cards = models.CommaSeparatedIntegerField(max_length=250)
+    remaining_cards = models.CommaSeparatedIntegerField(
+        max_length=250, default=default_remaining_cards)
     desk_cards = models.CommaSeparatedIntegerField(max_length=250, default='')
-
-    def __init__(self, *args, **kwargs):
-        models.Model.__init__(self, *args, **kwargs)
-        ids = range(81)
-        random.shuffle(ids)
-        self.remaining_cards = ','.join(map(str, ids))
 
     @property
     def rem_cards_list(self):
@@ -146,7 +147,7 @@ class GameSession(models.Model):
         self.set_pressed_dt = datetime.datetime.now()
         self.state = GameSessionState.SET_PRESSED
 
-    def set_in_time(self):
+    def set_received_in_time(self):
         return self.set_pressed_dt + PRESSED_SET_TIMEOUT > \
             datetime.datetime.now() if self.set_pressed_dt else \
             False

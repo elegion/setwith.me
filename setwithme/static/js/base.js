@@ -201,7 +201,7 @@ SetWithMe.Game = {
         return false;
     },
 
-    _sendSet: function(setArray) {
+    _sendSet: function(data) {
         this._stopCountDown();
         $.ajax({
             data: {
