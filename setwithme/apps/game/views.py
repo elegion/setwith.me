@@ -60,9 +60,11 @@ def status(request, game_id):
     users = [gs.serialize(self_id) for gs in \
         game.gamesession_set.all()]
     desc_cards = game.desk_cards_list
+    rem_cards_cnt = len(game.rem_cards_list)
     desc_cards.extend(game.pop_cards(quantity=12 - len(desc_cards)))
     return {'users': users,
-            'cards': [Card(id=card_id).as_text() for card_id in desc_cards]}
+            'cards': [Card(id=card_id).as_text() for card_id in desc_cards],
+            'cards_left': rem_cards_cnt}
 
 
 @ajax_request
