@@ -6,9 +6,15 @@ body {
     height: 100%;
 }
 
+p {
+    line-height: 130%;
+    margin: 0.5em 0 0 0;
+}
 a.pseudo {
     color: #FFF;
     border-bottom: 1px dashed #FFF;
+    cursor: pointer;
+    text-decoration: none;
 }
 a.pseudo:hover {
     border: none;
@@ -75,10 +81,37 @@ a.pseudo:hover {
     font-size: 1.75em;
     color: #FFF;
     text-shadow: #000 0 -1px 0;
+    margin: 1em 0 0 0;
 }
 
 .main .info p {
-    width: 35em;
+    width: 30em;
+    margin: 0.5em 0 0 0;
+}
+
+.main .play {
+    clear: both;
+    display: block;
+    width: 15em;
+    text-align: center;
+    color: #666;
+    font-family: 'Lobster', cursive;
+    text-shadow: #FFF 1px 1px 0;
+    font-size: 1.75em;
+    padding: 0.3em 0;
+    margin: 3em 0 0;
+    background: #FFF;
+    text-decoration: none;
+    background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc)); /* for webkit browsers */
+    background: -moz-linear-gradient(top,  #eee,  #ccc); /* for firefox 3.6+ */
+    border-radius: 6px;
+    border: 3px solid #585e62;
+}
+
+.main .play:hover {
+    background: #ddd;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd)); /* for webkit browsers */
+    background: -moz-linear-gradient(top,  #fff,  #ddd); /* for firefox 3.6+ */
 }
 
 /* 3. Cards */
