@@ -24,4 +24,4 @@ class ChatMessage(models.Model):
             'room': self.room_id,
             'timestamp': self.timestamp,
             'message': self.message,
-            'created': self.created}
+            'created': self.created.strftime("%Y-%m-%d %H-%M-%S")}
