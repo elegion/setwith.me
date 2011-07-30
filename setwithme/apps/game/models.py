@@ -75,30 +75,43 @@ class Game(models.Model):
         self.desk_cards_list = dcl
         return res
 
-class State:
-    IDLE = 0
-    SET_PRESSED = 1
-    SET_PENALTY = 2
 
-
-class ClientState:
-    ACTIVE = 0
-    IDLE = 1
-    LOST = 2
+class GameSessionState:
+    IDLE = "IDLE"
+    SET_PRESSED = "SET_PRESSED"
+    SET_PENALTY = "SET_PENALTY"
 
 
 GameSessionStateChoices = (
-    (State.IDLE, 'idle'),
-    (State.SET_PRESSED, 'set_pressed'),
-    (State.SET_PENALTY, 'set_penalty'),
+    (GameSessionState.IDLE, 'Idle'),
+    (GameSessionState.SET_PRESSED, 'Set pressed'),
+    (GameSessionState.SET_PENALTY, 'Set penalty'),
 )
 
+
+class ClientConnectionState:
+    ACTIVE = "ACTIVE"
+    IDLE = "IDLE"
+    LOST = "LOST"
+
+
+ClientConnectionStateChoices = (
+    (ClientConnectionState.ACTIVE, 'Active'),
+    (ClientConnectionState.IDLE, 'Idle'),
+    (ClientConnectionState.LOST, 'Lost'),
+)
 
 
 class GameSession(models.Model):
     game = models.ForeignKey(Game, null=True)
-    state = models.IntegerField(default=0, choices=GameSessionStateChoices)
-    client_state = models.IntegerField(default=ClientState.ACTIVE)
+    state = models.CharField(
+        max_length=50,
+        default=GameSessionState.IDLE,
+        choices=GameSessionStateChoices)
+    client_state = models.CharField(
+        max_length=50,
+        default=ClientConnectionState.ACTIVE,
+        choices=ClientConnectionStateChoices)
     #user = models.ForeignKey(User)
     user = models.CharField(max_length=50) # Session key
     set_pressed_dt = models.DateTimeField(null=True, blank=True)
@@ -108,7 +121,7 @@ class GameSession(models.Model):
 
     def press_set(self):
         self.set_pressed_dt = datetime.datetime.now()
-        self.state = State.SET_PRESSED
+        self.state = GameSessionState.SET_PRESSED
 
     def set_in_time(self):
         return self.set_pressed_dt + PRESSED_SET_TIMEOUT > \
@@ -127,16 +140,16 @@ class GameSession(models.Model):
 
     def update(self):
         self.last_access = datetime.datetime.now()
-        self.client_state = ClientState.ACTIVE
+        self.client_state = ClientConnectionState.ACTIVE
         self.save()
 
     def _get_client_state(self):
         now = datetime.datetime.now()
         if self.last_access + CLIENT_LOST_TIMEOUT < now:
-            return ClientState.LOST
+            return ClientConnectionState.LOST
         if self.last_access + CLIENT_IDLE_TIMEOUT < now:
-            return ClientState.IDLE
-        return ClientState.ACTIVE
+            return ClientConnectionState.IDLE
+        return ClientConnectionState.ACTIVE
 
     @property
     def name(self):

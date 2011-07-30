@@ -2,7 +2,7 @@
 from django.core.urlresolvers import reverse
 from annoying.decorators import ajax_request, render_to
 
-from game.models import Game, GameSession, State, ClientState, get_uid
+from game.models import Game, GameSession, State, ClientConnectionState, get_uid
 from game.utils import Card
 from users.models import WaitingUser
 from game.constants import *
@@ -16,7 +16,7 @@ def game_screen(request, game_id):
 def start_game(request):
     user_id = request.session.session_key
     qs = GameSession.objects.\
-        filter(user=user_id, client_state=ClientState.ACTIVE)
+        filter(user=user_id, client_state=ClientConnectionState.ACTIVE)
     if qs.count():
         gs = qs.all()[0]
         return {'status': 302,
