@@ -114,6 +114,24 @@ a.pseudo:hover {
     background: -moz-linear-gradient(top,  #fff,  #ddd); /* for firefox 3.6+ */
 }
 
+.main .searching {
+    display: none;
+    margin-top: 65px;
+    text-align: center;
+}
+    .main .searching .card {
+        display: inline-block;
+        float: none;
+        margin: 30px 5px 60px;
+    }
+    .main .searching .note {
+        color: #cfcfcf;
+        font-size: 12px;
+        font-style: italic;
+        font-weight: bold;
+        text-shadow: #5b6064 0 -1px 0;
+    }
+
 /* 3. Cards */
 
 .main .card {

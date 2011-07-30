@@ -53,13 +53,8 @@ SetWithMe.Poller.prototype = {
     }
 };
 
-SetWithMe.init = function() {
-    this.poller = new SetWithMe.Poller('/stub/');
-    this.poller.start();
+SetWithMe.searchGame = function() {
+    $('div.info').fadeOut('fast', function() {
+        $('div.searching').fadeIn('fast');
+    });
 };
-
-SetWithMe.uninit = function() {
-    this.poller.stop();
-};
-
-SetWithMe.init();
