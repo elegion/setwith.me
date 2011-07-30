@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
-import datetime
 import uuid
-from django.contrib.sessions.models import Session
 from django.core.urlresolvers import reverse
 from game.models import Game, GameSession, State, ClientState
 from game.utils import Card
 from users.models import WaitingUser
 from annoying.decorators import ajax_request, render_to
-from django.shortcuts import redirect
 
-WAITING_USER_TIMEOUT = 60
-
+from game.constants import *
 
 @render_to('game/game_screen.html')
 def game_screen(request, game_id):
@@ -27,8 +23,7 @@ def start_game(request):
         return {'status': 302,
                 'url': reverse(game_screen, kwargs={'game_id': gs.game.uid})}
     wu = WaitingUser.objects.get_or_create(user=user_id)[0].update()
-    last_poll_guard = datetime.datetime.now() - \
-                      datetime.timedelta(seconds=WAITING_USER_TIMEOUT)
+    last_poll_guard = datetime.datetime.now() - WAITING_USER_TIMEOUT
     opponents = WaitingUser.objects.\
         filter(last_poll__gt=last_poll_guard).\
         exclude(user=user_id).all()

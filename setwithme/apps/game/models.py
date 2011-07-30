@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-
-import datetime
 import random
 import uuid
 from django.db import models
-from django.contrib.auth.models import User
+
+from game.constants import *
+
+
 random_id = lambda : unicode(uuid.uuid4().hex)
 
 
@@ -13,11 +14,6 @@ attributes = {'color': ('red', 'green', 'purple'),
               'symbol': ('oval', 'squiggle', 'diamond'),
               'number': (1, 2, 3),
               'shading': ('solid', 'open', 'striped')}
-
-
-PRESSED_SET_TIMEOUT = datetime.timedelta(seconds=5)
-CLIENT_IDLE_TIMEOUT = datetime.timedelta(seconds=30)
-CLIENT_LOST_TIMEOUT = datetime.timedelta(seconds=60)
 
 
 class Game(models.Model):
