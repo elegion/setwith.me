@@ -3,7 +3,7 @@ import datetime
 import uuid
 from django.contrib.sessions.models import Session
 from django.views.decorators.http import require_POST
-from game.models import Game, GameSession, State
+from game.models import Game, GameSession, State, ClientState
 from game.utils import Card
 from users.models import WaitingUser
 from annoying.decorators import ajax_request, render_to
@@ -27,6 +27,11 @@ def game_screen(request, game_id):
 @ajax_request
 def start_game(request):
     user_id = request.session.session_key
+    qs = GameSession.objects.\
+        filter(user=user_id, client_state=ClientState.ACTIVE)
+    if qs.count():
+        gs = qs.all()[0]
+        return redirect(game_screen, game_id=gs.game_id)
     wu = WaitingUser.objects.get_or_create(user=user_id)[0].update()
     last_poll_guard = datetime.datetime.now() - \
                       datetime.timedelta(seconds=WAITING_USER_TIMEOUT)
