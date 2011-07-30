@@ -48,7 +48,7 @@ def start_game(request):
 def status(request, game_id):
     game = Game.objects.get(uid=game_id)
     self_id = request.session.session_key
-    GameSession.objects.get(game_id=game_id, user=self_id).update()
+    GameSession.objects.get(game=game_id, user=self_id).update()
     users = [gs.serialize(self_id) for gs in \
         game.gamesession_set.all()]
     return {'users': users,
