@@ -1,5 +1,13 @@
 {% extends "site_base.html" %}
 {% load i18n %}
+
+{% block bodyclass %}game{% endblock %}
+
 {% block content %}
-  Game screen would be here.
+    <script>
+        $(function() {SetWithMe.Game.init({{ game_id }})});
+    </script>
+
+    <div id="js_cards"></div>
+    <div id="js_users"></div>
 {% endblock %}

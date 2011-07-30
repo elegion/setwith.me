@@ -21,7 +21,7 @@ def waiting_screen(request):
 
 @render_to('game/game_screen.html')
 def game_screen(request, game_id):
-    return {}
+    return {'game_id': game_id}
 
 
 @ajax_request
