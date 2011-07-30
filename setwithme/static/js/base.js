@@ -79,25 +79,83 @@ SetWithMe.searchGame = function() {
     poller.start();
 };
 
-SetWithMe.Game = {}
+SetWithMe.Game = {
+    /** @type Array */
+    _cards: null,
+    /** @type String */
+    _id: '',
+    /** @type SetWithMe.Poller */
+    _poller: null,
 
-SetWithMe.Game.init = function(gameId) {
-    SetWithMe.Game.gameId = gameId;
-    SetWithMe.Game.$cards = $('#js_cards');
-    SetWithMe.Game.$users = $('#js_users');
+    /**
+     * @param {String} id
+     */
+    init: function(id) {
+        this._cardsContainer = $('#js_cards');
+        this._id = id;
+        this._poller = new SetWithMe.Poller('/game/get_status/' + this._id);
+        this._poller.onSuccess = this._onCardsReceived.bind(this);
+        this._poller.start();
+    },
 
-    var poller = new SetWithMe.Poller('/game/get_status/' + SetWithMe.Game.gameId);
-    poller.onSuccess = SetWithMe.Game.render;
-    poller.start();
-}
+    uninit: function() {
+        if (this._poller) {
+            this._poller.stop();
+        }
+    },
 
-SetWithMe.Game.render = function(status) {
-    SetWithMe.Game.status = status;
+    /**
+     * @param {Array} newCards
+     * @return {Object}
+     */
+    _getChangedCards: function(newCards) {
+        var i,
+            changedCards = {};
+        for (i = 0; i < this._cards.length; i++) {
+            if (this._cards[i] !== newCards[i]) {
+                changedCards[i] = newCards[i];
+            }
+        }
+        return changedCards;
+    },
 
-    var card = null;
-    SetWithMe.Game.$cards.html("");
-    for(var i=0; i<status.cards.length; i++) {
-        card = status.cards[i];
-        SetWithMe.Game.$cards.append('<li class="card ' + card + '"><i><b></b></i></li>');
+    _bindCardEvents: function($card) {
+        $card.click(this._onCardClick);
+    },
+
+    /**
+     * @param {String} className
+     */
+    _renderCard: function(className) {
+        var $card = $('<li class="card ' + className + '"><i><b></b></i></li>');
+        this._bindCardEvents($card);
+        this._cardsContainer.append($card);
+    },
+
+    _renderCards: function() {
+        this._cardsContainer.html('');
+        for (var i = 0; i < this._cards.length; i++) {
+            this._renderCard(this._cards[i])
+        }
+    },
+
+    _onCardClick: function() {
+        $(this).toggleClass('active');
+    },
+
+    /**
+     *
+     * @param {Object} data
+     */
+    _onCardsReceived: function(data) {
+        if (this._cards) {
+            if (!$.isEmptyObject(this._getChangedCards(data.cards))) {
+                this._cards = data.cards;
+                // TODO re-render changed cards
+            }
+        } else {
+            this._cards = data.cards;
+            this._renderCards();
+        }
     }
-}
+};

@@ -243,10 +243,13 @@ a.pseudo:hover {
     .game .card_list .card {
         float: left;
         margin: 10px;
+        cursor: pointer;
+        -webkit-transition: border-color 0.1s ease-in;
+        -o-transition: border-color 0.1s ease-in;
+        -moz-transition: border-color 0.1s ease-in;
     }
 
-    .game .card_list .card:hover {
+    .game .card_list .card:hover,
+    .game .card_list .card.active {
         border-color: #464d53;
     }
-
-
