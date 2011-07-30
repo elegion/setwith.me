@@ -361,23 +361,13 @@ $(function() {
 
     var $jsSearching = $('#js_searching');
     if ($jsSearching.length) {
-        var set = SetWithMe.generateSet();
-        for (var i=0; i < $jsSearching.find('.card').length; i++) {
-            $jsSearching.find('.card')[i].setAttribute('class', 'card ' + set[i]);
-        }
+        setInterval(function() {
+            $jsSearching.fadeOut(1000, function() {
+                var set = SetWithMe.generateSet();
+                for (var i=0; i < $jsSearching.find('.card').length; i++) {
+                    $jsSearching.find('.card')[i].setAttribute('class', 'card ' + set[i]);
+                }
+                $jsSearching.fadeIn(1500);
+            })}, 2000);
     }
-    var animate = function() {
-        var set = SetWithMe.generateSet($jsSearching.find('.card:last').attr('class').replace('card ', ''));
-        for (var i=0; i < set.length; i++) {
-            var $newCard = $jsSearching.find('.card:first').clone();
-            var first = (i==0)?' first ':'';
-            $newCard.attr('class', 'card '  + first + set[i]);
-            $jsSearching.append($newCard);
-        }
-        $jsSearching.find('.card').animate({left: '-=390'}, 5000, function() {
-            $jsSearching.find('.card').slice(0,2).remove();
-            animate();
-        });
-    };
-//    animate(); doesnt working yet
 });
