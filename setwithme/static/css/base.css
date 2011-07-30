@@ -3,6 +3,7 @@ body {
     font-family: Arial;
     font-size: 1em;
     color: #FFF;
+    height: 100%;
 }
 
 a.pseudo {
@@ -19,7 +20,7 @@ a.pseudo:hover {
 }
 /* 1.1 Header */
 .header {
-    height: 80px;
+    height: 85px;
     background: #4d545a;
 }
 
@@ -67,3 +68,64 @@ a.pseudo:hover {
 .main .info p {
     width: 35em;
 }
+
+/* 3. Cards */
+
+.card {
+    width: 100px;
+    height: 150px;
+    position: relative;
+    border: 7px solid #FFF;
+    border-radius: 5px;
+    background: #f1f1f1;
+
+    margin: 0 1em;
+    float: left;
+}
+    .card.two i {
+        height: 90px;
+        top: 20px;
+    }
+    .card.two b {
+        height: 90px;
+    }
+    .card.one i {
+        height: 60px;
+        top: 40px;
+    }
+    .card.one b {
+        height: 60px;
+    }
+    .card.striped i {
+        background-image: url(../images/card_striped_bg.png)
+    }
+    .card i {
+        display: block;
+        position: relative;
+    }
+    .card.red i {
+        background-color: #fe7a85;
+    }
+    .card.green i {
+        background-color: #70d88b;
+    }
+    .card.blue i {
+        background-color: #71c4d9;
+    }
+    .card b {
+        display: block;
+        background-image: url(../images/card_map.png);
+        width: 100px;
+        height: 150px;
+        position: relative;
+    }
+    .card.open b {
+        background-image: url(../images/card_map.png);
+        background-position-y: -150px;
+    }
+    .card.diamond b {
+        background-position-x: -100px;
+    }
+    .card.squiggle b {
+        background-position-x: -200px;
+    }
