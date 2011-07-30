@@ -4,30 +4,7 @@ import uuid
 from django.test import TestCase
 from game.utils import *
 from game.models import *
-from setwithme.apps.game.utils import Card, Card
-
-class IsSetTestCase(TestCase):
-
-    def test_match(self):
-        self.assertTrue(match(Color.red, Color.red, Color.red))
-        self.assertTrue(match(Color.red, Color.green, Color.purple))
-        self.assertFalse(match(Color.red, Color.green, Color.green))
-
-    def test_set(self):
-        first = Card(1, Shading.opened, Color.green, Symbol.diamond)
-        second = Card(2, Shading.opened, Color.green, Symbol.diamond)
-        third = Card(3, Shading.opened, Color.green, Symbol.diamond)
-        self.assertTrue(is_set(first, second,third))
-
-        first = Card(1, Shading.opened, Color.green, Symbol.diamond)
-        second = Card(2, Shading.solid, Color.purple, Symbol.oval)
-        third = Card(3, Shading.striped, Color.red, Symbol.squiggle)
-        self.assertTrue(is_set(first, second,third))
-
-        first = Card(1, Shading.opened, Color.green, Symbol.diamond)
-        second = Card(2, Shading.opened, Color.purple, Symbol.oval)
-        third = Card(3, Shading.striped, Color.red, Symbol.squiggle)
-        self.assertFalse(is_set(first, second,third))
+from setwithme.apps.game.utils import Card
 
 
 class GameModelTestCase(TestCase):
@@ -55,30 +32,16 @@ class GameModelTestCase(TestCase):
 
     def test_game_get_cards(self):
         game = Game.objects.create()
-        cards = game.cards_list
+        cards = game.rem_cards_list
         self.assertEqual(list(xrange(81)), cards)
 
-    def test_game_remove_cards(self):
+    def test_game_drop_cards(self):
         game = Game.objects.create()
-        game.remove_cards(1, 4, 7)
-        lst = range(81)
-        lst.remove(1)
-        lst.remove(4)
-        lst.remove(7)
-        cards = game.cards_list
-        self.assertEqual(lst, cards)
-
-    def test_game_pop_cards(self):
-        game = Game.objects.create()
-        cards = game.pop_cards()
-        self.assertEqual(len(cards), 3)
-        cards = game.pop_cards(76)
-        self.assertEqual(len(cards), 76)
-        self.assertTrue(all(cards.count(x) == 1 for x in cards))
-        cards = game.pop_cards()
-        self.assertEqual(len(cards), 2)
-        cards = game.pop_cards()
-        self.assertEqual(len(cards), 0)
+        shown_cards = game.pop_cards()
+        self.assertEqual(len(game.rem_cards_list), 81 - 3)
+        self.assertEqual(len(game.desk_cards_list), 3)
+        game.drop_cards(*shown_cards)
+        self.assertEqual(len(game.desk_cards_list), 0)
 
 
 class CardIdsTestCase(TestCase):

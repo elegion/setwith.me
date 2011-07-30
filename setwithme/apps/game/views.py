@@ -4,10 +4,10 @@ import uuid
 from django.contrib.sessions.models import Session
 from django.views.decorators.http import require_POST
 from game.models import Game, GameSession, State
+from game.utils import Card
 from users.models import WaitingUser
 from annoying.decorators import ajax_request, render_to
 from django.shortcuts import redirect
-from setwithme.apps.game.utils import Card
 
 WAITING_USER_TIMEOUT = 60
 
@@ -52,8 +52,10 @@ def status(request, game_id):
     GameSession.objects.get(game=game_id, user=self_id).update()
     users = [gs.serialize(self_id) for gs in \
         game.gamesession_set.all()]
+    desc_cards = game.desk_cards_list
+    desc_cards.extend(game.pop_cards(quantity=12 - len(desc_cards)))
     return {'users': users,
-            'cards': [Card(id=card).as_text() for card in game.cards_list]}
+            'cards': [Card(id=card_id).as_text() for card_id in desc_cards]}
 
 
 @ajax_request

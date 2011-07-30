@@ -26,42 +26,57 @@ class Game(models.Model):
     finished = models.BooleanField(default=False)
     start = models.DateTimeField(default=datetime.datetime.now)
     end = models.DateTimeField(null=True, default=None)
-    cards = models.CommaSeparatedIntegerField(max_length=250)
+    remaining_cards = models.CommaSeparatedIntegerField(max_length=250)
+    desk_cards = models.CommaSeparatedIntegerField(max_length=250, default='')
 
     def __init__(self, *args, **kwargs):
         models.Model.__init__(self, *args, **kwargs)
         ids = range(81)
         random.shuffle(ids)
-        self.cards = ','.join(map(str, ids))
+        self.remaining_cards = ','.join(map(str, ids))
 
     @property
-    def cards_list(self):
-        if not self.cards:
+    def rem_cards_list(self):
+        if not self.remaining_cards:
             return []
-        return map(int, self.cards.split(','))
+        return map(int, self.remaining_cards.split(','))
 
-    @cards_list.setter
-    def cards_list(self, lst):
-        self.cards = ','.join(map(str, lst))
+    @rem_cards_list.setter
+    def rem_cards_list(self, lst):
+        self.remaining_cards = ','.join(map(str, lst))
         self.save()
 
-    def remove_cards(self, first, second, third):
-        cards = self.cards_list
+    @property
+    def desk_cards_list(self):
+        if not self.desk_cards:
+            return []
+        return map(int, self.desk_cards.split(','))
+
+    @desk_cards_list.setter
+    def desk_cards_list(self, lst):
+        self.desk_cards = ','.join(map(str, lst))
+        self.save()
+
+    def drop_cards(self, first, second, third):
+        cards = self.desk_cards_list
         assert len(cards) >= 3
         cards.remove(first)
         cards.remove(second)
         cards.remove(third)
-        self.cards_list = cards
+        self.desk_cards_list = cards
 
     def pop_cards(self, quantity=3):
-        cards = self.cards_list
+        cards = self.rem_cards_list
         indexes = []
         for i in xrange(min(quantity, len(cards))):
             indexes.append(random.randrange(0, len(cards) - i))
         res = []
         for index in indexes:
             res.append(cards.pop(index))
-        self.cards_list = cards
+        self.rem_cards_list = cards
+        dcl = self.desk_cards_list
+        dcl.extend(res)
+        self.desk_cards_list = dcl
         return res
 
 class State:
