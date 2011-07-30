@@ -72,3 +72,26 @@ SetWithMe.searchGame = function() {
 //    var poller = new SetWithMe.Poller('/game/create/');
 //    poller.start();
 };
+
+SetWithMe.Game = {}
+
+SetWithMe.Game.init = function(gameId) {
+    SetWithMe.Game.gameId = gameId;
+    SetWithMe.Game.$cards = $('#js_cards');
+    SetWithMe.Game.$users = $('#js_users');
+
+    var poller = new SetWithMe.Poller('/game/status/' + SetWithMe.Game.gameId);
+    poller.onSuccess = SetWithMe.Game.render;
+    poller.start();
+}
+
+SetWithMe.Game.render = function(status) {
+    SetWithMe.Game.status = status;
+
+    var card = null;
+    for(var i=0; i<status.cards.length; i++) {
+        card = status.cards[i];
+        SetWithMe.Game.$cards.html();
+        SetWithMe.Game.$cards.append('<div class="card ' + card + '"><i><b></b></i></div>');
+    }
+}
