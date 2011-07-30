@@ -14,23 +14,23 @@ def game_screen(request, game_id):
 
 @ajax_request
 def start_game(request):
-    user_id = request.session.session_key
+    user = request.user
     qs = GameSession.objects.\
-        filter(user=user_id, client_state=ClientConnectionState.ACTIVE)
+        filter(user=user, client_state=ClientConnectionState.ACTIVE)
     if qs.count():
         gs = qs.all()[0]
         return {'status': 302,
                 'url': reverse(game_screen, kwargs={'game_id': gs.game.id})}
-    wu = WaitingUser.objects.get_or_create(user=user_id)[0].update()
+    wu = WaitingUser.objects.get_or_create(user=user)[0].update()
     last_poll_guard = datetime.datetime.now() - WAITING_USER_TIMEOUT
     opponents = WaitingUser.objects.\
         filter(last_poll__gt=last_poll_guard).\
-        exclude(user=user_id).all()
+        exclude(user=user).all()
     if opponents:
         opponent = opponents[0]
         game_id = get_uid()
         game = Game.objects.create(id=game_id)
-        GameSession.objects.create(game=game, user=user_id)
+        GameSession.objects.create(game=game, user=user)
         GameSession.objects.create(game=game, user=opponent.user)
         wu.delete()
         opponent.delete()
@@ -42,9 +42,8 @@ def start_game(request):
 @ajax_request
 def get_status(request, game_id):
     game = Game.objects.get(id=game_id)
-    self_id = request.session.session_key
-    GameSession.objects.get(game=game, user=self_id).update()
-    users = [gs.serialize(self_id) for gs in \
+    GameSession.objects.get(game=game, user=request.user).update()
+    users = [gs.serialize(request.user.id) for gs in \
         game.gamesession_set.all()]
     desc_cards = game.desk_cards_list
     desc_cards.extend(game.pop_cards(quantity=12 - len(desc_cards)))
@@ -57,11 +56,10 @@ def get_status(request, game_id):
 @ajax_request
 def put_set_mark(request, game_id):
     game = Game.objects.get(id=game_id)
-    self_id = request.session.session_key
     if not game.gamesession_set.\
             filter(state=GameSessionState.SET_PRESSED).\
             count():
-        gs = game.gamesession_set.get(user=self_id)
+        gs = game.gamesession_set.get(user=request.user)
         gs.press_set()
     return {'success': True}
 
@@ -69,8 +67,7 @@ def put_set_mark(request, game_id):
 @ajax_request
 def check_set(request, game_id):
     game = Game.objects.get(id=game_id)
-    self_id = request.session.session_key
-    gs = game.gamesession_set.get(user=self_id)
+    gs = game.gamesession_set.get(user=request.user)
     if gs.set_in_time():
         # TODO: check if set was correct
         # Process set, remove cards, return new

@@ -5,3 +5,6 @@ simplejson==2.1.6
 South==0.7.3
 django-annoying==0.7.6
 
+# For Facebook integration
+-e git://github.com/pythonforfacebook/facebook-sdk.git@b5ee678115391885a00cfd1ee114c6b5b22f7a55#egg=facebook_sdk-dev
+-e git://github.com/pythonforfacebook/django-facebook.git@7fe493d4ae20647ad050e609a2308f2f73c26522#egg=django_facebook-dev

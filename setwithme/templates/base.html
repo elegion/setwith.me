@@ -1,4 +1,4 @@
-{% load media %}
+{% load media facebook %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +20,10 @@
   {% block extrastyle %}{% endblock %}
   {% block extrajs %}{% endblock %}
   {% block extrahead %}{% endblock %}
+  {% facebook_init %}
+      {% block facebook_code %}
+      {% endblock %}
+  {% endfacebook %}
 
   <title>{% block title %}Set With Me{% endblock %}</title>
   <!--[if IE]>
@@ -43,4 +47,5 @@
   })();
 </script>
 </body>
+{% facebook_load %}
 </html>

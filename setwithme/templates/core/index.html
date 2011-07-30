@@ -1,4 +1,5 @@
 {% extends "site_base.html" %}
+{% load facebook %}
 
 {% block bodyclass %}main{% endblock %}
 
@@ -11,5 +12,6 @@
     or all the same faster than your <i>opponent</i>.</p>
     <p><a href="#logo" class="pseudo" id="js_rotate_logo">See&nbsp;logo</a> for examples.</p>
     <a href="{% url lobby %}" class="play big_button" id="js_play_btn">Play!</a>
+    <fb:login-button autologoutlink="true"></fb:login-button>
 </div>
 {% endblock %}

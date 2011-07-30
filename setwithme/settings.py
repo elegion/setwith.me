@@ -110,6 +110,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'core.facebook_sdk.SetWithMeFacebookMiddleware',
+    'core.middleware.CookieAuthMiddleware',
 )
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -133,6 +135,7 @@ INSTALLED_APPS = (
 
     # Third-party apps
     'south',
+    'django_facebook',
 
     # Our apps
     'core',
@@ -170,6 +173,15 @@ SITE_DOMAIN = 'setwith.me'
 AUTH_PROFILE_MODULE = 'users.UserProfile'
 
 SESSION_SAVE_EVERY_REQUEST = True
+
+FACEBOOK_APP_ID = 129235007167183
+FACEBOOK_APP_SECRET = '1f56b1a80e1d1dfb2d82c5953cf52043'
+
+AUTHENTICATION_BACKENDS = (
+    'django_facebook.auth.FacebookProfileBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'core.anon_backend.AnonymousBackend',
+)
 
 try:
     from settings_local import *
