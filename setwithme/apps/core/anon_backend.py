@@ -7,7 +7,7 @@ class AnonymousBackend(ModelBackend):
     """ Create anon user. """
     def authenticate(self, *args, **kwargs):
         user_uuid = kwargs.get('user_uuid', '')
-        user_uuid = user_uuid or unicode(uuid.uuid4().hex)
+        user_uuid = user_uuid or unicode(uuid.uuid4().hex)[:30]
         user, created = User.objects.get_or_create(
             username=user_uuid)
         print "Anon_user: %s" % user.username

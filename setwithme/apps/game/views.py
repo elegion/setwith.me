@@ -49,7 +49,9 @@ def get_status(request, game_id):
     desc_cards.extend(game.pop_cards(quantity=12 - len(desc_cards)))
     rem_cards_cnt = len(game.rem_cards_list)
     return {'users': users,
-            'cards': [Card(id=card_id).as_text() for card_id in desc_cards],
+            'cards': [{'id': card_id,
+                       'class': Card(id=card_id).as_text()} \
+                        for card_id in desc_cards],
             'cards_left': rem_cards_cnt}
 
 
