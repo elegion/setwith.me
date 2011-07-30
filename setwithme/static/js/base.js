@@ -140,7 +140,12 @@ SetWithMe.Game = {
     },
 
     _onCardClick: function() {
-        $(this).toggleClass('active');
+        var $card = $(this),
+            $activeCards = $('.active', this._cardsContainer);
+        if (!$card.hasClass('active') && $activeCards.length >= 3) {
+            return;
+        }
+        $card.toggleClass('active');
     },
 
     /**
