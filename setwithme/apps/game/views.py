@@ -16,7 +16,7 @@ def game_screen(request, game_id):
 def start_game(request):
     user = request.user
     qs = GameSession.objects.\
-        filter(user=user, client_state=ClientConnectionState.ACTIVE).exclude(game__finished=True)
+        filter(user=user, game__finished=False).exclude(client_state=ClientConnectionState.LOST)
     if qs.count():
         gs = qs.all()[0]
         return {'status': 302,
@@ -77,7 +77,7 @@ def check_set(request, game_id):
         ids = request.REQUEST.get('ids')
         if not ids:
             return {'success': False, 'msg': 'Empty ids'}
-        ids_lst = ids.split(',')
+        ids_lst = map(int, ids.split(','))
         if len(ids_lst) != 3:
             return {'success': False, 'msg': 'Ids len != 3'}
         desk_cards_lst = game.desk_cards_list
@@ -92,10 +92,10 @@ def check_set(request, game_id):
             gs.state = GameSessionState.IDLE
             gs.sets_found += 1
             gs.save()
+            # Remove cards from desc list
+            game.drop_cards(*ids_lst)
         # Update status to IDLE for other game sessions:
         for gs_other in game.gamesession_set.exclude(user=request.user).all():
             gs_other.state = GameSessionState.IDLE
             gs_other.save()
-        # Remove cards from desc list
-        game.drop_cards(*ids_lst)
     return {'success': True}

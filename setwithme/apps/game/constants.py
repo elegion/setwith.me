@@ -5,7 +5,7 @@ from django.conf import settings
 PRESSED_SET_TIMEOUT = getattr(
     settings,
     "PRESSED_SET_TIMEOUT",
-    datetime.timedelta(seconds=5))
+    datetime.timedelta(seconds=10))
 
 CLIENT_IDLE_TIMEOUT = getattr(
     settings,

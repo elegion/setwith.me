@@ -2,7 +2,7 @@ SetWithMe = {};
 
 $.extend(SetWithMe, {
     REQUEST_INTERVAL: 1000,
-    SET_CHOOSE_TIME: 5
+    SET_CHOOSE_TIME: 10
 });
 
 /**
