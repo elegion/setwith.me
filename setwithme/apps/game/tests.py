@@ -57,6 +57,20 @@ class GameModelTestCase(TestCase):
                         return
         self.assertEqual(False, game.has_sets())
 
+    def test_game_rem_cards(self):
+        game = Game.objects.create()
+        rem_lst = game.rem_cards_list
+        self.assertEqual(len(rem_lst), 81)
+        desk_lst = game.desk_cards_list
+        self.assertEqual(len(desk_lst), 0)
+        popped_lst = game.pop_cards(quantity=12)
+        self.assertEqual(len(popped_lst), 12)
+        desk_lst = game.desk_cards_list
+        self.assertEqual(len(desk_lst), 12)
+        rem_lst = game.rem_cards_list
+        self.assertEqual(len(rem_lst), 81 - 12)
+
+
     
 class UtilsTestCase(TestCase):
     def test_ids(self):
