@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import random
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
+random_id = lambda : unicode(uuid.uuid4())
 
 
 attributes_order = ('color', 'symbol', 'number', 'shading')
@@ -14,6 +17,7 @@ attributes = {'color': ('red', 'green', 'purple'),
 
 class Game(models.Model):
 
+    uid = models.CharField(max_length=36, unique=True)
     finished = models.BooleanField(default=False)
     start = models.DateTimeField(default=datetime.datetime.now)
     end = models.DateTimeField(null=True, default=None)
@@ -23,16 +27,35 @@ class Game(models.Model):
         models.Model.__init__(self, *args, **kwargs)
         self.cards = ','.join(map(str, xrange(81)))
 
+    @property
+    def cards_list(self):
+        if not self.cards:
+            return []
+        return map(int, self.cards.split(','))
+
+    @cards_list.setter
+    def cards_list(self, lst):
+        self.cards = ','.join(map(str, lst))
+        self.save()
+
     def remove_cards(self, first, second, third):
-        cards = map(int, self.cards.split(','))
+        cards = self.cards_list
+        assert len(cards) >= 3
         cards.remove(first)
         cards.remove(second)
         cards.remove(third)
-        self.cards = ','.join(map(str, cards))
-        self.save()
+        self.cards_list = cards
 
-    def get_cards(self):
-        return map(int, self.cards.split(','))
+    def pop_cards(self, quantity=3):
+        cards = self.cards_list
+        indexes = []
+        for i in xrange(min(quantity, len(cards))):
+            indexes.append(random.randrange(0, len(cards) - i))
+        res = []
+        for index in indexes:
+            res.append(cards.pop(index))
+        self.cards_list = cards
+        return res
     
 
 class GameSession(models.Model):
@@ -49,3 +72,4 @@ class GameSession(models.Model):
                 'user': self.user,
                 'sets_found': self.sets_found,
                 'failures': self.failures}
+

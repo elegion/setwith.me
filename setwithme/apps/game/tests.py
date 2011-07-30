@@ -54,7 +54,7 @@ class GameModelTestCase(TestCase):
 
     def test_game_get_cards(self):
         game = Game.objects.create()
-        cards = game.get_cards()
+        cards = game.cards_list
         self.assertEqual(list(xrange(81)), cards)
 
     def test_game_remove_cards(self):
@@ -64,5 +64,17 @@ class GameModelTestCase(TestCase):
         lst.remove(1)
         lst.remove(4)
         lst.remove(7)
-        cards = game.get_cards()
+        cards = game.cards_list
         self.assertEqual(lst, cards)
+
+    def test_game_pop_cards(self):
+        game = Game.objects.create()
+        cards = game.pop_cards()
+        self.assertEqual(len(cards), 3)
+        cards = game.pop_cards(76)
+        self.assertEqual(len(cards), 76)
+        self.assertTrue(all(cards.count(x) == 1 for x in cards))
+        cards = game.pop_cards()
+        self.assertEqual(len(cards), 2)
+        cards = game.pop_cards()
+        self.assertEqual(len(cards), 0)
