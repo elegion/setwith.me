@@ -147,7 +147,7 @@ class GameSession(models.Model):
         self.set_pressed_dt = datetime.datetime.now()
         self.state = GameSessionState.SET_PRESSED
 
-    def set_in_time(self):
+    def set_received_in_time(self):
         return self.set_pressed_dt + PRESSED_SET_TIMEOUT > \
             datetime.datetime.now() if self.set_pressed_dt else \
             False
