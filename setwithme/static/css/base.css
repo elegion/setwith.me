@@ -124,23 +124,39 @@ a.pseudo:hover {
 .main .play:hover {
 }
 
-.main .searching {
-    margin-top: 65px;
+.main h1.lobby {
     text-align: center;
+    margin: 2em 0 0 0;
 }
-    .main .searching .card {
-        display: inline-block;
-        float: none;
-        margin: 30px 5px 60px;
+.main .searching {
+    margin: 15px auto 0 auto;
+    text-align: center;
+    width: 400px;
+    overflow: hidden;
+    position: relative;
+}
+    .main .searching .card.first {
+        margin-left: 2em;
     }
-    .main .searching .note {
+    .main .searching .card {
+        float: none;
+        display: inline-block;
+        margin: 30px 5px 40px;
+        position: relative;
+    }
+    .main .note {
         color: #cfcfcf;
-        font-size: 12px;
+        font-size: 0.9em;
         font-style: italic;
         font-weight: bold;
         text-shadow: #5b6064 0 -1px 0;
+        width: 30em;
+        margin: 0 auto;
+        text-align: center;
     }
-
+.tape {
+    width: 400px;
+}
 /* 3. Cards */
 
 .main .card {

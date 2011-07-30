@@ -10,11 +10,15 @@
 {% endblock %}
 
 {% block content %}
+<h1 class="lobby">Searching for opponents...</h1>
+
 <div class="searching">
-    <h1>Searching for opponents...</h1>
-    <div class="card one red solid oval"><i><b></b></i></div>
-    <div class="card two blue striped diamond"><i><b></b></i></div>
-    <div class="card three green open squiggle"><i><b></b></i></div>
-    <div class="note">{{ message }}</div>
+    <div class="tape" id="js_searching">
+        <div class="card one red solid oval"><i><b></b></i></div>
+        <div class="card two blue striped diamond"><i><b></b></i></div>
+        <div class="card three green open squiggle"><i><b></b></i></div>
+    </div>
 </div>
+<div class="note">{{ message }}</div>
+
 {% endblock %}

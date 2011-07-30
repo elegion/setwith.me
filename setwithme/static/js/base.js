@@ -208,7 +208,7 @@ SetWithMe.generateSet = function() {
         }
         i += 1;
     }
-    return [result[0].join(' '), result[1].join(' '), result[2].join(' ')]
+    return [result[0].join(' '), result[1].join(' '), result[2].join(' ')];
 }
 
 $(function() {
@@ -224,4 +224,26 @@ $(function() {
     $('#js_rotate_logo').click(function(){
         $('#js_header_cards').click();
     });
+
+    var $jsSearching = $('#js_searching');
+    if ($jsSearching.length) {
+        var set = SetWithMe.generateSet();
+        for (var i=0; i < $jsSearching.find('.card').length; i++) {
+            $jsSearching.find('.card')[i].setAttribute('class', 'card ' + set[i]);
+        }
+    };
+    var animate = function() {
+        var set = SetWithMe.generateSet($jsSearching.find('.card:last').attr('class').replace('card ', ''));
+        for (var i=0; i < set.length; i++) {
+            var $newCard = $jsSearching.find('.card:first').clone();
+            var first = (i==0)?' first ':'';
+            $newCard.attr('class', 'card '  + first + set[i]);
+            $jsSearching.append($newCard);
+        }
+        $jsSearching.find('.card').animate({left: '-=390'}, 5000, function() {
+            $jsSearching.find('.card').slice(0,2).remove();
+            animate();
+        });
+    };
+//    animate(); doesnt working yet
 });
