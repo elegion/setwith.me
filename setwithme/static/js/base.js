@@ -86,7 +86,7 @@ SetWithMe.Game.init = function(gameId) {
     SetWithMe.Game.$cards = $('#js_cards');
     SetWithMe.Game.$users = $('#js_users');
 
-    var poller = new SetWithMe.Poller('/game/status/' + SetWithMe.Game.gameId);
+    var poller = new SetWithMe.Poller('/game/get_status/' + SetWithMe.Game.gameId);
     poller.onSuccess = SetWithMe.Game.render;
     poller.start();
 }

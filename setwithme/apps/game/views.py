@@ -12,13 +12,6 @@ from django.shortcuts import redirect
 WAITING_USER_TIMEOUT = 60
 
 
-@render_to('game/waiting_screen.html')
-def waiting_screen(request):
-    sessions = Session.objects.filter(expire_date__gt=datetime.datetime.now()).all()
-    users = [s.session_key for s in sessions if s.session_key != request.session.session_key]
-    return {'waiting_users': users}
-
-
 @render_to('game/game_screen.html')
 def game_screen(request, game_id):
     return {'game_id': game_id}
@@ -53,7 +46,7 @@ def start_game(request):
 
 
 @ajax_request
-def status(request, game_id):
+def get_status(request, game_id):
     game = Game.objects.get(uid=game_id)
     self_id = request.session.session_key
     GameSession.objects.get(game=game, user=self_id).update()
@@ -68,7 +61,7 @@ def status(request, game_id):
 
 
 @ajax_request
-def put_set(request, game_id):
+def put_set_mark(request, game_id):
     game = Game.objects.get(uid=game_id)
     self_id = request.session.session_key
     if not game.gamesession_set.filter(state=State.SET_PRESSED).count():
@@ -78,7 +71,7 @@ def put_set(request, game_id):
 
 
 @ajax_request
-def show_set(request, game_id):
+def check_set(request, game_id):
     game = Game.objects.get(uid=game_id)
     self_id = request.session.session_key
     gs = game.gamesession_set.get(user=self_id)
