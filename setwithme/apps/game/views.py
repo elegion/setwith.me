@@ -20,7 +20,7 @@ def start_game(request):
     if qs.count():
         gs = qs.all()[0]
         return {'status': 302,
-                'url': reverse(game_screen, kwargs={'game_id': gs.game.uid})}
+                'url': reverse(game_screen, kwargs={'game_id': gs.game.id})}
     wu = WaitingUser.objects.get_or_create(user=user_id)[0].update()
     last_poll_guard = datetime.datetime.now() - WAITING_USER_TIMEOUT
     opponents = WaitingUser.objects.\
@@ -29,7 +29,7 @@ def start_game(request):
     if opponents:
         opponent = opponents[0]
         game_id = get_uid()
-        game = Game.objects.create(uid=game_id)
+        game = Game.objects.create(id=game_id)
         GameSession.objects.create(game=game, user=user_id)
         GameSession.objects.create(game=game, user=opponent.user)
         wu.delete()
@@ -41,7 +41,7 @@ def start_game(request):
 
 @ajax_request
 def get_status(request, game_id):
-    game = Game.objects.get(uid=game_id)
+    game = Game.objects.get(id=game_id)
     self_id = request.session.session_key
     GameSession.objects.get(game=game, user=self_id).update()
     users = [gs.serialize(self_id) for gs in \
@@ -56,7 +56,7 @@ def get_status(request, game_id):
 
 @ajax_request
 def put_set_mark(request, game_id):
-    game = Game.objects.get(uid=game_id)
+    game = Game.objects.get(id=game_id)
     self_id = request.session.session_key
     if not game.gamesession_set.filter(state=State.SET_PRESSED).count():
         gs = game.gamesession_set.get(user=self_id)
@@ -66,7 +66,7 @@ def put_set_mark(request, game_id):
 
 @ajax_request
 def check_set(request, game_id):
-    game = Game.objects.get(uid=game_id)
+    game = Game.objects.get(id=game_id)
     self_id = request.session.session_key
     gs = game.gamesession_set.get(user=self_id)
     if gs.set_in_time():

@@ -18,7 +18,7 @@ attributes = {'color': ('red', 'green', 'purple'),
 
 class Game(models.Model):
 
-    uid = models.CharField(max_length=36, unique=True)
+    id = models.CharField(max_length=36, primary_key=True)
     finished = models.BooleanField(default=False)
     start = models.DateTimeField(default=datetime.datetime.now)
     end = models.DateTimeField(null=True, default=None)
