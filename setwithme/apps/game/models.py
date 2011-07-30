@@ -92,6 +92,9 @@ class Game(models.Model):
         has_sets = self.has_sets()
         active_players = self.gamesession_set.exclude(client_state=ClientConnectionState.LOST).count()
         is_finished = (active_players < 2) or (not has_cards and not has_sets)
+        if is_finished:
+            self.finished = True
+            self.save()
         return is_finished
 
     @property

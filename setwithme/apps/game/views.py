@@ -16,7 +16,7 @@ def game_screen(request, game_id):
 def start_game(request):
     user = request.user
     qs = GameSession.objects.\
-        filter(user=user, client_state=ClientConnectionState.ACTIVE)
+        filter(user=user, client_state=ClientConnectionState.ACTIVE).exclude(game__finished=True)
     if qs.count():
         gs = qs.all()[0]
         return {'status': 302,
