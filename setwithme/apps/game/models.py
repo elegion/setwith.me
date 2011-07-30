@@ -56,10 +56,14 @@ class Game(models.Model):
             res.append(cards.pop(index))
         self.cards_list = cards
         return res
+
+class State:
+    IDLE = 0
+    SET_PRESSED = 1
+    BLOCKED = 2
     
 
 class GameSession(models.Model):
-
     game = models.ForeignKey(Game, null=True)
     state = models.IntegerField(default=0)
     #user = models.ForeignKey(User)
@@ -67,9 +71,11 @@ class GameSession(models.Model):
     sets_found = models.IntegerField(default=0)
     failures = models.IntegerField(default=0)
 
-    def serialize(self):
+    def serialize(self, current_user_id):
         return {'game': self.game_id,
-                'user': self.user,
+                'state': self.state,
+                'user_id': self.user,
+                'me': self.user == current_user_id,
                 'sets_found': self.sets_found,
                 'failures': self.failures}
 

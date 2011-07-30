@@ -45,8 +45,11 @@ def start_game(request):
 
 
 @ajax_request
-def status(request):
-    game_session, created = GameSession.objects.\
-        get_or_create(user=request.session.session_key)
-    return {'session': game_session.serialize()}
+def status(request, game_id):
+    game = Game.objects.get(uid=game_id)
+    self_id = request.session.session_key
+    users = [gs.serialize(self_id) for gs in \
+        game.gamesession_set.all()]
+    return {'users': users,
+            'cards': []}
 
