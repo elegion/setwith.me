@@ -15,11 +15,22 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('users', ['UserProfile'])
 
+        # Adding model 'WaitingUser'
+        db.create_table('users_waitinguser', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('last_poll', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+        ))
+        db.send_create_signal('users', ['WaitingUser'])
+
 
     def backwards(self, orm):
         
         # Deleting model 'UserProfile'
         db.delete_table('users_userprofile')
+
+        # Deleting model 'WaitingUser'
+        db.delete_table('users_waitinguser')
 
 
     models = {
@@ -63,6 +74,12 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'UserProfile'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'})
+        },
+        'users.waitinguser': {
+            'Meta': {'object_name': 'WaitingUser'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'last_poll': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         }
     }
 
