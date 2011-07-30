@@ -1,7 +1,8 @@
 SetWithMe = {};
 
 $.extend(SetWithMe, {
-    REQUEST_INTERVAL: 1000
+    REQUEST_INTERVAL: 1000,
+    SET_CHOOSE_TIME: 5
 });
 
 /**
@@ -38,7 +39,6 @@ SetWithMe.Poller.prototype = {
      * @param {Object} data
      */
     _onSuccess: function(data) {
-        window.console && console.debug('SUCCESS:', data);
         this.onSuccess(data);
         this._timer = setTimeout(this._request.bind(this), SetWithMe.REQUEST_INTERVAL);
     },
@@ -51,7 +51,6 @@ SetWithMe.Poller.prototype = {
      * @param {String} textStatus
      */
     _onError: function(jqXHR, textStatus) {
-        window.console && console.error('Error:', textStatus);
         this.onError();
     },
 
@@ -79,13 +78,35 @@ SetWithMe.searchGame = function() {
     poller.start();
 };
 
+SetWithMe.getCookie = function(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+};
+
 SetWithMe.Game = {
     /** @type Array */
     _cards: null,
+    /** @type Boolean */
+    _markingSet: false,
     /** @type String */
     _id: '',
     /** @type SetWithMe.Poller */
     _poller: null,
+
+    _timeLeft: -1,
+
+    _CSRFToken: '',
 
     /**
      * @param {String} id
@@ -95,9 +116,13 @@ SetWithMe.Game = {
         this.$users = $('#js_players');
         this.$cardsLeft = $('#js_cards_left');
         this._cardsContainer = $('#js_cards');
+        this._setButton = $('#js_set_button');
+        this._setButtonLabel = $('#js_set_button_label');
+        this._countDownLabel = $('#js_countdown');
+        this._CSRFToken = SetWithMe.getCookie('csrftoken');
         this._id = id;
         this._poller = new SetWithMe.Poller('/game/get_status/' + this._id);
-        this._poller.onSuccess = this._onCardsReceived.bind(this);
+        this._poller.onSuccess = this._onStatusReceived.bind(this);
         this._poller.start();
     },
 
@@ -105,6 +130,81 @@ SetWithMe.Game = {
         if (this._poller) {
             this._poller.stop();
         }
+    },
+
+    _onCountDown: function() {
+        if (this._timeLeft < 0) {
+            this._timeLeft = SetWithMe.SET_CHOOSE_TIME;
+            this._countDownLabel.text(this._timeLeft);
+        } else if (this._timeLeft === 0) {
+            this._stopCountDown();
+            this._setButtonLabel.text('You should choose set faster. Try it next time');
+        } else {
+            this._countDownLabel.text(--this._timeLeft);
+        }
+    },
+
+    _startCountDown: function() {
+        this._countDown_timer = setInterval(this._onCountDown.bind(this), 1000);
+    },
+
+    _stopCountDown: function() {
+        if (this._countDown_timer) {
+            clearInterval(this._countDown_timer);
+            this._markingSet = false;
+            this._timeLeft = -1;
+            this._countDownLabel.text('');
+        }
+    },
+
+    markSet: function(event) {
+        event.preventDefault();
+        if (this._setButton.hasClass('disabled') || this._markingSet) {
+            return;
+        }
+        this._markingSet = true;
+        this._setButton.addClass('disabled');
+        this._setButtonLabel.text('Show us set bellow...');
+        this._startCountDown();
+    },
+
+    _checkSet: function($cards) {
+        console.debug($cards, $cards.attr('class'));
+        var valid,
+            setArray = [],
+            count = [],
+            symbol = [],
+            shading = [],
+            color = [];
+        $cards.each(function(i, elem) {
+            var className = elem.className.replace(/\s?(card|active)\s?/gi, ''),
+                props = className.split(' ');
+            setArray.push(elem.id);
+            count.push(props[0]);
+            symbol.push(props[1]);
+            shading.push(props[2]);
+            color.push(props[3]);
+        });
+        valid = $.unique(count).length +
+                $.unique(symbol).length +
+                $.unique(shading).length +
+                $.unique(color).length > 9;
+        if (valid) {
+            return setArray;
+        }
+        return false;
+    },
+
+    _sendSet: function(setArray) {
+        this._stopCountDown();
+        $.ajax({
+            data: setArray,
+            headers: {
+                'X-CSRFToken': this._CSRFToken
+            },
+            url: '/game/check_set/' + this._id,
+            type: 'POST'
+        })
     },
 
     /**
@@ -127,10 +227,12 @@ SetWithMe.Game = {
     },
 
     /**
-     * @param {String} className
+     * @param {Object} card
      */
-    _renderCard: function(className) {
-        var $card = $('<li class="card ' + className + '"><i><b></b></i></li>');
+    _renderCard: function(card) {
+        var $card = $('<li><i><b></b></i></li>');
+        $card.attr('id', card.id);
+        $card.attr('class', 'card ' + card.class);
         this._bindCardEvents($card);
         this._cardsContainer.append($card);
     },
@@ -143,19 +245,29 @@ SetWithMe.Game = {
     },
 
     _onCardClick: function() {
-        var $card = $(this),
+        var setArray,
+            $card = $(this),
             $activeCards = $('.active', this._cardsContainer);
-        if (!$card.hasClass('active') && $activeCards.length >= 3) {
+        if (!SetWithMe.Game._markingSet) {
+            return ;
+        }
+        if ($activeCards.length > 2) {
             return;
         }
         $card.toggleClass('active');
+        if ($activeCards.length === 2) {
+            $activeCards = $activeCards.add($card);
+            if (setArray = SetWithMe.Game._checkSet($activeCards)) {
+                SetWithMe.Game._sendSet(setArray);
+            }
+        }
     },
 
     /**
      *
      * @param {Object} data
      */
-    _onCardsReceived: function(data) {
+    _onStatusReceived: function(data) {
         if (this._cards) {
             if (!$.isEmptyObject(this._getChangedCards(data.cards))) {
                 this._cards = data.cards;
@@ -175,7 +287,7 @@ SetWithMe.Game = {
             }
             $player.find('.sets .count').text(player.sets_found);
             $player[0].class = 'player ' + player.state;
-        }        
+        }
     },
 
     _renderPlayer: function(player) {
@@ -194,13 +306,13 @@ SetWithMe.attributes =  {
     'symbol': ['oval', 'diamond', 'squiggle'],
     'shading': ['solid', 'open', 'striped'],
     'color': ['red', 'green', 'blue']
-}
+};
 
 SetWithMe.generateSet = function() {
     //generates random set
     var result = [[],[],[]];
     var i = 0;
-    for(attr in SetWithMe.attributes) {
+    for (var attr in SetWithMe.attributes) {
         var similar = Math.random() > 0.5;
         var num = Math.ceil(Math.random() * 3) - 1;
         for (var j=0; j<result.length; j++) {
@@ -209,7 +321,7 @@ SetWithMe.generateSet = function() {
         i += 1;
     }
     return [result[0].join(' '), result[1].join(' '), result[2].join(' ')];
-}
+};
 
 $(function() {
     $('#js_header_cards').click(function() {
@@ -231,7 +343,7 @@ $(function() {
         for (var i=0; i < $jsSearching.find('.card').length; i++) {
             $jsSearching.find('.card')[i].setAttribute('class', 'card ' + set[i]);
         }
-    };
+    }
     var animate = function() {
         var set = SetWithMe.generateSet($jsSearching.find('.card:last').attr('class').replace('card ', ''));
         for (var i=0; i < set.length; i++) {
