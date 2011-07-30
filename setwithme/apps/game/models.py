@@ -65,18 +65,26 @@ class Game(models.Model):
 class State:
     IDLE = 0
     SET_PRESSED = 1
-    BLOCKED = 2
+    SET_PENALTY = 2
 
 
 class ClientState:
     ACTIVE = 0
     IDLE = 1
     LOST = 2
-    
+
+
+GameSessionStateChoices = (
+    (State.IDLE, 'idle'),
+    (State.SET_PRESSED, 'set_pressed'),
+    (State.SET_PENALTY, 'set_penalty'),
+)
+
+
 
 class GameSession(models.Model):
     game = models.ForeignKey(Game, null=True)
-    state = models.IntegerField(default=0)
+    state = models.IntegerField(default=0, choices=GameSessionStateChoices)
     #user = models.ForeignKey(User)
     user = models.CharField(max_length=50) # Session key
     set_pressed_dt = models.DateTimeField(null=True)
