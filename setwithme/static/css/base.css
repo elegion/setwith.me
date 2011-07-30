@@ -48,6 +48,7 @@ a.pseudo:hover {
     height: 170px;
     overflow: hidden;
     padding: 15px 0 0 0;
+    clear: both;
 }
 
 .footer .djangodash {
@@ -73,6 +74,7 @@ a.pseudo:hover {
     min-height: 500px;
     border-top: 1px solid #848a8e;
     border-bottom: 1px solid #848a8e;
+    overflow: hidden;
 }
 
 /* 2. Main page */
@@ -232,5 +234,19 @@ a.pseudo:hover {
             background-position-x: -40px;
         }
 
+/* 4. Game */
+.game .card_list {
+    margin: 2em 0;
+    width: 600px;
+    overflow: hidden;
+}
+    .game .card_list .card {
+        float: left;
+        margin: 10px;
+    }
+
+    .game .card_list .card:hover {
+        border-color: #464d53;
+    }
 
 

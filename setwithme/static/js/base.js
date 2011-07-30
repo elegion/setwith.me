@@ -89,9 +89,9 @@ SetWithMe.Game.render = function(status) {
     SetWithMe.Game.status = status;
 
     var card = null;
+    SetWithMe.Game.$cards.html("");
     for(var i=0; i<status.cards.length; i++) {
         card = status.cards[i];
-        SetWithMe.Game.$cards.html();
-        SetWithMe.Game.$cards.append('<div class="card ' + card + '"><i><b></b></i></div>');
+        SetWithMe.Game.$cards.append('<li class="card ' + card + '"><i><b></b></i></li>');
     }
 }
