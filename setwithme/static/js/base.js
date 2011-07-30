@@ -87,11 +87,6 @@ SetWithMe.Game = {
     /** @type SetWithMe.Poller */
     _poller: null,
 
-SetWithMe.Game.init = function(gameId) {
-    SetWithMe.Game.gameId = gameId;
-    SetWithMe.Game.$cards = $('#js_cards');
-    SetWithMe.Game.$users = $('#js_players');
-    SetWithMe.Game.$cardsLeft = $('#js_cards_left');
     /**
      * @param {String} id
      */
