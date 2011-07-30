@@ -175,7 +175,7 @@ SetWithMe.Game = {
     _checkSet: function($cards) {
         console.debug($cards, $cards.attr('class'));
         var valid,
-            setArray = [],
+            setIds = [],
             count = [],
             symbol = [],
             shading = [],
@@ -183,7 +183,7 @@ SetWithMe.Game = {
         $cards.each(function(i, elem) {
             var className = elem.className.replace(/\s?(card|active)\s?/gi, ''),
                 props = className.split(' ');
-            setArray.push(elem.id);
+            setIds.push(elem.id);
             count.push(props[0]);
             symbol.push(props[1]);
             shading.push(props[2]);
@@ -194,7 +194,7 @@ SetWithMe.Game = {
                 $.unique(shading).length +
                 $.unique(color).length > 9;
         if (valid) {
-            return setArray;
+            return setIds.join(',');
         }
         return false;
     },
@@ -202,7 +202,9 @@ SetWithMe.Game = {
     _sendSet: function(setArray) {
         this._stopCountDown();
         $.ajax({
-            data: setArray,
+            data: {
+                ids: data
+            },
             headers: {
                 'X-CSRFToken': this._CSRFToken
             },
@@ -272,7 +274,7 @@ SetWithMe.Game = {
     },
 
     _onCardClick: function() {
-        var setArray,
+        var setIds,
             $card = $(this),
             $activeCards = $('.active', this._cardsContainer);
         if (!SetWithMe.Game._markingSet) {
@@ -284,8 +286,8 @@ SetWithMe.Game = {
         $card.toggleClass('active');
         if ($activeCards.length === 2) {
             $activeCards = $activeCards.add($card);
-            if (setArray = SetWithMe.Game._checkSet($activeCards)) {
-                SetWithMe.Game._sendSet(setArray);
+            if (setIds = SetWithMe.Game._checkSet($activeCards)) {
+                SetWithMe.Game._sendSet(setIds);
             }
         }
     },
