@@ -23,6 +23,7 @@ a.pseudo:hover {
 .wrapper_width {
     width: 870px;
     margin: 0 auto;
+    position: relative;
 }
 /* 1.1 Header */
 .header {
@@ -79,7 +80,7 @@ a.pseudo:hover {
 }
 
 /* 2. Main page */
-.main h1 {
+.main h1, .game h1 {
     font-family: 'Lobster', cursive;
     font-size: 1.75em;
     color: #FFF;
@@ -311,8 +312,12 @@ a.pseudo:hover {
 
 .players {
     float: left;
-    margin: 50px 0 0 65px;
+    margin: 0 0 0 65px;
     color: #454c52;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    width: 270px;
 }
 
 .players li {
@@ -322,6 +327,8 @@ a.pseudo:hover {
 .players .info {
     float: left;
     margin-left: 15px;
+    width: 180px;
+    overflow: hidden;
 }
     .players .photo {
         float: left;
@@ -378,3 +385,27 @@ a.pseudo:hover {
         font-size: 0.8em;
         display: block;
     }
+
+.game .winner_plate {
+    display: none;
+    width: 500px;
+    height: 230px;
+    padding: 1em 2em;
+    
+    position: absolute;
+    top: 100px;
+    left: 50px;
+
+    background: #454C52;
+    border: 5px solid white;
+    border-radius: 5px;
+}
+
+.game .winner_plate h1 {
+    margin: 0;
+}
+.game .winner_plate a {
+    color: white;
+    position: absolute;
+    bottom: 2em;
+}

@@ -165,6 +165,8 @@ SetWithMe.Game = {
             this._cards = data.cards;
             this._renderCards();
         }
+
+        //render and update users
         var player = null;
         for(var i=0; i<data.users.length; i++) {
             player = data.users[i];
@@ -175,7 +177,13 @@ SetWithMe.Game = {
             }
             $player.find('.sets .count').text(player.sets_found);
             $player[0].class = 'player ' + player.state;
-        }        
+        }
+
+        //game ending
+        if (data.game.is_finished) {
+            $('#p' + data.game.leader).appendTo($('#js_user_place'));
+            this.uninit();
+        }
     },
 
     _renderPlayer: function(player) {
