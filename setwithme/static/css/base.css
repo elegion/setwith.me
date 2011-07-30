@@ -1,0 +1,69 @@
+/* 0. Common tags */
+body {
+    font-family: Arial;
+    font-size: 1em;
+    color: #FFF;
+}
+
+a.pseudo {
+    color: #FFF;
+    border-bottom: 1px dashed #FFF;
+}
+a.pseudo:hover {
+    border: none;
+}
+/* 1. Layout */
+.wrapper_width {
+    width: 870px;
+    margin: 0 auto;
+}
+/* 1.1 Header */
+.header {
+    height: 80px;
+    background: #4d545a;
+}
+
+/* 1.2 Footer */
+.footer {
+    background: #4d545a;
+    height: 170px;
+    overflow: hidden;
+    padding: 15px 0 0 0;
+}
+
+.footer .djangodash {
+    float: right;
+    margin: 0 1em 0 0;
+}
+
+.footer .elegion {
+    float: right;
+}
+
+.footer .facebook {
+    float: left;
+    margin: 0 1em 0 0;
+}
+
+.footer .twitter {
+    float: left;
+}
+/* 1.3 Content */
+.content {
+    background: #6f757a;
+    min-height: 500px;
+    border-top: 1px solid #848a8e;
+    border-bottom: 1px solid #848a8e;
+}
+
+/* 2. Main page */
+.main h1 {
+    font-family: 'Lobster', cursive;
+    font-size: 1.75em;
+    color: #FFF;
+    text-shadow: #000 0 -1px 0;
+}
+
+.main .info p {
+    width: 35em;
+}
