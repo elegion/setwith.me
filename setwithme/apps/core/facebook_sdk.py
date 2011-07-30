@@ -153,12 +153,9 @@ class SetWithMeFacebookMiddleware(FacebookMiddleware):
         fb_user = self.get_fb_user(request)
         request.facebook = DjangoFacebook(fb_user) if fb_user else None
         if settings.DEBUG:
-            print "Middleware. user: %s" % fb_user
             if fb_user and 'expires' in fb_user:
                 expires_dt = datetime.datetime.fromtimestamp(
                     float(fb_user['expires']))
-                print "Middleware. Cookie expires %s" % expires_dt
-            print "Middleware. request.facebook: %s" % request.facebook
         if fb_user and request.user.is_anonymous():
             user = auth.authenticate(
                 fb_uid=fb_user['uid'],

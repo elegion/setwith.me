@@ -108,6 +108,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'core.middleware.CsrfFixMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'core.facebook_sdk.SetWithMeFacebookMiddleware',
@@ -178,8 +179,8 @@ FACEBOOK_APP_ID = '129235007167183'
 FACEBOOK_SECRET_KEY = '1f56b1a80e1d1dfb2d82c5953cf52043'
 
 AUTHENTICATION_BACKENDS = (
-    'django_facebook.auth.FacebookProfileBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'django_facebook.auth.FacebookProfileBackend',
     'core.anon_backend.AnonymousBackend',
 )
 

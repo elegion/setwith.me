@@ -4,11 +4,17 @@
 
 {% block bodyclass %}game{% endblock %}
 
-{% block content %}
+{% block extrajs %}
+    {{ block.super }}
     <script>
-        $(function() {SetWithMe.Game.init('{{ game_id }}')});
+        $(function() {
+            SetWithMe.Game.init('{{ game_id }}');
+            $('#js_set_button').click(SetWithMe.Game.markSet.bind(SetWithMe.Game));
+        });
     </script>
+{% endblock %}
 
+{% block content %}
     <ul id="js_cards" class="card_list"></ul>
     <div id="js_users"></div>
 
@@ -21,7 +27,10 @@
     </div>
 
     <div class="bottom">
-    <a href="#" class="set_button big_button">Set!</a>
+    <a href="#" class="set_button big_button" id="js_set_button">
+        <span class="label" id="js_set_button_label">Set!</span>
+        <span class="timer" id="js_countdown"></span>
+    </a>
     <div class="cards_left"><span id="js_cards_left">81</span> cards left</div>
     </div>
 {% endblock %}
