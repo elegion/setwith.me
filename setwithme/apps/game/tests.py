@@ -4,6 +4,7 @@ import uuid
 from django.test import TestCase
 from game.utils import *
 from game.models import *
+from setwithme.apps.game.utils import Card, Card
 
 class IsSetTestCase(TestCase):
 
@@ -78,3 +79,9 @@ class GameModelTestCase(TestCase):
         self.assertEqual(len(cards), 2)
         cards = game.pop_cards()
         self.assertEqual(len(cards), 0)
+
+
+class CardIdsTestCase(TestCase):
+    def test(self):
+        for n in range(80):
+            self.assertEqual(Card(text=Card(id=n).as_text()).as_id(), n)
