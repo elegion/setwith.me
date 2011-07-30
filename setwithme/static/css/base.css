@@ -24,6 +24,18 @@ a.pseudo:hover {
     background: #4d545a;
 }
 
+    .header .cards {
+        overflow: hidden;
+        padding: 9px 1em;
+    }
+        .header .cards li {
+            float: left;
+            margin: 0 0.3em;
+        }
+    .header .logo {
+        float: left;
+        padding: 20px 0;
+    }
 /* 1.2 Footer */
 .footer {
     background: #4d545a;
@@ -71,6 +83,10 @@ a.pseudo:hover {
 
 /* 3. Cards */
 
+.main .card {
+    margin: 0 1em;
+    float: left;
+}
 .card {
     width: 100px;
     height: 150px;
@@ -78,9 +94,6 @@ a.pseudo:hover {
     border: 7px solid #FFF;
     border-radius: 5px;
     background: #f1f1f1;
-
-    margin: 0 1em;
-    float: left;
 }
     .card.two i {
         height: 90px;
@@ -115,17 +128,59 @@ a.pseudo:hover {
     .card b {
         display: block;
         background-image: url(../images/card_map.png);
+        background-position: 0 0;
         width: 100px;
         height: 150px;
         position: relative;
     }
     .card.open b {
-        background-image: url(../images/card_map.png);
         background-position-y: -150px;
     }
     .card.diamond b {
-        background-position-x: -100px;
-    }
-    .card.squiggle b {
         background-position-x: -200px;
     }
+    .card.squiggle b {
+        background-position-x: -100px;
+    }
+
+    .card.mini {
+        width: 40px;
+        height: 60px;
+        border-radius: 5px;
+        border-width: 4px;
+    }
+        .card.mini i {
+            width: 40px;
+            height: 60px;
+        }
+        .card.mini b {
+            background-image: url(../images/card_map_mini.png);
+            width: 40px;
+            height: 60px;
+        }
+        .card.mini.two i {
+            height: 36px;
+            top: 8px;
+        }
+        .card.mini.two b {
+            height: 36px;
+        }
+        .card.mini.one i {
+            height: 24px;
+            top: 16px;
+        }
+        .card.mini.one b {
+            height: 24px;
+        }
+        .card.mini.open b {
+            background-position-y: -60px;
+        }
+        .card.mini.diamond b {
+            background-position-x: -80px;
+        }
+        .card.mini.squiggle b {
+            background-position-x: -40px;
+        }
+
+
+
