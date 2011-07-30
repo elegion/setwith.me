@@ -102,6 +102,7 @@ GameSessionStateChoices = (
 class GameSession(models.Model):
     game = models.ForeignKey(Game, null=True)
     state = models.IntegerField(default=0, choices=GameSessionStateChoices)
+    client_state = models.IntegerField(default=ClientState.ACTIVE)
     #user = models.ForeignKey(User)
     user = models.CharField(max_length=50) # Session key
     set_pressed_dt = models.DateTimeField(null=True)
@@ -130,6 +131,7 @@ class GameSession(models.Model):
 
     def update(self):
         self.last_access = datetime.datetime.now()
+        self.client_state = ClientState.ACTIVE
         self.save()
 
     def _get_client_state(self):
