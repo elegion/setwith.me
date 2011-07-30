@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
-from annoying.decorators import JsonResponse
-from django.shortcuts import render_to_response
+from annoying.decorators import render_to
 
 
+@render_to('core/index.html')
 def home(request):
-    return render_to_response("core/index.html", {})
-
-
-def stub(request):
-    return JsonResponse({
-        'success': True
-    })
+    return {}
