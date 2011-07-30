@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  {% block extracss %}
+  {% endblock %}
+
+  {% block extrastyle %}{% endblock %}
+  {% block extrajs %}{% endblock %}
+  {% block extrahead %}{% endblock %}
+
+  <title>{% block title %}Set With Me{% endblock %}</title>
+  <!--[if IE]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <script src="http://jdbartlett.com/innershiv/innershiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+{% block body %}{% endblock %}
+</body>
+</html>
