@@ -27,7 +27,7 @@ a.pseudo:hover {
 /* 1.1 Header */
 .header {
     height: 85px;
-    background: #4d545a;
+    background: #4d545a url(../images/bg.png);
 }
 
     .header .cards {
@@ -44,7 +44,7 @@ a.pseudo:hover {
     }
 /* 1.2 Footer */
 .footer {
-    background: #4d545a;
+    background: #4d545a url(../images/bg.png);
     height: 170px;
     overflow: hidden;
     padding: 15px 0 0 0;
@@ -198,7 +198,7 @@ a.pseudo:hover {
     .card.mini {
         width: 40px;
         height: 60px;
-        border-radius: 5px;
+        border-radius: 2px;
         border-width: 4px;
     }
         .card.mini i {
