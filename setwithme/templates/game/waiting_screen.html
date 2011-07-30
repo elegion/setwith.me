@@ -1,0 +1,17 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+
+{% block content %}
+  {% if not waiting_users|length %}
+    No waiting users at this moment, sorry.
+  {% else %}
+    {% for user in waiting_users %}
+      {{ user }}
+      <form action="{% url game.views.start_game %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="opponent" value="{{ user }}">
+        <button type="submit">Start game</button>
+      </form>
+    {% endfor %}
+  {% endif %}
+{% endblock %}
