@@ -26,7 +26,7 @@ def game_screen(request, game_id):
 @ajax_request
 def start_game(request):
     user_id = request.session.session_key
-    WaitingUser.objects.get_or_create(user=user_id)[0].update()
+    wu = WaitingUser.objects.get_or_create(user=user_id)[0].update()
     last_poll_guard = datetime.datetime.now() - \
                       datetime.timedelta(seconds=WAITING_USER_TIMEOUT)
     opponents = WaitingUser.objects.\
@@ -38,6 +38,8 @@ def start_game(request):
         game = Game.objects.create(uid=game_id)
         GameSession.objects.create(game=game, user=user_id)
         GameSession.objects.create(game=game, user=opponent.user)
+        wu.delete()
+        opponent.delete()
         return redirect(game_screen, game_id=game_id)
     return {'status': 'polling'}
 
