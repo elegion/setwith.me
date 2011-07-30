@@ -78,7 +78,8 @@ SetWithMe.Game = {}
 SetWithMe.Game.init = function(gameId) {
     SetWithMe.Game.gameId = gameId;
     SetWithMe.Game.$cards = $('#js_cards');
-    SetWithMe.Game.$users = $('#js_users');
+    SetWithMe.Game.$users = $('#js_players');
+    SetWithMe.Game.$cardsLeft = $('#js_cards_left');
 
     var poller = new SetWithMe.Poller('/game/status/' + SetWithMe.Game.gameId);
     poller.onSuccess = SetWithMe.Game.render;
@@ -94,4 +95,26 @@ SetWithMe.Game.render = function(status) {
         card = status.cards[i];
         SetWithMe.Game.$cards.append('<li class="card ' + card + '"><i><b></b></i></li>');
     }
+
+    var player = null;
+    for(var i=0; i<status.users.length; i++) {
+        player = status.users[i];
+        var $player = $('#p'+player.user_id);
+        if (!$player.length) {
+            SetWithMe.Game.$users.append($(SetWithMe.Game.renderPlayer(player)));
+            $player = $('#p' + player.user_id);
+        }
+        $player.find('.sets .count').text(player.sets_found);
+        $player[0].class = 'player ' + player.state;
+    }
+}
+
+SetWithMe.Game.renderPlayer = function(player) {
+    return '<li class="player" id="p' + player.user_id + '">'+
+         '<div class="photo"><div><img src="/static/images/nophoto.png"></div></div>'+
+         '<div class="info">'+
+         '<a href="#" class="name">'+ player.user_name +'</a>'+
+         '<span class="sets"><span class="count"></span> sets</a>'+
+         '</div>'
+     '</li>'
 }

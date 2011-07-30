@@ -1,5 +1,6 @@
 {% extends "site_base.html" %}
 {% load i18n %}
+{% load media %}
 
 {% block bodyclass %}game{% endblock %}
 
@@ -10,4 +11,20 @@
 
     <ul id="js_cards" class="card_list"></ul>
     <div id="js_users"></div>
+
+    <ul class="players" id="js_players">
+        <!--li class="player active" id="p12">
+            <div class="photo"><div><img src="{% media 'images/nophoto.png' %}"></div></div>
+            <div class="info">
+            <a href="#" class="name">Anatoliy Larin</a>
+            <span class="sets">12 sets</span>
+            </div>
+        </li-->
+    </ul>
+
+
+    <div class="bottom">
+    <a href="#" class="set_button big_button">Set!</a>
+    <div class="cards_left"><span id="js_cards_left">81</span> cards left</div>
+    </div>
 {% endblock %}
