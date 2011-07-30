@@ -30,7 +30,9 @@ class Game(models.Model):
 
     def __init__(self, *args, **kwargs):
         models.Model.__init__(self, *args, **kwargs)
-        self.cards = ','.join(map(str, xrange(81)))
+        ids = range(81)
+        random.shuffle(ids)
+        self.cards = ','.join(map(str, ids))
 
     @property
     def cards_list(self):
@@ -103,12 +105,13 @@ class GameSession(models.Model):
 
     def serialize(self, current_user_id):
         return {'game': self.game_id,
-                'state': self.state,
+                'state': self.get_state_display(),
                 'client_state': self._get_client_state(),
                 'user_id': self.user,
                 'me': self.user == current_user_id,
                 'sets_found': self.sets_found,
-                'failures': self.failures}
+                'failures': self.failures,
+                'user_name': self.name}
 
     def update(self):
         self.last_access = datetime.datetime.now()
@@ -121,3 +124,7 @@ class GameSession(models.Model):
         if self.last_access + CLIENT_IDLE_TIMEOUT < now:
             return ClientState.IDLE
         return ClientState.ACTIVE
+
+    @property
+    def name(self):
+        return self.user[:4]

@@ -7,6 +7,7 @@ from game.models import Game, GameSession, State
 from users.models import WaitingUser
 from annoying.decorators import ajax_request, render_to
 from django.shortcuts import redirect
+from setwithme.apps.game.utils import Card
 
 WAITING_USER_TIMEOUT = 60
 
@@ -52,7 +53,7 @@ def status(request, game_id):
     users = [gs.serialize(self_id) for gs in \
         game.gamesession_set.all()]
     return {'users': users,
-            'cards': []}
+            'cards': [Card(id=card).as_text() for card in game.cards_list]}
 
 
 @ajax_request
