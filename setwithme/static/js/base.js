@@ -57,7 +57,7 @@ SetWithMe.Poller.prototype = {
         try {
             this.onSuccess(data);
         } catch (e) {
-            console.error(e);
+            console && console.error(e);
         }
     },
 
@@ -69,12 +69,12 @@ SetWithMe.Poller.prototype = {
      * @param {String} textStatus
      */
     _onError: function(jqXHR, textStatus) {
-        console.error(textStatus);
+        console && console.error(textStatus);
         this._timer = setTimeout(this._request.bind(this), SetWithMe.REQUEST_INTERVAL);
         try {
             this.onError();
         } catch (e) {
-            console.error(e);
+            console && console.error(e);
         }
     },
 
@@ -191,6 +191,7 @@ SetWithMe.Game = {
         this._id = id;
         this._poller = new SetWithMe.Poller('/game/get_status/' + this._id);
         this._poller.onSuccess = this._onStatusReceived.bind(this);
+        this._poller.onError = this._poller.onSuccess.bind(this);
         this._poller.start();
 
         this._status = this.statuses.NORMAL;
