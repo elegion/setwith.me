@@ -752,12 +752,13 @@ a.pseudo:hover {
     .game .chat_messages {
         height: 15em;
         font-size: 0.9em;
+        overflow-y: auto;
     }
     .game .chat_messages li {
         margin: 0.5em 0;
     }
     .game .chat_container input.text {
-        margin: 2em 0 0 0;
+        margin: 1em 0 0 0;
         width: 190px;
     }
     .game .chat_container h2 {
