@@ -1,1 +1,31 @@
-Django Dash 2011 repository for e-Legion team
+---
+SET online game
+---
+
+Brief description:
+
+Rules
+The object of the game is to identify a 'set' of three cards from 12 cards laid out on the table.
+Each card has a variation of the following four features:
+(A) Color:
+Each card is red, green, or purple.
+
+(B) Symbol:
+Each card contains ovals, squiggles, or diamonds.
+
+(C) Number:
+Each card has one, two, or three symbols.
+
+(D) Shading: Each card is solid, open, or striped.
+
+A 'Set' consists of three cards in which each feature is EITHER the same on each card OR is different on each card.
+That is to say, any feature in the 'Set' of three cards is either common to all three cards or is different on each card.
+
+----
+Supported key features:
+
+1. Cool design
+2. Login with Facebook or anonymous login with auto-created user
+3. Highly interactive game process
+4. Game available for any reasonable number of users (they just need to click 'Play' in one minute)
+5. Simple chat in game
