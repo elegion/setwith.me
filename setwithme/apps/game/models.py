@@ -164,6 +164,7 @@ class GameSession(models.Model):
                 'me': self.user.id == current_user_id,
                 'sets_found': self.sets_found,
                 'failures': self.failures,
+                'score': self.sets_found - self.failures,
                 'user_name': self.name}
 
     def update(self):
