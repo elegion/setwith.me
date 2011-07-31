@@ -25,7 +25,7 @@
 
     <ul class="players" id="js_players"></ul>
   
-    <div class="chat_container">
+    <div class="chat_container" style="display: none">
       <ul class="chat_messages"></ul>
       <form action="{% url chat.views.put_message game_id %}" method="POST" class="js_chat_message_form">
         {% csrf_token %}
