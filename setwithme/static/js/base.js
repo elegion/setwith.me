@@ -352,6 +352,11 @@ SetWithMe.Game = {
                 changedCards[i].oldId = this._cards[i].id;
             }
         }
+        if (newCards.length > this._cards.length) {
+            for (i = this._cards.length; i < newCards.length; i++) {
+                changedCards[i] = newCards[i];
+            }
+        }
         return changedCards;
     },
 
@@ -459,15 +464,22 @@ SetWithMe.Game = {
             var changed = this._getChangedCards(data.cards);
             if (!$.isEmptyObject(changed)) {
                 console.debug(changed);
-                for (key in changed) {
-                    if(changed.hasOwnProperty(key)) {
+                for (var key in changed) {
+                    if (changed.hasOwnProperty(key)) {
                         var card = changed[key];
                         var $place = this._cardsContainer.find('#' + card.oldId);
-                        if ($place.css('opacity') == 0) {
-                            $place.animate({opacity: '0'}, 1000);
+                        console.debug(card)
+                        if ($place.length) {
+                            if ($place.css('opacity') == 0) {
+                                $place.animate({opacity: '0'}, 1000);
+                            }
+                        } else {
+                            $place = $('<li style="opacity: 0"><i><b></b></i></li>');
+                            this._cardsContainer.append($place);
                         }
+                        console.debug($place);
                         $place.attr('class', 'card ' + card['class']);
-                        $place.attr('id', card['id'])
+                        $place.attr('id', card['id']);
                         $place.animate({opacity: '1'}, 1000);
                     }
                 }
