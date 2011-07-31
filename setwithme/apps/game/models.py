@@ -257,3 +257,6 @@ class GameSession(models.Model):
     @property
     def score(self):
         return self.sets_found - self.failures
+
+class Facts(models.Model):
+    text = models.CharField(max_length=255)

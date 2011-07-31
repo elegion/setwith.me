@@ -219,11 +219,11 @@ a.pseudo:hover {
     }
     .main .note {
         color: #cfcfcf;
-        font-size: 0.9em;
+        font-size: 0.75em;
         font-style: italic;
         font-weight: bold;
         text-shadow: #5b6064 0 -1px 0;
-        width: 30em;
+        width: 60em;
         margin: 0 auto;
         text-align: center;
     }
