@@ -95,7 +95,7 @@ def check_set(request, game_id):
         cards = [Card(id=card_id) for card_id in ids_lst]
         if not is_set(*cards):
             gs.state = GameSessionState.SET_PENALTY
-            gs.sets_found -= 1
+            gs.failures += 1
             gs.save()
             result = {'success': False, 'msg': 'Not SET!'}
         else:
