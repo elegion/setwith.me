@@ -474,6 +474,7 @@ SetWithMe.Game = {
                             }
                         } else {
                             $place = $('<li style="opacity: 0"><i><b></b></i></li>');
+                            this._bindCardEvents($place);
                             this._cardsContainer.append($place);
                         }
                         console.debug($place);
