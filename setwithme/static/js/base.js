@@ -365,7 +365,7 @@ SetWithMe.Game = {
     _renderCard: function(card) {
         var $card = $('<li><i><b></b></i></li>');
         $card.attr('id', card.id);
-        $card.attr('class', 'card ' + card.class);
+        $card.attr('class', 'card ' + card['class']);
         this._bindCardEvents($card);
         this._cardsContainer.append($card);
     },
