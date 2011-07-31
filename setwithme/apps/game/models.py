@@ -95,6 +95,20 @@ class Game(models.Model):
         self.desk_cards_list = dcl
         return res
 
+    @property
+    def cards_to_pop(self):
+        cards_to_pop = constants.CARDS_ON_DESK
+        now = datetime.datetime.now()
+        gss = self.gamesession_set
+        time_since_start = now - self.start
+        if len(gss.all()) == gss.filter(set_pressed_dt__isnull=True).count()\
+            and now - self.start > datetime.timedelta(seconds=constants.CARD_ADD_INTERVAL):
+            cards_to_pop += min(
+                constants.MAX_ADDITIONAL_CARDS,
+                int(time_since_start.seconds / float(constants.CARD_ADD_INTERVAL))
+            )
+        return cards_to_pop
+
     def has_sets(self):
         #FIXME: cache that and update on cards removal
         cards = sorted(self.desk_cards_list)

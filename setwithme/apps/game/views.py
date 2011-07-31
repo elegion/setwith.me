@@ -72,7 +72,7 @@ def get_status(request, game_id):
     users = [gs.serialize(request.user.id) for gs in \
         game.gamesession_set.all()]
     desc_cards = game.desk_cards_list
-    desc_cards.extend(game.pop_cards(quantity=constants.CARDS_ON_DESK - len(desc_cards)))
+    desc_cards.extend(game.pop_cards(quantity=game.cards_to_pop - len(desc_cards)))
     rem_cards_cnt = len(game.rem_cards_list)
     return {'users': users,
             'cards': [{'id': card_id,
