@@ -219,6 +219,7 @@ class GameSession(models.Model):
                     gs.state = GameSessionState.NORMAL
                     gs.save()
                 self.state = GameSessionState.SET_PENALTY
+                self.failures += 1
                 self.save()
 
         if not self.game.gamesession_set.exclude(state=GameSessionState.SET_PENALTY).count():
