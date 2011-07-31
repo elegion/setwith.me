@@ -43,7 +43,9 @@ def start_game(request):
         join_timeout = request.session['game_join_timeout'] = now
 
     if join_timeout + constants.GAME_JOIN_WAIT_TIMEOUT > now:
+        time_left = join_timeout + constants.GAME_JOIN_WAIT_TIMEOUT - now
         return {'status': 'polling',
+                'timeout': time_left.seconds,
                 'opponents': [op.serialize() for op in opponents]}
 
     game_id = get_uid()
@@ -92,7 +94,7 @@ def put_set_mark(request, game_id):
         gs = game.gamesession_set.get(user=request.user)
         gs.press_set()
         for g in game.gamesession_set.exclude(user=request.user).all():
-            g.state = GameSessionState.NORMAL
+            g.state = GameSessionState.SET_ANOTHER_USER
             g.save()
         return {'success': True}
     return {'success': False}

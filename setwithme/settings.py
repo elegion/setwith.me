@@ -194,6 +194,8 @@ AUTHENTICATION_BACKENDS = (
     'core.anon_backend.AnonymousBackend',
 )
 
+LOGIN_URL = '/'
+
 try:
     from settings_local import *
 except ImportError:

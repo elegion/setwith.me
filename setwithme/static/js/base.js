@@ -112,6 +112,10 @@ SetWithMe.searchGame = function() {
             }
             $players_list.html(opponents.join(''));
         }
+        if (data.timeout) {
+            $('#countdown').show();
+            $('#countdown .timer').text(data.timeout);
+        }
     };
     poller.start();
 };
@@ -134,7 +138,13 @@ SetWithMe.getCookie = function(name) {
 
 
 SetWithMe.Game = {
-    statuses: {'NORMAL': 'normal', 'SET_CHOOSE': 'set_choose', 'PENALTY': 'penalty', 'GAME_END': 'gameend'},
+    statuses: {
+        'NORMAL': 'normal',
+        'SET_CHOOSE': 'set_choose',
+        'PENALTY': 'penalty',
+        'GAME_END': 'gameend',
+        SET_ANOTHER_USER: 'set_another_user'
+    },
     _status: null,
     _statusChangedAt: null,
 
@@ -183,6 +193,11 @@ SetWithMe.Game = {
             $('#p' + this._leader).clone().appendTo($('#js_user_place'));
             this.uninit();
             $('.winner_plate').show();
+        }
+
+        if (newStatus == this.statuses.SET_ANOTHER_USER) {
+            this._setButtonLabel.text('Another user choosing the set...');
+            this._setButton.addClass('disabled');
         }
     },
 
@@ -283,7 +298,8 @@ SetWithMe.Game = {
 
     _onPutSet: function(data) {
         if (data.success === false) {
-            this._changeStatus(this.statuses.PENALTY);
+            this._stopCountDown();
+            this._changeStatus(this.statuses.SET_ANOTHER_USER);
         }
     },
 
@@ -450,6 +466,9 @@ SetWithMe.Game = {
         }
         if (this._user.state == 'SET_PRESSED') {
             this._changeStatus(this.statuses.SET_CHOOSE);
+        }
+        if (this._user.state == 'SET_ANOTHER_USER') {
+            this._changeStatus(this.statuses.SET_ANOTHER_USER);
         }
         if (data.game.is_finished) {
             this._changeStatus(this.statuses.GAME_END);
