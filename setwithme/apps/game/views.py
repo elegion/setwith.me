@@ -109,7 +109,7 @@ def check_set(request, game_id):
             gs.state = GameSessionState.SET_PENALTY
             gs.failures += 1
             gs.save()
-            result = {'success': False, 'msg': 'Not SET!'}
+            return {'success': False, 'msg': 'Not SET!'}
         else:
             gs.state = GameSessionState.NORMAL
             gs.sets_found += 1
