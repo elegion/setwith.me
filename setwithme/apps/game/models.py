@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import random
+import datetime
 import uuid
+
 from django.db import models
 from django.contrib.auth.models import User
 
-from game.constants import *
+from game import constants
 from setwithme.apps.game.utils import is_set, Card
 
 
@@ -100,18 +102,19 @@ class Game(models.Model):
     @property
     def leader(self):
         """Determines leading user, can be user after game end for determining winner"""
-        return max(self.gamesession_set.exclude(client_state=ClientConnectionState.LOST)\
-            .values_list('sets_found', 'pk', 'user'))[2]
+        scores = self.gamesession_set.exclude(client_state=ClientConnectionState.LOST)\
+            .values_list('sets_found', 'failures', 'user')
+        return max([(score[0] - score[1], score[2]) for score in scores])[1]
 
 
 class GameSessionState:
-    IDLE = "IDLE"
+    NORMAL = "NORMAL"
     SET_PRESSED = "SET_PRESSED"
     SET_PENALTY = "SET_PENALTY"
 
 
 GameSessionStateChoices = (
-    (GameSessionState.IDLE, 'Idle'),
+    (GameSessionState.NORMAL, 'Normal'),
     (GameSessionState.SET_PRESSED, 'Set pressed'),
     (GameSessionState.SET_PENALTY, 'Set penalty'),
 )
@@ -134,7 +137,7 @@ class GameSession(models.Model):
     game = models.ForeignKey(Game, null=True)
     state = models.CharField(
         max_length=50,
-        default=GameSessionState.IDLE,
+        default=GameSessionState.NORMAL,
         choices=GameSessionStateChoices)
     client_state = models.CharField(
         max_length=50,
@@ -152,7 +155,7 @@ class GameSession(models.Model):
         self.save()
 
     def set_received_in_time(self):
-        return self.set_pressed_dt + PRESSED_SET_TIMEOUT > \
+        return self.set_pressed_dt + constants.PRESSED_SET_TIMEOUT > \
             datetime.datetime.now() if self.set_pressed_dt else \
             False
 
@@ -164,7 +167,7 @@ class GameSession(models.Model):
                 'me': self.user.id == current_user_id,
                 'sets_found': self.sets_found,
                 'failures': self.failures,
-                'score': self.sets_found - self.failures,
+                'score': self.score,
                 'user_name': self.name}
 
     def update(self):
@@ -174,10 +177,15 @@ class GameSession(models.Model):
 
     def _fix_game_state(self):
         now = datetime.datetime.now()
-        if self.set_pressed_dt and \
-            self.set_pressed_dt + PRESSED_SET_TIMEOUT > now:
-            self.state = GameSessionState.IDLE
-            self.save()
+        state_pressed = self.state == GameSessionState.SET_PRESSED
+        if state_pressed:
+            if not self.set_pressed_dt or (self.set_pressed_dt and\
+                ((now > self.set_pressed_dt + constants.PRESSED_SET_TIMEOUT))):
+                self.state = GameSessionState.SET_PENALTY
+                self.save()
+
+        if not self.game.gamesession_set.exclude(state=GameSessionState.SET_PENALTY).count():
+            self.game.gamesession_set.all().update(state=GameSessionState.NORMAL)
 
     def _get_game_state(self):
         self._fix_game_state()
@@ -185,11 +193,11 @@ class GameSession(models.Model):
 
     def _get_client_state(self):
         now = datetime.datetime.now()
-        if self.last_access + CLIENT_LOST_TIMEOUT < now:
+        if self.last_access + constants.CLIENT_LOST_TIMEOUT < now:
             self.client_state = ClientConnectionState.LOST
             self.save()
             return self.client_state
-        if self.last_access + CLIENT_IDLE_TIMEOUT < now:
+        if self.last_access + constants.CLIENT_IDLE_TIMEOUT < now:
             self.client_state = ClientConnectionState.IDLE
             self.save()
             return self.client_state 
@@ -201,3 +209,7 @@ class GameSession(models.Model):
             return u"%s %s" % (self.user.first_name, self.user.last_name)
         else:
             return self.user.username
+
+    @property
+    def score(self):
+        return self.sets_found - self.failures

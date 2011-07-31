@@ -394,18 +394,18 @@ a.pseudo:hover {
         max-width: 170px;
         overflow: hidden;
     }
-    .player.set_presed {
+    .player.set_pressed {
         color: #FFF;
         position: relative;
         left: -30px;
     }
-        .player.set_presed .name {
+        .player.set_pressed .name {
             color: #FFF;
         }
-        .player.set_presed .photo {
+        .player.set_pressed .photo {
             border-color: #FFF;
         }
-        .player.set_presed .photo div {
+        .player.set_pressed .photo div {
             padding-left: 30px;
             background: #FFF no-repeat 5px 50% url(../images/set_vertical.png);
         }

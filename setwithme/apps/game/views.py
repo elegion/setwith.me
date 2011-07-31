@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.core.urlresolvers import reverse
 from annoying.decorators import ajax_request, render_to
 
 from game.models import Game, GameSession, GameSessionState, ClientConnectionState, get_uid
 from game.utils import Card, is_set
 from users.models import WaitingUser
-from game.constants import *
+from game import constants
 from chat.models import ChatMessage
 
 
@@ -24,7 +26,7 @@ def start_game(request):
         return {'status': 302,
                 'url': reverse(game_screen, kwargs={'game_id': gs.game.id})}
     wu = WaitingUser.objects.get_or_create(user=user)[0].update()
-    last_poll_guard = datetime.datetime.now() - WAITING_USER_TIMEOUT
+    last_poll_guard = datetime.datetime.now() - constants.WAITING_USER_TIMEOUT
     opponents = WaitingUser.objects.\
         filter(last_poll__gt=last_poll_guard).\
         exclude(user=user).all()
@@ -54,7 +56,7 @@ def get_status(request, game_id):
     users = [gs.serialize(request.user.id) for gs in \
         game.gamesession_set.all()]
     desc_cards = game.desk_cards_list
-    desc_cards.extend(game.pop_cards(quantity=CARDS_ON_DESK - len(desc_cards)))
+    desc_cards.extend(game.pop_cards(quantity=constants.CARDS_ON_DESK - len(desc_cards)))
     rem_cards_cnt = len(game.rem_cards_list)
     return {'users': users,
             'cards': [{'id': card_id,
@@ -82,6 +84,16 @@ def put_set_mark(request, game_id):
 def check_set(request, game_id):
     game = Game.objects.get(id=game_id)
     gs = game.gamesession_set.get(user=request.user)
+
+    # Update status to IDLE for other game sessions:
+    for gs_other in game.gamesession_set.exclude(user=request.user).all():
+        gs_other.state = GameSessionState.NORMAL
+        gs_other.save()
+
+    def add_stat(gs, data):
+        data.update({'sets_found': gs.sets_found, 'failures': gs.failures, 'score': gs.score})
+        return data
+
     if gs.set_received_in_time():
         ids = request.REQUEST.get('ids')
         if not ids:
@@ -99,15 +111,15 @@ def check_set(request, game_id):
             gs.save()
             result = {'success': False, 'msg': 'Not SET!'}
         else:
-            gs.state = GameSessionState.IDLE
+            gs.state = GameSessionState.NORMAL
             gs.sets_found += 1
             gs.save()
             # Remove cards from desc list
             game.drop_cards(*ids_lst)
-            result = {'success': True, 'msg': 'SET!'}
-        # Update status to IDLE for other game sessions:
-        for gs_other in game.gamesession_set.exclude(user=request.user).all():
-            gs_other.state = GameSessionState.IDLE
-            gs_other.save()
-        return result
-    return {'success': False, 'msg': 'Not in time!'}
+            result = {'success': True, 'msg': 'SET!', 'sets_found': gs.sets_found}
+            return add_stat(gs, result)
+    else:
+        gs.state = GameSessionState.SET_PENALTY
+        gs.failures -= 1
+        gs.save()
+        return add_stat(gs, {'success': False, 'msg': 'Not in time!'})
