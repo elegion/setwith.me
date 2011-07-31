@@ -102,10 +102,11 @@ SetWithMe.searchGame = function() {
             opponents = [];
             for (var i = 0; i < data.opponents.length; i++) {
                 var op = data.opponents[i];
+                var pic = op.pic || '/static/images/nophoto.png';
                 var op_rendered = '<li class="player" id="p' + op.username + '">'+
-                        '<div class="photo"><div><img src="/static/images/nophoto.png"></div></div>'+
+                        '<div class="photo"><div><img src="' + pic + '"></div></div>'+
                         '<div class="info">'+
-                        '<a href="#" class="name">'+ op.username +'</a>'+
+                        '<a href="#" class="name">'+ op.name +'</a>'+
                         '</div></li>';
                         '</li>'
                 opponents.push(op_rendered);
@@ -377,10 +378,11 @@ SetWithMe.Game = {
     },
 
     _renderPlayer: function(player) {
-        return '<li class="player" id="p' + player.user_id + '">'+
-             '<div class="photo"><div><img src="/static/images/nophoto.png"></div></div>'+
+        var pic = player.user_data.pic || '/static/images/nophoto.png';
+        return '<li class="player" id="p' + player.user_data.id + '">'+
+             '<div class="photo"><div><img src="' + pic + '"></div></div>'+
              '<div class="info">'+
-             '<a href="#" class="name">'+ player.user_name +'</a><span class="stats">'+
+             '<a href="#" class="name">'+ player.user_data.name +'</a><span class="stats">'+
              '<span class="points"><span class="count"></span> points, </span>'+
              '<span class="sets"><span class="count"></span> sets, </span>'+
              '<span class="failures"><span class="count"></span> failures</span>'+
@@ -391,14 +393,14 @@ SetWithMe.Game = {
         var player = null;
         for (var i = 0; i < users.length; i++) {
             player = users[i];
-            var $player = $('#p'+player.user_id);
+            var $player = $('#p'+player.user_data.id);
             if (!$player.length) {
                 if (player.me) {
                     SetWithMe.Game.$users.prepend($(this._renderPlayer(player)));
                 } else {
                     SetWithMe.Game.$users.append($(this._renderPlayer(player)));
                 }
-                $player = $('#p' + player.user_id);
+                $player = $('#p' + player.user_data.id);
             }
             this._updateScore(player.user_id, player);
 

@@ -117,6 +117,7 @@ MIDDLEWARE_CLASSES = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.request',
+    'core.context_processors.user_profile',
 )
 
 
@@ -177,7 +178,7 @@ LOGGING = {
 SITE_NAME = 'Setwithme'
 SITE_DOMAIN = 'setwith.me'
 
-#AUTH_PROFILE_MODULE = 'users.UserProfile'
+AUTH_PROFILE_MODULE = 'users.UserProfile'
 
 SESSION_SAVE_EVERY_REQUEST = True
 
@@ -190,11 +191,13 @@ FACEBOOK_SECRET_KEY = '2f8f1719fa39fc05be74a33e28474091'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'django_facebook.auth.FacebookProfileBackend',
+    'core.facebook_sdk.FacebookProfileBackend',
     'core.anon_backend.AnonymousBackend',
 )
 
 LOGIN_URL = '/'
+
+DEFAULT_PROFILE_PIC = '/static/images/nophoto.png'
 
 try:
     from settings_local import *
