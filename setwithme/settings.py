@@ -197,7 +197,7 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = '/'
 
-DEFAULT_PROFILE_PIC = '/static/images/nophoto.png'
+DEFAULT_PROFILE_PIC = os.path.join(STATIC_URL, '/static/images/nophoto.png')
 
 try:
     from settings_local import *
