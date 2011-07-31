@@ -8,9 +8,13 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import authenticate
 from django.views.decorators.http import require_POST
 
+from game.models import Game
+
+
 @render_to('core/index.html')
 def home(request):
-    return {}
+    return {'players': User.objects.count(),
+            'games_online': Game.objects.filter(finished=False).count()}
 
 
 @render_to('core/lobby.html')
