@@ -258,6 +258,11 @@ class GameSession(models.Model):
         if not self.game.gamesession_set.exclude(state=GameSessionState.SET_PENALTY).count():
             self.game.gamesession_set.all().update(state=GameSessionState.NORMAL)
 
+        self.game.gamesession_set\
+            .filter(state=GameSessionState.SET_PENALTY,
+                    set_pressed_dt__lte=now-constants.CLIENT_PENALTY_TIMEOUT)\
+            .update(state=GameSessionState.NORMAL)
+
     def _get_game_state(self):
         self._fix_game_state()
         return self.state
@@ -271,7 +276,7 @@ class GameSession(models.Model):
         if self.last_access + constants.CLIENT_IDLE_TIMEOUT < now:
             self.client_state = ClientConnectionState.IDLE
             self.save()
-            return self.client_state 
+            return self.client_state
         return ClientConnectionState.ACTIVE
 
     @property

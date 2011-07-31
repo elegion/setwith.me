@@ -17,6 +17,12 @@ CLIENT_LOST_TIMEOUT = getattr(
     "CLIENT_LOST_TIMEOUT",
     datetime.timedelta(seconds=60))
 
+CLIENT_PENALTY_TIMEOUT = getattr(
+    settings,
+    'CLIENT_PENALTY_TIMEOUT',
+    datetime.timedelta(seconds=120)
+)
+
 WAITING_USER_TIMEOUT = getattr(
     settings,
     "WAITING_USER_TIMEOUT",
