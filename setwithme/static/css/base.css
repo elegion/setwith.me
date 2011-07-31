@@ -412,12 +412,17 @@ a.pseudo:hover {
         -webkit-transition: border-color 0.1s ease-in;
         -o-transition: border-color 0.1s ease-in;
         -moz-transition: border-color 0.1s ease-in;
+        position: relative;
     }
 
     .game .card_list.active .card:hover,
     .game .card_list .card.active {
         border-color: #464d53;
         cursor: pointer;
+    }
+
+    .game .card_list.active .card.vibrate:hover {
+        border-color: #F1F1F1;
     }
 
 .game .bottom {
