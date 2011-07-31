@@ -113,6 +113,7 @@ def get_status(request, game_id):
         expired.update(state=GameSessionState.NORMAL)
         update_status_cache(game_id)
 
+    #LOST and IDLE player
     if gsession.last_access + constants.CLIENT_LOST_TIMEOUT < now:
         gsession.client_state = ClientConnectionState.LOST
         gsession.save()
@@ -121,6 +122,12 @@ def get_status(request, game_id):
     if gsession.last_access + constants.CLIENT_IDLE_TIMEOUT < now:
         gsession.client_state = ClientConnectionState.IDLE
         gsession.save()
+        update_status_cache(game_id)
+
+    #give new cards on set detection problems
+    cards_needed = game.cards_to_pop - len(game.desk_cards_list)
+    if cards_needed:
+        game.pop_cards(quantity=cards_needed)
         update_status_cache(game_id)
 
     status = cache.get('st_%s_%s' % (game_id, request.user.id))
