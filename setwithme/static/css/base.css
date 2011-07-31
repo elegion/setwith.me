@@ -472,6 +472,9 @@ a.pseudo:hover {
     overflow: hidden;
     margin: 1em 0 0;
 }
+.player:first-child {
+    margin-top: 0;
+}
 .player .info {
     float: left;
     margin-left: 15px;
