@@ -11,18 +11,18 @@ from setwithme.apps.game.utils import Card
 class GameModelTestCase(TestCase):
 
     def test_game_session_creation(self):
-        user_id = uuid.uuid4().hex
-        game_session, created = GameSession.objects.get_or_create(user=user_id)
+        user = self._create_user()
+        game_session, created = GameSession.objects.get_or_create(user=user)
         self.assertTrue(created)
         self.assertIsNotNone(game_session)
-        game_session, created = GameSession.objects.get_or_create(user=user_id)
+        game_session, created = GameSession.objects.get_or_create(user=user)
         self.assertFalse(created)
         self.assertIsNotNone(game_session)
 
     def test_game_creation(self):
-        user_1 = User.objects.get_or_create(username='a')[0]
+        user_1 = self._create_user()
         game_session_1 = GameSession.objects.get_or_create(user=user_1)[0]
-        user_2 = User.objects.get_or_create(username='b')[0]
+        user_2 = self._create_user()
         game_session_2 = GameSession.objects.get_or_create(user=user_2)[0]
         game = Game.objects.create()
         self.assertIsNotNone(game)
@@ -33,18 +33,13 @@ class GameModelTestCase(TestCase):
         game.pop_cards(quantity=12)
         return game
 
-    def test_game_get_cards(self):
-        game = Game.objects.create()
-        cards = game.rem_cards_list
-        self.assertEqual(list(xrange(81)), cards)
-
     def test_game_drop_cards(self):
         game = Game.objects.create()
         shown_cards = game.pop_cards()
-        self.assertEqual(len(game.rem_cards_list), 81 - 3)
-        self.assertEqual(len(game.desk_cards_list), 3)
+        self.assertEqual(len(game.rem_cards_list), 81 - 3 - 12)
+        self.assertEqual(len(game.desk_cards_list), 3 + 12)
         game.drop_cards(*shown_cards)
-        self.assertEqual(len(game.desk_cards_list), 0)
+        self.assertEqual(len(game.desk_cards_list), 12)
 
     def test_has_sets(self):
         game = self.test_game_creation()
@@ -60,15 +55,22 @@ class GameModelTestCase(TestCase):
     def test_game_rem_cards(self):
         game = Game.objects.create()
         rem_lst = game.rem_cards_list
-        self.assertEqual(len(rem_lst), 81)
+        self.assertEqual(len(rem_lst), 81 - 12)
         desk_lst = game.desk_cards_list
-        self.assertEqual(len(desk_lst), 0)
+        self.assertEqual(len(desk_lst), 12)
         popped_lst = game.pop_cards(quantity=12)
         self.assertEqual(len(popped_lst), 12)
         desk_lst = game.desk_cards_list
-        self.assertEqual(len(desk_lst), 12)
+        self.assertEqual(len(desk_lst), 12 + 12)
         rem_lst = game.rem_cards_list
-        self.assertEqual(len(rem_lst), 81 - 12)
+        self.assertEqual(len(rem_lst), 81 - 12 - 12)
+
+
+    def _create_user(self):
+        user_uuid = unicode(uuid.uuid4().hex)[:30]
+        user, created = User.objects.get_or_create(
+            username=user_uuid, defaults={'first_name': 'Anon %s' % (user_uuid[:4],)})
+        return user
 
 
     
