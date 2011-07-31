@@ -267,11 +267,8 @@ SetWithMe.Game = {
         if (this._setButton.hasClass('disabled') || this._markingSet) {
             return;
         }
-        this._markingSet = true;
-        this._setButton.addClass('disabled');
-        this._setButtonLabel.text('Show us set bellow...');
-        this._startCountDown();
         this._sendPutSet();
+        this._setButton.addClass('disabled');
     },
 
     _checkSet: function($cards) {
@@ -302,11 +299,17 @@ SetWithMe.Game = {
         if (data.success === false) {
             this._stopCountDown();
             this._changeStatus(this.statuses.SET_ANOTHER_USER);
+            this._setButton.removeClass('disabled');
+        } else {
+            this._markingSet = true;
+            this._setButtonLabel.text('Show us set bellow...');
+            this._startCountDown();
         }
     },
 
     _sendPutSet: function() {
         $.ajax({
+            async: false,
             headers: {
                 'X-CSRFToken': this._CSRFToken
             },
