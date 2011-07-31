@@ -196,7 +196,7 @@ SetWithMe.Game = {
         }
 
         if (newStatus == this.statuses.SET_ANOTHER_USER) {
-            this._setButtonLabel.text('Another user choosing the set...');
+            this._setButtonLabel.text('Another user is choosing the set...');
             this._setButton.addClass('disabled');
         }
     },
@@ -462,7 +462,6 @@ SetWithMe.Game = {
         if (this._cards) {
             var changed = this._getChangedCards(data.cards);
             if (!$.isEmptyObject(changed)) {
-                console.debug(changed);
                 for (var key in changed) {
                     if (changed.hasOwnProperty(key)) {
                         var card = changed[key];
@@ -504,6 +503,18 @@ SetWithMe.Game = {
         this._leader = data.game.leader;
 
         this._cardsLeftLabel.text(data.cards_left);
+
+        //chat
+        var messages = data.chat.splice(0, 10);
+        this._messages_ids = [];
+        var $cont = $('#js_chatmessages');
+        $cont.html("");
+        var msg = null;
+        for(var i=messages.length-1; i>=0; i--) {
+            msg = messages[i];
+            $cont.prepend('<li><span class="sender">' + msg.sender + '</span>' +
+                    ': <span class="message">' + msg.message + '</span></li>');
+        }
 
         //status changes
         if (this._user.state == 'SET_PENALTY') {
@@ -573,7 +584,7 @@ $(function() {
     }
     $('.js_chat_message_form').ajaxForm({
         'success': function(data) {
-            console.log('message form success');
+            $('.js_chat_message_form input.text').attr('value', '');
         }
     });
 });

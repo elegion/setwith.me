@@ -34,7 +34,7 @@ a.pseudo:hover {
     position: relative;
     min-height: 100%;
 }
-.wrapper_width {
+.wrapper_width, .inner_width_wrapper {
     width: 870px;
     margin: 0 auto;
     position: relative;
@@ -523,8 +523,8 @@ a.pseudo:hover {
 
         margin: 0.5em 0 0 65px;
         position: absolute;
-        bottom: 55px;
-        right: 100px;
+        top: 40px;
+        left: 0px;
     }
     .game .cards_left #js_cards_left {
         text-shadow: 0 1px 1px #888e93;
@@ -672,3 +672,33 @@ a.pseudo:hover {
     float: right;
     margin-top: 60px;
 }
+
+.game .content .wrapper_width {
+    width: 100%;
+}
+.game .chat_container {
+    position: absolute;
+    width: 230px;
+    bottom: 50px;
+    left: 600px;
+    background: #454C52;
+    padding: 1em;
+    border-radius: 10px;
+    overflow: hidden;
+}
+    .game .chat_messages {
+        height: 15em;
+        font-size: 0.9em;
+    }
+    .game .chat_messages li {
+        margin: 0.5em 0;
+    }
+    .game .chat_container input.text {
+        margin: 2em 0 0 0;
+        width: 190px;
+    }
+    .game .chat_container h2 {
+        font-family: 'Lobster', cursive;
+        font-size: 1.5em;
+        margin: 0 0 0.5em 0;
+    }
