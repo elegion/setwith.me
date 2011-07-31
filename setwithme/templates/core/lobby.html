@@ -1,6 +1,6 @@
 {% extends "site_base.html" %}
 
-{% block bodyclass %}main{% endblock %}
+{% block bodyclass %}main lobby{% endblock %}
 
 {% block extrajs %}
     {{ block.super }}
@@ -10,7 +10,11 @@
 {% endblock %}
 
 {% block content %}
+<div class="lobby_main">
 <h1 class="lobby">Searching for opponents...</h1>
+<div id="countdown" style="display: none">
+  <div><span class="timer"></span> seconds left</div>
+</div>
 
 <div class="searching">
     <div class="tape" id="js_searching">
@@ -19,13 +23,11 @@
         <div class="card three green open squiggle"><i><b></b></i></div>
     </div>
 </div>
-
-  <ul class="opponents" id="js_opponents"></ul>
-  <div id="countdown" style="display: none">
-    <div>Waiting for other players to join the game...</div>
-    <div><span class="timer"></span> seconds left.</div>
-  </div>
-
+<ul class="opponents" id="js_opponents"></ul>
 <div class="note">{{ message }}</div>
+</div>
+
+
+
 
 {% endblock %}

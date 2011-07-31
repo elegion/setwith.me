@@ -8,11 +8,12 @@
         <div class="wrapper_width">
             <div class="loginbox">
               {% if request.user.is_authenticated %}
-                <div>{{ request.user.username }}</div>
-                <div>{{ request.user.first_name }}</div>
-                <div>{{ request.user.last_name }}</div>
-                <div class="photo"><div><img src="{{ user_profile.user_pic }}"></div></div>
-                <form action="{% url core.views.logout %}" method="POST">
+                <img class="photo" src="{{ user_profile.user_pic }}">
+                <div class="info">
+                <div class="name">{{ request.user.first_name }} {{ request.user.last_name }}</div>
+                <div class="stat">win 0 | lose 0</div>
+                  </div>
+                <form class="logout" action="{% url core.views.logout %}" method="POST">
                   {% csrf_token %}
                   <button type="submit">Logout</button>
                 </form>

@@ -108,7 +108,6 @@ SetWithMe.searchGame = function() {
                         '<div class="info">'+
                         '<a href="#" class="name">'+ op.name +'</a>'+
                         '</div></li>';
-                        '</li>'
                 opponents.push(op_rendered);
             }
             $players_list.html(opponents.join(''));
