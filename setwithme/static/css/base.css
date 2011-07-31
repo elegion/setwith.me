@@ -438,9 +438,9 @@ a.pseudo:hover {
         color: #434a50;
         text-shadow: 0 1px 1px #888e93;
 
-        xmargin: 0.5em 0 0 65px;
+        margin: 0.5em 0 0 65px;
         position: absolute;
-        bottom: 40px;
+        bottom: 55px;
         right: 100px;
     }
     .game .cards_left #js_cards_left {
