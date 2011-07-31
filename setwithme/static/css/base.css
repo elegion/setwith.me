@@ -333,14 +333,23 @@ a.pseudo:hover {
         height: 150px;
         position: relative;
     }
-    .card.open b {
-        background-position-y: -150px;
+    .card.oval b {
+        background-position: 0 0;
+    }
+    .card.oval.open b {
+        background-position: 0 -150px;
     }
     .card.diamond b {
-        background-position-x: -200px;
+        background-position: -200px 0;
+    }
+    .card.diamond.open b {
+        background-position: -200px -150px;
     }
     .card.squiggle b {
-        background-position-x: -100px;
+        background-position: -100px 0;
+    }
+    .card.squiggle.open b {
+        background-position: -100px -150px;
     }
 
     .card.mini {
@@ -372,14 +381,23 @@ a.pseudo:hover {
         .card.mini.one b {
             height: 24px;
         }
-        .card.mini.open b {
-            background-position-y: -60px;
+        .card.mini.oval b {
+            background-position: 0 0;
+        }
+        .card.mini.oval,open b {
+            background-position: 0 -60px;
         }
         .card.mini.diamond b {
-            background-position-x: -80px;
+            background-position: -80px 0;
+        }
+        .card.mini.diamond.open b {
+            background-position: -80px -60px;
         }
         .card.mini.squiggle b {
-            background-position-x: -40px;
+            background-position: -40px 0;
+        }
+        .card.mini.squiggle.open b {
+            background-position: -40px -60px;
         }
 
 /* 4. Game */
