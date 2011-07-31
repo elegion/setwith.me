@@ -90,7 +90,11 @@ def put_set_mark(request, game_id):
             count():
         gs = game.gamesession_set.get(user=request.user)
         gs.press_set()
-    return {'success': True}
+        for g in game.gamesession_set.exclude(user=request.user).all():
+            g.state = GameSessionState.NORMAL
+            g.save()
+        return {'success': True}
+    return {'success': False}
 
 
 @ajax_request
