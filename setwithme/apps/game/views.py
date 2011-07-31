@@ -145,7 +145,7 @@ def check_set(request, game_id):
             return add_stat(gs, result)
     else:
         gs.state = GameSessionState.SET_PENALTY
-        gs.failures -= 1
+        gs.failures += 1
         gs.save()
         return add_stat(gs, {'success': False, 'msg': 'Not in time!'})
 

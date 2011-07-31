@@ -161,6 +161,7 @@ a.pseudo:hover {
     background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc)); /* for webkit browsers */
     background: -moz-linear-gradient(top,  #eee,  #ccc); /* for firefox 3.6+ */
     border-radius: 6px;
+    -moz-border-radius: 6px;
     border: 3px solid #585e62;
 }
 
@@ -247,6 +248,7 @@ a.pseudo:hover {
         text-decoration: none;
         background: url(../images/bg_grey.png);
         border-radius: 6px;
+        -moz-border-radius: 6px;
     }
         .stats .stats_container span {
             display: block;
@@ -272,6 +274,7 @@ a.pseudo:hover {
     text-shadow: 0 -1px 0 #3b4146;
     text-decoration: none;
     border-radius: 6px;
+    -moz-border-radius: 6px;
     border: 3px solid #585e62;
 }
     .login_container form {
@@ -345,6 +348,7 @@ a.pseudo:hover {
     position: relative;
     border: 7px solid #FFF;
     border-radius: 5px;
+    -moz-border-radius: 5px;
     background: #f1f1f1;
     user-select: none;
     -moz-user-select: none;
@@ -411,6 +415,7 @@ a.pseudo:hover {
         width: 40px;
         height: 60px;
         border-radius: 2px;
+        -moz-border-radius: 2px;
         border-width: 4px;
     }
         .card.mini i {
@@ -524,6 +529,7 @@ a.pseudo:hover {
     .game .cards_left #js_cards_left {
         text-shadow: 0 1px 1px #888e93;
         border-radius: 25px;
+        -moz-border-radius: 25px;
         padding: 5px 10px;
         background: #464d53;
         color: #777d81;
@@ -563,6 +569,7 @@ a.pseudo:hover {
         float: left;
         border: 4px solid #454b51;
         border-radius: 5px;
+        -moz-border-radius: 5px;
     }
     .player .photo div {
         width: 50px;
@@ -643,6 +650,7 @@ a.pseudo:hover {
     background: #454C52;
     border: 5px solid white;
     border-radius: 5px;
+    -moz-border-radius: 5px;
 }
 
 .game .winner_plate h1 {
@@ -659,3 +667,8 @@ a.pseudo:hover {
     .game .winner_plate .player .name {
         color: #FF0;
     }
+
+.game .share_game {
+    float: right;
+    margin-top: 60px;
+}
