@@ -10,6 +10,12 @@ p {
     line-height: 130%;
     margin: 0.5em 0 0 0;
 }
+a {
+    color: #FFF;
+}
+a:hover {
+    text-decoration: none;
+}
 a.pseudo {
     color: #FFF;
     border-bottom: 1px dashed #FFF;
@@ -24,6 +30,7 @@ a.pseudo:hover {
     width: 870px;
     margin: 0 auto;
     position: relative;
+    overflow: hidden;
 }
 /* 1.1 Header */
 .header {
@@ -269,7 +276,7 @@ a.pseudo:hover {
 
 /* 4. Game */
 .game .card_list {
-    margin: 40px 0;
+    margin: 20px 0 40px 0;
     width: 550px;
     float: left;
 }
@@ -295,9 +302,12 @@ a.pseudo:hover {
 
     .game .set_button {
         width: 516px;
-        margin: 0 7px;
+        margin: 40px 7px 0 7px;
         float: left;
         font-size: 1.5em;
+    }
+    .game .set_button.disabled {
+        cursor: default;
     }
     .game .set_button:active,
     .game .set_button.disabled {
@@ -315,12 +325,15 @@ a.pseudo:hover {
             text-shadow: none;
         }
     .game .cards_left {
-        float: left;
         font-family: 'Lobster', cursive;
         font-size: 1.5em;
-        margin: 0.5em 0 0 65px;
         color: #434a50;
         text-shadow: 0 1px 1px #888e93;
+
+        xmargin: 0.5em 0 0 65px;
+        position: absolute;
+        bottom: 40px;
+        right: 100px;
     }
     .game .cards_left #js_cards_left {
         text-shadow: 0 1px 1px #888e93;
