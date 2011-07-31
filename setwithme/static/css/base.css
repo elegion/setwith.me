@@ -1,4 +1,8 @@
 /* 0. Common tags */
+html {
+    height: 100%;
+}
+
 body {
     font-family: Arial;
     font-size: 1em;
@@ -124,7 +128,7 @@ a.pseudo:hover {
 
 .main .play {
     clear: both;
-    margin: 3em 0 0;
+    width: 17em;
 }
 
 .main .play:hover {
@@ -163,6 +167,110 @@ a.pseudo:hover {
 .tape {
     width: 400px;
 }
+/* 2.1 Stats container */
+.stats {
+    margin: 50px 0 50px;
+    width: 30em;
+}
+    .stats .stats_container {
+        padding: 15px;
+        display: block;
+        width: 8em;
+        text-align: center;
+        color: #596064;
+        font-family: 'Lobster', cursive;
+        text-shadow: #9fa4a8 0 1px 0;
+        font-size: 1.35em;
+        margin: 0 auto;
+        text-decoration: none;
+        background: url(../images/bg_grey.png);
+        border-radius: 6px;
+    }
+        .stats .stats_container span {
+            display: block;
+            text-align: center;
+        }
+        .stats .stats_container .separator {
+            background: url(../images/bg_separator.png);
+            height: 2px;
+            margin: 10px 10px 5px;
+        }
+
+/* 2.2 Login Container */
+.login_container {
+    display: none;
+    width: 33em;
+    height: 1.6em;
+    text-align: center;
+    padding: 0.9em 0;
+    margin: 2.2em 0 0;
+    background: #464D53 url(../images/bg.png);
+    color: #9a9a9a;
+    font-size: 0.9em;
+    text-shadow: 0 -1px 0 #3b4146;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 3px solid #585e62;
+}
+    .login_container form {
+        display: inline;
+    }
+    .login_container .anonymous_login {
+        display: inline;
+        color: #fff;
+    }
+        .login_container .anonymous_login .or {
+            margin: 0 10px;
+        }
+        .login_container .anonymous_login a {
+            color: #fff;
+        }
+
+.facebook_button {
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+    display: inline-block;
+    padding: 0.3em 0.6em 0.375em;
+    border: 1px solid;
+    margin: 0;
+    text-decoration: none;
+    text-align: center;
+    font: bold 11px/normal 'lucida grande', tahoma, verdana, arial, sans-serif;
+    white-space: nowrap;
+    cursor: pointer;
+    /* outline: none; */
+    color: #fff;
+    border-color: #29447E #29447E #1A356E;
+    background-color: #5B74A8;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#637bad), to(#5872a7));
+    background-image: -moz-linear-gradient(#637bad, #5872a7);
+    background-image: -o-linear-gradient(#637bad, #5872a7);
+    background-image: linear-gradient(#637bad, #5872a7);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#637bad', EndColorStr='#5872a7'); /* for IE 6 - 9 */
+    -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 #8a9cc2;
+    -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 #8a9cc2;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 #8a9cc2;
+    /* IE hacks */
+    zoom: 1;
+    *display: inline;
+}
+
+.facebook_button:active {
+    border-color: #29447E;
+    background: #4F6AA3;
+    filter: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.facebook_button::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+
 /* 3. Cards */
 
 .main .card {

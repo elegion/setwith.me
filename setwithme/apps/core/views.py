@@ -28,7 +28,7 @@ def login(request):
     else:
         raise NotImplementedError('Provider %s login method not implemented' %
             provider)
-    return redirect(home)
+    return redirect(lobby)
 
 
 def logout(request):
