@@ -3,27 +3,59 @@
 
 {% block bodyclass %}main{% endblock %}
 
-{% block extrajs %}{% endblock %}
+{% block extrajs %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(function() {
+            $('#js_anonymous_login_button').click(function() {
+                $('#js_anonymous_login').submit();
+            });
+            $('#js_play_button').click(function(event) {
+                var $loginContainer = $('#js_login_container');
+                if ($loginContainer.length) {
+                    event.preventDefault();
+                    $(this).fadeOut(100, function() {
+                        $loginContainer.fadeIn(100);
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}
 
 {% block content %}
 <div class="info">
     <h1>Set is visual perception game</h1>
     <p>You should notice three cards "set" with color, form, count and fill all different
     or all the same faster than your <i>opponent</i>.</p>
-    <p><a href="#logo" class="pseudo" id="js_rotate_logo">See&nbsp;logo</a> for examples or <a href="http://www.setgame.com/set/rules_set.htm">full rules</a></p>
-    {% if request.user.is_authenticated %}
-      <a href="{% url lobby %}" class="play big_button" id="js_play_btn">Play!</a>
-    {% else %}
+
+    <p><a href="#logo" class="pseudo" id="js_rotate_logo">See&nbsp;logo</a> for examples or <a href="http://www.setgame.com/set/rules_set.htm">full rules</a>.</p>
+    <div class="stats">
+        <div class="stats_container">
+            <span>123 players</span>
+            <span class="separator"></span>
+            <span>245 games online</span>
+        </div>
+    </div>
+    <div id="js_button_container" class="button_container">
+      <a href="{% url lobby %}" class="play big_button" id="js_play_button">Play!</a>
+    </div>
+    {% if not request.user.is_authenticated %}
+    <div id="js_login_container" class="login_container">
       <form id="js_facebook_login" action="{% url core.views.login %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="provider" value="facebook">
-        <button type="submit" class="js_submit">Login via Facebook</button>
+        <button type="submit" class="js_submit facebook_button">Login with Facebook</button>
       </form>
-      <form action="{% url core.views.login %}" method="POST">
+      <form id="js_anonymous_login" action="{% url core.views.login %}" method="POST" style="display: none">
         {% csrf_token %}
         <input type="hidden" name="provider" value="anon">
-        <button type="submit">Login as anon</button>
       </form>
+      <div class="anonymous_login">
+          <span class="or">or</span>
+          <a id="js_anonymous_login_button" href="#">stay anonymous</a>
+      </div>
+    </div>
     {% endif %}
 </div>
 {% endblock %}
