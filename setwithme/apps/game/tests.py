@@ -45,8 +45,8 @@ class GameModelTestCase(TestCase):
         game = self.test_game_creation()
         cards = sorted(game.desk_cards_list)
         for ncard1, card1 in enumerate(cards):
-            for ncard2, card2 in enumerate(cards[ncard1+1:]):
-                for ncard3, card3 in enumerate(cards[ncard2+ncard1+1+1:]):
+            for ncard2, card2 in enumerate(cards[ncard1 + 1:]):
+                for ncard3, card3 in enumerate(cards[ncard2 + ncard1 + 1 + 1:]):
                     if is_set(Card(id=card1), Card(id=card2), Card(id=card3)):
                         self.assertEqual(True, game.has_sets())
                         return
@@ -65,26 +65,29 @@ class GameModelTestCase(TestCase):
         rem_lst = game.rem_cards_list
         self.assertEqual(len(rem_lst), 81 - 12 - 12)
 
-
     def _create_user(self):
         user_uuid = unicode(uuid.uuid4().hex)[:30]
         user, created = User.objects.get_or_create(
-            username=user_uuid, defaults={'first_name': 'Anon %s' % (user_uuid[:4],)})
+            username=user_uuid,
+            defaults={'first_name': 'Anon %s' % (user_uuid[:4],)})
         return user
 
 
-    
 class UtilsTestCase(TestCase):
     def test_ids(self):
         for n in range(80):
             self.assertEqual(Card(text=Card(id=n).as_text()).as_id(), n)
 
     def test_is_set(self):
-        data = [(True, 0,3,6),
-        (True, 0,1,2),
-        (True, 15,16,17),
-        (False, 8,9,10),
-        (False, 14,16,17),]
+        data = [(True, 0 ,3 ,6),
+        (True, 0, 1, 2),
+        (True, 15, 16, 17),
+        (False, 8, 9, 10),
+        (False, 14, 16, 17),]
 
         for d in data:
-            self.assertEqual(d[0], is_set(Card(id=d[1]), Card(id=d[2]), Card(id=d[3])), '%s: %d, %d, %d' % d)
+            self.assertEqual(d[0],
+                             is_set(Card(id=d[1]),
+                                    Card(id=d[2]),
+                                    Card(id=d[3])),
+                             '%s: %d, %d, %d' % d)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.datastructures import SortedDict
 
+
 def match(first, second, third):
     return (first == second and second == third) or \
     (first != second and first != third and second != third)
@@ -32,7 +33,7 @@ class Card:
         result = {}
         for n, key in enumerate(Card.attributes.keys()):
             power = 3**(len(Card.attributes)-n-1)
-            pn = id/power
+            pn = id / power
             id -= pn * power
             result[key] = Card.attributes[key][pn]
         return result
@@ -42,7 +43,7 @@ class Card:
         for n, key in enumerate(Card.attributes.keys()):
             result += 3**(len(Card.attributes)-n-1) * Card.attributes[key].index(getattr(self, key))
         return result
-    
+
     def as_text(self):
         return ' '.join([getattr(self, key) for key in Card.attributes.keys()])
 
@@ -55,5 +56,3 @@ def is_set(first, second, third):
         getattr(first, a_name),
         getattr(second, a_name),
         getattr(third, a_name)) for a_name in Card.attributes.keys())
-
-

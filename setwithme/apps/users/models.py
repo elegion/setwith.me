@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class WaitingUser(models.Model):
 
     user = models.ForeignKey(User)
@@ -32,7 +33,8 @@ def get_user_json(user):
         name = u"%s %s" % (user.first_name, user.last_name)
     else:
         name = user.username
-    pic = profile.user_pic if profile.user_pic else settings.DEFAULT_PROFILE_PIC
+    pic = profile.user_pic if profile.user_pic \
+        else settings.DEFAULT_PROFILE_PIC
     return {'id': user.id,
             'username': user.username,
             'name': name,

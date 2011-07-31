@@ -11,7 +11,7 @@ from setwithme.apps.game.utils import is_set, Card
 from users.models import get_user_json
 
 
-get_uid = lambda : unicode(uuid.uuid4().hex)
+get_uid = lambda: unicode(uuid.uuid4().hex)
 
 
 attributes_order = ('color', 'symbol', 'number', 'shading')
@@ -24,10 +24,12 @@ attributes = {'color': ('red', 'green', 'purple'),
 ids = range(81)
 random.shuffle(ids)
 
+
 def get_desk():
     return ','.join(
         map(str,
             ids[:constants.CARDS_ON_DESK]))
+
 
 def get_remaining():
     return ','.join(
@@ -94,7 +96,6 @@ class Game(models.Model):
         self.rem_cards_list = left_cards
         self.desk_cards_list = cards
 
-
     def pop_cards(self, quantity=3):
         cards = self.rem_cards_list
         indexes = []
@@ -111,7 +112,8 @@ class Game(models.Model):
 
     @property
     def last_action_time(self):
-        last_action = self.gamesession_set.filter(set_pressed_dt__isnull=False)\
+        last_action = self.gamesession_set.\
+                filter(set_pressed_dt__isnull=False)\
                 .order_by('-set_pressed_dt')
         if last_action.count():
             return last_action[0].set_pressed_dt
@@ -122,10 +124,12 @@ class Game(models.Model):
         cards_to_pop = constants.CARDS_ON_DESK
         now = datetime.datetime.now()
         time_since_last_action = now - self.last_action_time
-        if time_since_last_action > datetime.timedelta(seconds=constants.CARD_ADD_INTERVAL):
+        if time_since_last_action > datetime.timedelta(
+                seconds=constants.CARD_ADD_INTERVAL):
             cards_to_pop += min(
                 constants.MAX_ADDITIONAL_CARDS,
-                int(time_since_last_action.seconds / float(constants.CARD_ADD_INTERVAL))
+                int(time_since_last_action.seconds /
+                    float(constants.CARD_ADD_INTERVAL))
             )
         return cards_to_pop
 
@@ -136,8 +140,8 @@ class Game(models.Model):
         cnt = 0
         cards = sorted(self.desk_cards_list)
         for ncard1, card1 in enumerate(cards):
-            for ncard2, card2 in enumerate(cards[ncard1+1:]):
-                for ncard3, card3 in enumerate(cards[ncard2+ncard1+1+1:]):
+            for ncard2, card2 in enumerate(cards[ncard1 + 1:]):
+                for ncard3, card3 in enumerate(cards[ncard2 + ncard1 + 1 + 1:]):
                     if is_set(Card(id=card1), Card(id=card2), Card(id=card3)):
                         cnt += 1
         return cnt
@@ -156,8 +160,10 @@ class Game(models.Model):
 
     @property
     def leader(self):
-        """Determines leading user, can be user after game end for determining winner"""
-        scores = self.gamesession_set.exclude(client_state=ClientConnectionState.LOST)\
+        """Determines leading user,
+        can be user after game end for determining winner"""
+        scores = self.gamesession_set.\
+            exclude(client_state=ClientConnectionState.LOST)\
             .exclude(state=GameSessionState.LEFT)\
             .values_list('sets_found', 'failures', 'user')
         return max([(score[0] - score[1], score[2]) for score in scores])[1]
@@ -182,8 +188,8 @@ GameSessionStateChoices = (
 
 class ClientConnectionState:
     ACTIVE = "ACTIVE"
-    IDLE = "IDLE" #no status requests in 30 sec
-    LOST = "LOST" #no status requests in 60 sec
+    IDLE = "IDLE" # no status requests in 30 sec
+    LOST = "LOST" # no status requests in 60 sec
 
 
 ClientConnectionStateChoices = (
@@ -253,6 +259,7 @@ class GameSession(models.Model):
     @property
     def score(self):
         return self.sets_found - self.failures
+
 
 class Facts(models.Model):
     text = models.CharField(max_length=255)

@@ -54,9 +54,9 @@ def get_app_access_token(application_id, application_secret):
     returns the application access_token
     """
     # Get an app access token
-    args = {'grant_type':'client_credentials',
-            'client_id':application_id,
-            'client_secret':application_secret}
+    args = {'grant_type': 'client_credentials',
+            'client_id': application_id,
+            'client_secret': application_secret}
 
     try:
         result_io = urllib2.urlopen(
@@ -157,6 +157,7 @@ class SetWithMeFacebookMiddleware(FacebookMiddleware):
         request.facebook = DjangoFacebook(fb_user) if fb_user else None
         return None
 
+
 class FacebookProfileBackend(ModelBackend):
     """ Authenticate a facebook user and autopopulate facebook data into the users profile. """
     def authenticate(self, fb_uid=None, fb_graphtoken=None):
@@ -174,7 +175,9 @@ class FacebookProfileBackend(ModelBackend):
                     if me.get('first_name'): user.first_name = me['first_name']
                     if me.get('last_name'): user.last_name = me['last_name']
                     if me.get('email'): user.email = me['email']
-                    pic = GraphAPI().get_connections('%s' % fb_uid, 'picture', type='square')
+                    pic = GraphAPI().get_connections('%s' % fb_uid,
+                                                     'picture',
+                                                     type='square')
                     profile.user_pic = pic.get('url', '')
                     profile.save()
                     user.save()

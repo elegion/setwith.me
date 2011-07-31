@@ -11,7 +11,8 @@ from django.core.cache import cache
 
 from chat.models import ChatMessage
 from game import constants
-from game.models import ClientConnectionState, Game, GameSession, GameSessionState, get_uid
+from game.models import (ClientConnectionState, Game,
+                         GameSession, GameSessionState, get_uid)
 from game.utils import Card, is_set
 from users.models import WaitingUser
 
@@ -24,7 +25,7 @@ def game_screen(request, game_id):
     desc_cards = game.desk_cards_list
     rem_cards_cnt = len(game.rem_cards_list)
     initial_status = {'users': users,
-                     'cards': [{'id': card_id,
+                      'cards': [{'id': card_id,
                                 'class': Card(id=card_id).as_text()} \
                                     for card_id in desc_cards],
                      'cards_left': rem_cards_cnt,
@@ -33,7 +34,7 @@ def game_screen(request, game_id):
                          'leader': game.leader},
                      'chat': []}
     return {'game_id': game_id,
-            'initial_status': json.dumps(initial_status, separators=(',',':'))}
+            'initial_status': json.dumps(initial_status, separators=(',', ':'))}
 
 
 @ajax_request
@@ -42,7 +43,8 @@ def start_game(request):
     qs = GameSession.objects.\
         filter(user=user,
                left=False,
-               game__finished=False).exclude(client_state=ClientConnectionState.LOST)
+               game__finished=False).\
+        exclude(client_state=ClientConnectionState.LOST)
     if qs.count():
         gs = qs.all()[0]
         return {'status': 302,
@@ -203,7 +205,9 @@ def check_set(request, game_id):
         gs_other.save()
 
     def add_stat(gs, data):
-        data.update({'sets_found': gs.sets_found, 'failures': gs.failures, 'score': gs.score})
+        data.update({'sets_found': gs.sets_found,
+                     'failures': gs.failures,
+                     'score': gs.score})
         return data
 
     if gs.set_received_in_time():
@@ -217,6 +221,7 @@ def check_set(request, game_id):
         if not all(card_id in desk_cards_lst for card_id in ids_lst):
             return {'success': False, 'msg': 'Not all card were on desk'}
         cards = [Card(id=card_id) for card_id in ids_lst]
+
         def is_set_wrapper(*args):
             if constants.CANCEL_SET_CHECK:
                 return True
@@ -233,7 +238,9 @@ def check_set(request, game_id):
             gs.save()
             # Remove cards from desc list and replace with new, if any
             game.replace_cards(*ids_lst)
-            result = {'success': True, 'msg': 'SET!', 'sets_found': gs.sets_found}
+            result = {'success': True,
+                      'msg': 'SET!',
+                      'sets_found': gs.sets_found}
             return add_stat(gs, result)
     else:
         gs.state = GameSessionState.SET_PENALTY
