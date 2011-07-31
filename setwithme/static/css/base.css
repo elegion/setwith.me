@@ -604,3 +604,8 @@ a.pseudo:hover {
     .game .winner_plate .player .name {
         color: #FF0;
     }
+
+.game .share_game {
+    float: right;
+    margin-top: 60px;
+}
