@@ -514,8 +514,11 @@ SetWithMe.Game = {
         var msg = null;
         for(var i=messages.length-1; i>=0; i--) {
             msg = messages[i];
-            $cont.prepend('<li><span class="sender">' + msg.sender + '</span>' +
-                    ': <span class="message">' + msg.message + '</span></li>');
+            var $mes = $('<li><span class="sender"></span>' +
+                    ': <span class="message"></span></li>');
+            $('.sender', $mes).text(msg.sender);
+            $('.message', $mes).text(msg.message);
+            $cont.prepend($mes);
         }
 
         //status changes
