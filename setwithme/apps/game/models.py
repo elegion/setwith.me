@@ -21,19 +21,18 @@ attributes = {'color': ('red', 'green', 'purple'),
               'shading': ('solid', 'open', 'striped')}
 
 
-def initial_cards(desk=True):
-    ids = range(81)
-    random.shuffle(ids)
-    def get_desk():
-        return ','.join(
-            map(str,
-                ids[:constants.CARDS_ON_DESK]))
-    def get_remaining():
-        return ','.join(
-            map(str,
-                ids[constants.CARDS_ON_DESK:]))
-    return get_desk if desk else get_remaining
+ids = range(81)
+random.shuffle(ids)
 
+def get_desk():
+    return ','.join(
+        map(str,
+            ids[:constants.CARDS_ON_DESK]))
+
+def get_remaining():
+    return ','.join(
+        map(str,
+            ids[constants.CARDS_ON_DESK:]))
 
 
 class Game(models.Model):
@@ -42,10 +41,10 @@ class Game(models.Model):
     start = models.DateTimeField(default=datetime.datetime.now)
     end = models.DateTimeField(null=True, default=None)
     remaining_cards = models.CommaSeparatedIntegerField(
-        max_length=250, default=initial_cards(desk=False))
+        max_length=250, default=get_remaining)
     desk_cards = models.CommaSeparatedIntegerField(
         max_length=250,
-        default=initial_cards(desk=True))
+        default=get_desk)
 
     @property
     def rem_cards_list(self):
