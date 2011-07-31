@@ -30,7 +30,7 @@ GAME_JOIN_WAIT_TIMEOUT = getattr(
 CARDS_ON_DESK = getattr(
     settings,
     "CARDS_ON_DESK",
-    16)
+    12)
 
 MAX_ADDITIONAL_CARDS = getattr(
     settings,
@@ -41,7 +41,7 @@ MAX_ADDITIONAL_CARDS = getattr(
 CARD_ADD_INTERVAL = getattr(
     settings,
     "CARD_ADD_INTERVAL",
-    20
+    60
 )
 
 CANCEL_SET_CHECK = getattr(
