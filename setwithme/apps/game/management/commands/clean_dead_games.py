@@ -26,8 +26,7 @@ class Command(BaseCommand):
                 for gs in game.gamesession_set.all():
                     gs.client_state = ClientConnectionState.LOST
                     gs.save()
-                game.finished = True
-                game.save()
+                game.finish()
                 cleaned_cnt += 1
         if cleaned_cnt:
             print "Cleaned %s zombie games" % cleaned_cnt

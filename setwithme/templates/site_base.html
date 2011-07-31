@@ -11,7 +11,7 @@
                 <img class="photo" src="{{ user_profile.user_pic }}">
                 <div class="info">
                 <div class="name">{{ request.user.first_name }} {{ request.user.last_name }}</div>
-                <div class="stat">win 0 | lose 0</div>
+                <div class="stat">win {{ request.user.userprofile.games_win }} | lose {{ request.user.userprofile.games_loss }}</div>
                   </div>
                 <form class="logout" action="{% url core.views.logout %}" method="POST">
                   {% csrf_token %}

@@ -262,6 +262,5 @@ def leave_game(request, game_id):
     gs.state = GameSessionState.LEFT
     gs.left = True
     gs.save()
-    gs.game.finished = True
-    gs.game.save()
+    gs.game.finish()
     return redirect('/')

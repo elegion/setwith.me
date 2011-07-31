@@ -10,7 +10,7 @@ from django.contrib.auth import authenticate
 from django.views.decorators.http import require_POST
 
 from game.models import Game, GameSession, ClientConnectionState, Facts
-from users.models import WaitingUser
+from users.models import UserProfile, WaitingUser
 
 
 @render_to('core/index.html')
@@ -18,8 +18,10 @@ def home(request):
     ONLINE_TIMEOUT = datetime.timedelta(minutes=30)
     now = datetime.datetime.now()
     guard = now - ONLINE_TIMEOUT
+    top_users = UserProfile.objects.order_by('-games_win', 'games_total')[:3]
     return {'players': User.objects.filter(last_login__gt=guard).count(),
-            'games_online': Game.objects.filter(finished=False).count()}
+            'games_online': Game.objects.filter(finished=False).count(),
+            'top_users': top_users}
 
 
 @login_required

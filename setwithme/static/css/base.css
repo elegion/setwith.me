@@ -146,6 +146,59 @@ a.pseudo:hover {
     margin: 0.5em 0 0 0;
 }
 
+.main .top_users_container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #81868a;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    padding: 15px 25px 28px;;
+    margin-top: 35px;
+}
+    .main .top_users_container .header {
+        background: #81868a;
+        font-family: 'Lobster', cursive;
+        font-size: 1.35em;
+        color: #42494f;
+        text-shadow: #9fa4a8 0 1px 0;
+    }
+    .main .top_users_container .top_users {
+        margin-top: 20px;
+        width: 14em;
+    }
+    .main .top_users_container .top_users .separator {
+        display: block;
+        height: 2px;
+        margin: 18px 0 15px;
+        background: url(../images/bg_separator_top_users.png);
+    }
+    .main .top_users_container .top_user .info {
+        margin-top: -62px;
+        margin-left: 80px;
+    }
+    .main .top_users_container .top_user .photo {
+        border: #fff 6px solid;
+        border-radius: 3px;
+        -moz-border-radius: 3px;
+        margin-right: 10px;
+    }
+    .main .top_users_container .top_user .name {
+        font-family: 'Lobster', cursive;
+        font-size: 1em;
+        color: #f9f9f9;
+        text-shadow: #a5a7a8 0 -1px 1px;
+    }
+    .main .top_users_container .top_user .stats {
+        margin: 1em 0 0;
+        width: auto;
+        color: #d2d2d2;
+        font-size: 0.8em;
+        font-style: italic;
+        font-weight: bold;
+        text-shadow: #6a6e71 0 -1px 0;
+    }
+
 .big_button {
     display: block;
     width: 15em;
