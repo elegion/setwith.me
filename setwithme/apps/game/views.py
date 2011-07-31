@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+from django.contrib.auth.decorators import login_required
 
 from django.core.urlresolvers import reverse
 from annoying.decorators import ajax_request, render_to
@@ -25,22 +26,34 @@ def start_game(request):
         gs = qs.all()[0]
         return {'status': 302,
                 'url': reverse(game_screen, kwargs={'game_id': gs.game.id})}
+
     wu = WaitingUser.objects.get_or_create(user=user)[0].update()
     last_poll_guard = datetime.datetime.now() - constants.WAITING_USER_TIMEOUT
+
+    now = datetime.datetime.now()
+    join_timeout = request.session.get('game_join_timeout', None)
+    if not join_timeout:
+        join_timeout = request.session['game_join_timeout'] = now
+
     opponents = WaitingUser.objects.\
         filter(last_poll__gt=last_poll_guard).\
         exclude(user=user).all()
-    if opponents:
-        opponent = opponents[0]
-        game_id = get_uid()
-        game = Game.objects.create(id=game_id)
-        GameSession.objects.create(game=game, user=user)
-        GameSession.objects.create(game=game, user=opponent.user)
-        wu.delete()
-        opponent.delete()
-        return {'status': '302',
-                'url': reverse(game_screen, kwargs={'game_id': game_id})}
-    return {'status': 'polling'}
+    if not opponents:
+        return {'status': 'polling',
+                'opponents': []}
+    if join_timeout + constants.GAME_JOIN_WAIT_TIMEOUT > now:
+        return {'status': 'polling',
+                'opponents': [op.serialize() for op in opponents]}
+
+    game_id = get_uid()
+    game = Game.objects.create(id=game_id)
+    GameSession.objects.create(game=game, user=user)
+    wu.delete()
+    for op in opponents:
+        GameSession.objects.create(game=game, user=op.user)
+        op.delete()
+    return {'status': '302',
+            'url': reverse(game_screen, kwargs={'game_id': game_id})}
 
 
 @ajax_request
@@ -128,3 +141,4 @@ def check_set(request, game_id):
         gs.failures -= 1
         gs.save()
         return add_stat(gs, {'success': False, 'msg': 'Not in time!'})
+

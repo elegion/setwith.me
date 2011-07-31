@@ -22,6 +22,11 @@ WAITING_USER_TIMEOUT = getattr(
     "WAITING_USER_TIMEOUT",
     datetime.timedelta(seconds=60))
 
+GAME_JOIN_WAIT_TIMEOUT = getattr(
+    settings,
+    "GAME_JOIN_WAIT_TIMEOUT",
+    datetime.timedelta(seconds=15))
+
 CARDS_ON_DESK = getattr(
     settings,
     "CARDS_ON_DESK",

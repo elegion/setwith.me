@@ -13,7 +13,6 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('last_poll', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('confirmed', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('users', ['WaitingUser'])
 
@@ -63,7 +62,6 @@ class Migration(SchemaMigration):
         },
         'users.waitinguser': {
             'Meta': {'object_name': 'WaitingUser'},
-            'confirmed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_poll': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})

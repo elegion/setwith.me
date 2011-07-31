@@ -7,17 +7,14 @@ class WaitingUser(models.Model):
 
     user = models.ForeignKey(User)
     last_poll = models.DateTimeField(default=datetime.datetime.now)
-    confirmed = models.BooleanField(default=False)
 
     def update(self):
         self.last_poll = datetime.datetime.now()
         self.save()
         return self
 
-    def confirm(self):
-        self.confirmed = True
-        self.save()
-
     def serialize(self):
-        return {'username': self.user.username,
-                'confirmed': self.confirmed}
+        return {'username': self.user.username}
+
+    def __unicode__(self):
+        return u"%s" % (self.user.username)

@@ -98,6 +98,21 @@ SetWithMe.searchGame = function() {
             window.location.replace(data.url);
             poller.stop();
         }
+        if (data.opponents) {
+            var $players_list = $('#js_opponents'),
+            opponents = [];
+            for (var i = 0; i < data.opponents.length; i++) {
+                var op = data.opponents[i];
+                var op_rendered = '<li class="player" id="p' + op.username + '">'+
+                        '<div class="photo"><div><img src="/static/images/nophoto.png"></div></div>'+
+                        '<div class="info">'+
+                        '<a href="#" class="name">'+ op.username +'</a>'+
+                        '</div></li>';
+                        '</li>'
+                opponents.push(op_rendered);
+            }
+            $players_list.html(opponents.join(''));
+        }
     };
     poller.start();
 };
