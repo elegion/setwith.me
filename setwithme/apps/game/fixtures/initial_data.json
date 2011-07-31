@@ -1,0 +1,65 @@
+[
+ {
+  "pk": 1,
+  "model": "game.facts",
+  "fields": {
+   "text": "Set is designed by Marsha Falco in 1974 and published by Set Enterprises in 1991."
+  }
+ },
+ {
+  "pk": 2,
+  "model": "game.facts",
+  "fields": {
+   "text": "If two are... and one is not, then it is not a Set."
+  }
+ },
+ {
+  "pk": 3,
+  "model": "game.facts",
+  "fields": {
+   "text": "The game evolved out of a coding system that the designer used in her job as a geneticist."
+  }
+ },
+ {
+  "pk": 4,
+  "model": "game.facts",
+  "fields": {
+   "text": "The object of the game is to identify a Set of three cards from 12 cards displayed."
+  }
+ },
+ {
+  "pk": 5,
+  "model": "game.facts",
+  "fields": {
+   "text": "Each card has a variation of the following four features: color, symbol, number, shading."
+  }
+ },
+ {
+  "pk": 6,
+  "model": "game.facts",
+  "fields": {
+   "text": "A Set consists of three cards in which each feature is either the same on each card or is different on each card."
+  }
+ },
+ {
+  "pk": 7,
+  "model": "game.facts",
+  "fields": {
+   "text": "Numbers are an essential part of the game of Set."
+  }
+ },
+ {
+  "pk": 8,
+  "model": "game.facts",
+  "fields": {
+   "text": "Given any two cards from the deck, there will be one and only one other card that forms a Set with them."
+  }
+ },
+ {
+  "pk": 9,
+  "model": "game.facts",
+  "fields": {
+   "text": "Each possible combination of features (e.g., a card with three striped green diamonds) appears precisely once in the deck."
+  }
+ }
+]
