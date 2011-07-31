@@ -189,6 +189,10 @@ FACEBOOK_SECRET_KEY = '2f8f1719fa39fc05be74a33e28474091'
 #FACEBOOK_APP_ID = '129235007167183'
 #FACEBOOK_SECRET_KEY = '1f56b1a80e1d1dfb2d82c5953cf52043'
 
+# setwithme.ep.io
+#FACEBOOK_APP_ID = '259283820765276'
+#FACEBOOK_SECRET_KEY = '4920c31ec084157c03a22f2089812039'
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'core.facebook_sdk.FacebookProfileBackend',
