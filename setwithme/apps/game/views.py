@@ -30,17 +30,18 @@ def start_game(request):
     wu = WaitingUser.objects.get_or_create(user=user)[0].update()
     last_poll_guard = datetime.datetime.now() - constants.WAITING_USER_TIMEOUT
 
-    now = datetime.datetime.now()
-    join_timeout = request.session.get('game_join_timeout', None)
-    if not join_timeout:
-        join_timeout = request.session['game_join_timeout'] = now
-
     opponents = WaitingUser.objects.\
         filter(last_poll__gt=last_poll_guard).\
         exclude(user=user).all()
     if not opponents:
         return {'status': 'polling',
                 'opponents': []}
+
+    now = datetime.datetime.now()
+    join_timeout = request.session.get('game_join_timeout', None)
+    if not join_timeout:
+        join_timeout = request.session['game_join_timeout'] = now
+
     if join_timeout + constants.GAME_JOIN_WAIT_TIMEOUT > now:
         return {'status': 'polling',
                 'opponents': [op.serialize() for op in opponents]}
