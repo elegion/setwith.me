@@ -32,6 +32,18 @@ CARDS_ON_DESK = getattr(
     "CARDS_ON_DESK",
     16)
 
+MAX_ADDITIONAL_CARDS = getattr(
+    settings,
+    "MAX_ADDITIONAL_CARDS",
+    3
+)
+
+CARD_ADD_INTERVAL = getattr(
+    settings,
+    "CARD_ADD_INTERVAL",
+    20
+)
+
 CANCEL_SET_CHECK = getattr(
     settings,
     "CANCEL_SET_CHECK",
