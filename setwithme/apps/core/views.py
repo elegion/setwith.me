@@ -69,4 +69,4 @@ def login_facebook(request):
             fb_uid=fb.uid,
             fb_graphtoken=fb.access_token)
         auth_login(request, user)
-    return redirect('/')
+    return redirect(lobby)
