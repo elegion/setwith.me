@@ -150,8 +150,8 @@ SetWithMe.Game = {
 
         if (newStatus == this.statuses.NORMAL) {
             //clean up all
-            this._setButtonLabel.text = 'Set!';
-            this._setButton.removeClass('active');
+            this._setButtonLabel.text('Set!');
+            this._setButton.removeClass('disabled');
             this._markingSet = false;
             this._countDownLabel.text('');
         }
