@@ -86,8 +86,11 @@ class Game(models.Model):
             except IndexError:
                 cards.remove(card)
             else:
-                left_cards.remove(new_card)
-                cards[cards.index(card)] = new_card
+                if len(cards) > constants.CARDS_ON_DESK:
+                    cards.remove(card)
+                else:
+                    left_cards.remove(new_card)
+                    cards[cards.index(card)] = new_card
         self.rem_cards_list = left_cards
         self.desk_cards_list = cards
 

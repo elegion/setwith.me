@@ -220,6 +220,7 @@ SetWithMe.Game = {
         this._setsCountLabel = $('#js_sets_count');
         this._CSRFToken = SetWithMe.getCookie('csrftoken');
         this._id = id;
+        this._oldIds = [];
         this._poller = new SetWithMe.Poller('/game/get_status/' + this._id);
         this._poller.onSuccess = this._onStatusReceived.bind(this);
         this._poller.onError = this._poller.onSuccess.bind(this);
@@ -352,9 +353,11 @@ SetWithMe.Game = {
         var i,
             changedCards = {};
         for (i = 0; i < this._cards.length; i++) {
-            if (this._cards[i].id !== newCards[i].id) {
+            if (newCards[i] && this._cards[i].id !== newCards[i].id) {
                 changedCards[i] = newCards[i];
                 changedCards[i].oldId = this._cards[i].id;
+            } else if (!newCards[i]) {
+
             }
         }
         if (newCards.length > this._cards.length) {
@@ -377,14 +380,18 @@ SetWithMe.Game = {
         $card.attr('id', card.id);
         $card.attr('class', 'card ' + card['class']);
         this._bindCardEvents($card);
+        if (this._oldIds.length && $.inArray(card.id, this._oldIds) === -1) {
+            $card.css('opacity', 0);
+        }
         this._cardsContainer.append($card);
     },
 
     _renderCards: function() {
         this._cardsContainer.html('');
         for (var i = 0; i < this._cards.length; i++) {
-            this._renderCard(this._cards[i])
+            this._renderCard(this._cards[i]);
         }
+        this._oldIds = [];
     },
 
     _renderPlayer: function(player) {
@@ -467,7 +474,18 @@ SetWithMe.Game = {
     _onStatusReceived: function(data) {
         if (this._cards) {
             var changed = this._getChangedCards(data.cards);
-            if (!$.isEmptyObject(changed)) {
+            if (data.cards.length < this._cards.length) {
+                for (var i = 0; i < data.cards.length; i++) {
+                    for (var j = 0; j < this._cards.length; j++) {
+                        if (data.cards[i].id == this._cards[j].id) {
+                            this._oldIds.push(data.cards[i].id)
+                        }
+                    }
+                }
+                this._cards = data.cards;
+                this._renderCards();
+                $('.card', this._cardsContainer).animate({opacity: '1'}, 1000);
+            } else if (!$.isEmptyObject(changed)) {
                 for (var key in changed) {
                     if (changed.hasOwnProperty(key)) {
                         var card = changed[key];
@@ -487,8 +505,6 @@ SetWithMe.Game = {
                     }
                 }
                 this._cards = data.cards;
-                //this._renderCards();
-                // TODO re-render changed cards
             }
         } else {
             this._cards = data.cards;
