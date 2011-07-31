@@ -1,13 +1,26 @@
 /* 0. Common tags */
+/* 1. Layout */
+/* 1.1 Header */
+/* 1.2 Footer */
+/* 1.3 Content */
+/* 2. Main page */
+/* 2.1 Stats container */
+/* 2.2 Login Container */
+/* 3. Cards */
+/* 4. Game */
+
+
+/* 0. Common tags */
 html {
     height: 100%;
 }
 
 body {
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     font-size: 1em;
     color: #FFF;
     height: 100%;
+    min-width: 1000px;
 }
 
 p {
@@ -91,6 +104,7 @@ a.pseudo:hover {
     .header .loginbox .stat {
         margin: 1em 0 0 0;
     }
+
 /* 1.2 Footer */
 .footer {
     position: absolute;
@@ -122,6 +136,7 @@ a.pseudo:hover {
 .footer .twitter {
     float: left;
 }
+
 /* 1.3 Content */
 .content {
     background: #6f757a;
@@ -461,40 +476,28 @@ a.pseudo:hover {
         }
 
 /* 4. Game */
-.game .card_list {
-    margin: 20px 0 40px 0;
-    width: 550px;
-    float: left;
+.game .header {
+    height: 90px;
 }
-    .game .card_list .card {
-        float: left;
-        margin: 10px;
-        -webkit-transition: border-color 0.1s ease-in;
-        -o-transition: border-color 0.1s ease-in;
-        -moz-transition: border-color 0.1s ease-in;
-        position: relative;
-    }
+.game .content .wrapper_width {
+    width: auto;
+}
 
-    .game .card_list.active .card:hover,
-    .game .card_list .card.active {
-        border-color: #464d53;
-        cursor: pointer;
-    }
+.game .inner_wrapper {
+    margin: 0 auto;
+    width: 90%;
+    min-width: 850px;
+    max-width: 1000px;
+    overflow: auto;
+}
 
-    .game .card_list.active .card.vibrate:hover {
-        border-color: #F1F1F1;
-    }
-
-.game .bottom {
-    margin: 1em 0 3em 0;
+.game .gamefield {
+    width: 600px;
     overflow: hidden;
-    clear: both;
 }
-
     .game .set_button {
         width: 516px;
-        margin: 40px 7px 0 7px;
-        float: left;
+        margin: 40px auto 0 auto;
         font-size: 1.5em;
     }
     .game .set_button.disabled {
@@ -515,138 +518,205 @@ a.pseudo:hover {
             color: #fff;
             text-shadow: none;
         }
-    .game .counts {
-        font-family: 'Lobster', cursive;
-        font-size: 1.5em;
-        color: #434a50;
-        text-shadow: 0 1px 1px #888e93;
-    }
-    .game .sets_count {
-        position: absolute;
-        top: 90px;
-        left: 0px;
-        margin: 0.5em 0 0 65px;
-    }
-    .game .cards_left {
-        margin: 0.5em 0 0 65px;
-        position: absolute;
-        top: 40px;
-        left: 0px;
-    }
-    .game .counts span {
-        text-shadow: 0 1px 1px #888e93;
-        border-radius: 25px;
-        -moz-border-radius: 25px;
-        padding: 5px 10px;
-        background: #464d53;
-        color: #777d81;
-    }
-
-.players {
-    float: left;
-    margin: 0 0 0 65px;
-    color: #454c52;
-    position: absolute;
-    right: 0;
-    top: 40px;
-    width: 270px;
-}
-
-.players .player.idle {
-    opacity: 0.6;
-}
-.players .player.lost {
-    opacity: 0.2;
-}
-.players .player.left {
-    opacity: 0.2;
-}
-
-.player {
-    overflow: hidden;
-    margin: 1em 0 0;
-}
-.player:first-child {
-    margin-top: 0;
-}
-.player .info {
-    float: left;
-    margin-left: 15px;
-    width: 170px;
-    overflow: hidden;
-}
-    .player .photo {
-        float: left;
-        border: 4px solid #454b51;
-        border-radius: 5px;
-        -moz-border-radius: 5px;
-    }
-    .player .photo div {
-        width: 50px;
-        height: 50px;
-    }
-    .player .photo img {
-        margin: 0 auto;
-    }
-    .player .name {
-        font-family: 'Lobster', cursive;
-        font-size: 1.1em;
-        color: #454c52;
-        text-decoration: none;
-        margin: 0.5em 0 0 0;
-        float: left;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        max-width: 170px;
+    .game .card_list {
+        margin: 20px auto 40px auto;
         overflow: hidden;
     }
-    .player.set_pressed {
-        color: #FFF;
-        position: relative;
-        left: -30px;
-        width: 300px;
+        .game .card_list .card {
+            float: left;
+            margin: 10px;
+            -webkit-transition: border-color 0.1s ease-in;
+            -o-transition: border-color 0.1s ease-in;
+            -moz-transition: border-color 0.1s ease-in;
+            position: relative;
+        }
+
+        .game .card_list.active .card:hover,
+        .game .card_list .card.active {
+            border-color: #464d53;
+            cursor: pointer;
+        }
+
+        .game .card_list.active .card.vibrate:hover {
+            border-color: #F1F1F1;
+        }
+
+    .game .help_panel {
+        overflow: hidden;
+        height: 50px;
+        width: 850px;
+        margin: 10px auto 0 auto;
     }
-        .player.set_pressed .name {
-            color: #FFF;
+        .game .help_panel li {
+            float: left;
+            margin: 0 30px;
         }
-        .player.set_pressed .photo {
-            border-color: #FFF;
+        .game .help_panel .rules, .game .help_panel .leavegame {
+            border-radius: 25px;
+            padding: 10px 20px;
+            display: block;
+            background: #464D53
         }
-        .player.set_pressed .photo div {
-            padding-left: 30px;
-            background: #FFF no-repeat 5px 50% url(../images/set_vertical.png);
+        .game .counts {
+            font-family: 'Lobster', cursive;
+            font-size: 1.5em;
+            color: #434a50;
+            text-shadow: 0 1px 1px #888e93;
+            margin: 5px 0 0 0;
         }
-    .player.set_penalty {
-        position: relative;
-        left: -30px;
-        width: 300px;
-    }
-        .player.set_penalty .name {
-            color: #FFF;
+        .game .counts span {
+            text-shadow: 0 1px 1px #888e93;
+            border-radius: 25px;
+            -moz-border-radius: 25px;
+            padding: 5px 10px;
+            background: #464d53;
+            color: #777d81;
         }
-        .player.set_penalty .photo {
-            border-color: #444b51;
-        }
-        .player.set_penalty .photo div {
-            padding-left: 30px;
-            background: #444b51 no-repeat 5px 50% url(../images/set_vertical.png);
-        }
-    .player .stats {
-        display: block;
-        clear: both;
-        margin: 0;
-        white-space: nowrap;
-        width: auto;
-    }
-    .player .sets,
-    .player .points,
-    .player .failures {
-        margin: 0.5em 0 0 0;
-        font-size: 0.8em;
-        display: inline;
-        clear: both;
+    .game .delimeter {
+        background: #4D545A url(../images/bg.png);
+        border-top: 1px solid #848A8E;
+        border-bottom: 1px solid #848A8E;
+        height: 10px;
     }
 
+.gameinfo {
+    float: right;
+    margin: 40px 0 0 0;
+}
+    .players {
+        color: #454c52;
+        width: 250px;
+    }
+
+    .players .player.idle {
+        opacity: 0.6;
+    }
+    .players .player.lost {
+        opacity: 0.2;
+    }
+    .players .player.left {
+        opacity: 0.2;
+    }
+
+    .player {
+        overflow: hidden;
+        margin: 1em 0 0;
+    }
+    .player:first-child {
+        margin-top: 0;
+    }
+    .player .info {
+        float: left;
+        margin-left: 15px;
+        width: 170px;
+        overflow: hidden;
+    }
+        .player .photo {
+            float: left;
+            border: 4px solid #454b51;
+            border-radius: 5px;
+            -moz-border-radius: 5px;
+        }
+        .player .photo div {
+            width: 50px;
+            height: 50px;
+        }
+        .player .photo img {
+            margin: 0 auto;
+        }
+        .player .name {
+            font-family: 'Lobster', cursive;
+            font-size: 1.1em;
+            color: #454c52;
+            text-decoration: none;
+            margin: 0.5em 0 0 0;
+            float: left;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 170px;
+            overflow: hidden;
+        }
+        .player.set_pressed {
+            color: #FFF;
+            position: relative;
+            left: -30px;
+            width: 300px;
+        }
+            .player.set_pressed .name {
+                color: #FFF;
+            }
+            .player.set_pressed .photo {
+                border-color: #FFF;
+            }
+            .player.set_pressed .photo div {
+                padding-left: 30px;
+                background: #FFF no-repeat 5px 50% url(../images/set_vertical.png);
+            }
+        .player.set_penalty {
+            position: relative;
+            left: -30px;
+            width: 300px;
+        }
+            .player.set_penalty .name {
+                color: #FFF;
+            }
+            .player.set_penalty .photo {
+                border-color: #444b51;
+            }
+            .player.set_penalty .photo div {
+                padding-left: 30px;
+                background: #444b51 no-repeat 5px 50% url(../images/set_vertical.png);
+            }
+        .player .stats {
+            display: block;
+            clear: both;
+            margin: 0;
+            white-space: nowrap;
+            width: auto;
+        }
+        .player .sets,
+        .player .points,
+        .player .failures {
+            margin: 0.5em 0 0 0;
+            font-size: 0.8em;
+            display: inline;
+            clear: both;
+        }
+    .game .chat_container {
+        background: #454C52;
+        padding: 1em;
+        border-radius: 10px;
+        overflow: hidden;
+        width: 250px;
+        margin: 40px 0 0 0;
+    }
+        .game .chat_messages {
+            height: 15em;
+            font-size: 0.9em;
+        }
+        .game .chat_messages li {
+            margin: 0.5em 0;
+        }
+        .game .chat_container input.text {
+            margin: 2em 0 0 0;
+            width: 190px;
+        }
+        .game .chat_container h2 {
+            font-family: 'Lobster', cursive;
+            font-size: 1.5em;
+            margin: 0 0 0.5em 0;
+        }
+
+
+.game .hideall {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background: #454C52;
+    opacity: 0.6;
+}
 .game .winner_plate {
     display: none;
     width: 500px;
@@ -654,8 +724,8 @@ a.pseudo:hover {
     padding: 1em 2em;
     
     position: absolute;
-    top: 100px;
-    left: 50px;
+    top: 200px;
+    left: 30%;
 
     background: #454C52;
     border: 5px solid white;
@@ -663,6 +733,10 @@ a.pseudo:hover {
     -moz-border-radius: 5px;
 }
 
+/*.game .center {*/
+    /*position: absolute;*/
+    /**/
+/*}*/
 .game .winner_plate h1 {
     margin: 0;
 }
@@ -682,33 +756,3 @@ a.pseudo:hover {
     float: right;
     margin-top: 60px;
 }
-
-.game .content .wrapper_width {
-    width: 100%;
-}
-.game .chat_container {
-    position: absolute;
-    width: 230px;
-    bottom: 50px;
-    left: 600px;
-    background: #454C52;
-    padding: 1em;
-    border-radius: 10px;
-    overflow: hidden;
-}
-    .game .chat_messages {
-        height: 15em;
-        font-size: 0.9em;
-    }
-    .game .chat_messages li {
-        margin: 0.5em 0;
-    }
-    .game .chat_container input.text {
-        margin: 2em 0 0 0;
-        width: 190px;
-    }
-    .game .chat_container h2 {
-        font-family: 'Lobster', cursive;
-        font-size: 1.5em;
-        margin: 0 0 0.5em 0;
-    }

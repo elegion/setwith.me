@@ -190,6 +190,7 @@ SetWithMe.Game = {
         }
 
         if (newStatus == this.statuses.GAME_END) {
+            $('#js_user_place').text('');
             $('#p' + this._leader).clone().appendTo($('#js_user_place'));
             this.uninit();
             $('.winner_plate').show();
@@ -467,6 +468,21 @@ SetWithMe.Game = {
         }
     },
 
+    _updateCardsContainerWidth: function data(cards) {
+        //fix layout to cards
+        var $gf = $('.gamefield');
+        var baseWidth = parseInt($gf.css('width'));
+        var newWidth = 135 * Math.ceil(cards.length/3);
+        
+        $gf.css('width', newWidth + 'px');
+
+        var $wr = $('.inner_wrapper');
+        var maxWrWidth = parseInt($wr.css('max-width')) + (newWidth-baseWidth);
+        var minWrWidth = parseInt($wr.css('min-width')) + (newWidth-baseWidth);
+        $wr.css('max-width', maxWrWidth + 'px');
+        $wr.css('min-width', minWrWidth + 'px');
+    },
+
     /**
      *
      * @param {Object} data
@@ -474,6 +490,9 @@ SetWithMe.Game = {
     _onStatusReceived: function(data) {
         if (this._cards) {
             var changed = this._getChangedCards(data.cards);
+            if (!$.isEmptyObject(changed)) {
+                this._updateCardsContainerWidth(data.cards);
+            }
             if (data.cards.length < this._cards.length) {
                 for (var i = 0; i < data.cards.length; i++) {
                     for (var j = 0; j < this._cards.length; j++) {
@@ -507,6 +526,7 @@ SetWithMe.Game = {
                 this._cards = data.cards;
             }
         } else {
+            this._updateCardsContainerWidth(data.cards);
             this._cards = data.cards;
             this._renderCards();
         }
