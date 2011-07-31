@@ -293,7 +293,11 @@ SetWithMe.Game = {
             player = users[i];
             var $player = $('#p'+player.user_id);
             if (!$player.length) {
-                SetWithMe.Game.$users.append($(this._renderPlayer(player)));
+                if (player.me) {
+                    SetWithMe.Game.$users.prepend($(this._renderPlayer(player)));
+                } else {
+                    SetWithMe.Game.$users.append($(this._renderPlayer(player)));
+                }
                 $player = $('#p' + player.user_id);
             }
             $player.find('.sets .count').text(player.sets_found);
