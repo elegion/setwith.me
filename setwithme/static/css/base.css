@@ -478,7 +478,7 @@ a.pseudo:hover {
 .player .info {
     float: left;
     margin-left: 15px;
-    width: 150px;
+    width: 170px;
     overflow: hidden;
 }
     .player .photo {
@@ -509,6 +509,7 @@ a.pseudo:hover {
         color: #FFF;
         position: relative;
         left: -30px;
+        width: 300px;
     }
         .player.set_pressed .name {
             color: #FFF;
@@ -523,6 +524,7 @@ a.pseudo:hover {
     .player.set_penalty {
         position: relative;
         left: -30px;
+        width: 300px;
     }
         .player.set_penalty .name {
             color: #FFF;
@@ -534,11 +536,19 @@ a.pseudo:hover {
             padding-left: 30px;
             background: #444b51 no-repeat 5px 50% url(../images/set_vertical.png);
         }
-
-    .player .sets {
+    .player .stats {
+        display: block;
+        clear: both;
+        margin: 0;
+        white-space: nowrap;
+        width: auto;
+    }
+    .player .sets,
+    .player .points,
+    .player .failures {
         margin: 0.5em 0 0 0;
         font-size: 0.8em;
-        display: block;
+        display: inline;
         clear: both;
     }
 

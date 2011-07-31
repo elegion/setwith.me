@@ -161,6 +161,7 @@ SetWithMe.Game = {
             this._stopCountDown();
             this._setButtonLabel.text('Blocked. Waiting for other players move.');
             this._cardsContainer.removeClass('active');
+            $('.card', this._cardsContainer).removeClass('active');
         }
 
         if (newStatus == this.statuses.GAME_END) {
@@ -240,13 +241,8 @@ SetWithMe.Game = {
     },
 
     _checkSet: function($cards) {
-        console.debug($cards, $cards.attr('class'));
         var valid = true,
             setIds = [],
-            count = [],
-            symbol = [],
-            shading = [],
-            color = [],
             attrs = [[],[],[],[]];
         $cards.each(function(i, elem) {
             var className = elem.className.replace(/\s?(card|active)\s?/gi, ''),
@@ -267,11 +263,18 @@ SetWithMe.Game = {
         return false;
     },
 
+    _onPutSet: function(data) {
+        if (data.success === false) {
+            this._changeStatus(this.statuses.PENALTY);
+        }
+    },
+
     _sendPutSet: function() {
         $.ajax({
             headers: {
                 'X-CSRFToken': this._CSRFToken
             },
+            success: this._onPutSet.bind(this),
             url: '/game/put_set_mark/' + this._id,
             type: 'POST'
         })
@@ -332,9 +335,11 @@ SetWithMe.Game = {
         return '<li class="player" id="p' + player.user_id + '">'+
              '<div class="photo"><div><img src="/static/images/nophoto.png"></div></div>'+
              '<div class="info">'+
-             '<a href="#" class="name">'+ player.user_name +'</a>'+
-             '<span class="sets"><span class="count"></span> sets</a>'+
-             '</div></li>';
+             '<a href="#" class="name">'+ player.user_name +'</a><span class="stats">'+
+             '<span class="points"><span class="count"></span> points, </span>'+
+             '<span class="sets"><span class="count"></span> sets, </span>'+
+             '<span class="failures"><span class="count"></span> failures</span>'+
+             '</span></div></li>';
     },
 
     _renderPlayers: function(users) {
@@ -350,7 +355,9 @@ SetWithMe.Game = {
                 }
                 $player = $('#p' + player.user_id);
             }
+            $player.find('.points .count').text(player.score);
             $player.find('.sets .count').text(player.sets_found);
+            $player.find('.failures .count').text(player.failures);
             $player[0].className =
                     ['player', player.client_state.toLowerCase(), player.state.toLowerCase()].join(' ')
         }
