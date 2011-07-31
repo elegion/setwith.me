@@ -177,7 +177,7 @@ LOGGING = {
 SITE_NAME = 'Setwithme'
 SITE_DOMAIN = 'setwith.me'
 
-AUTH_PROFILE_MODULE = 'users.UserProfile'
+#AUTH_PROFILE_MODULE = 'users.UserProfile'
 
 SESSION_SAVE_EVERY_REQUEST = True
 

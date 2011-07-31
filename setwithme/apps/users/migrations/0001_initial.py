@@ -8,27 +8,18 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'UserProfile'
-        db.create_table('users_userprofile', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
-        ))
-        db.send_create_signal('users', ['UserProfile'])
-
         # Adding model 'WaitingUser'
         db.create_table('users_waitinguser', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('last_poll', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('confirmed', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('users', ['WaitingUser'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'UserProfile'
-        db.delete_table('users_userprofile')
-
         # Deleting model 'WaitingUser'
         db.delete_table('users_waitinguser')
 
@@ -70,13 +61,9 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'users.userprofile': {
-            'Meta': {'object_name': 'UserProfile'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'})
-        },
         'users.waitinguser': {
             'Meta': {'object_name': 'WaitingUser'},
+            'confirmed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_poll': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
