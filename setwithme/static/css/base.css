@@ -515,18 +515,25 @@ a.pseudo:hover {
             color: #fff;
             text-shadow: none;
         }
-    .game .cards_left {
+    .game .counts {
         font-family: 'Lobster', cursive;
         font-size: 1.5em;
         color: #434a50;
         text-shadow: 0 1px 1px #888e93;
-
+    }
+    .game .sets_count {
+        position: absolute;
+        top: 90px;
+        left: 0px;
+        margin: 0.5em 0 0 65px;
+    }
+    .game .cards_left {
         margin: 0.5em 0 0 65px;
         position: absolute;
         top: 40px;
         left: 0px;
     }
-    .game .cards_left #js_cards_left {
+    .game .counts span {
         text-shadow: 0 1px 1px #888e93;
         border-radius: 25px;
         -moz-border-radius: 25px;

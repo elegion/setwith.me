@@ -217,6 +217,7 @@ SetWithMe.Game = {
         this._setButtonLabel = $('#js_set_button_label');
         this._countDownLabel = $('#js_countdown');
         this._cardsLeftLabel = $('#js_cards_left');
+        this._setsCountLabel = $('#js_sets_count');
         this._CSRFToken = SetWithMe.getCookie('csrftoken');
         this._id = id;
         this._poller = new SetWithMe.Poller('/game/get_status/' + this._id);
@@ -503,6 +504,7 @@ SetWithMe.Game = {
         this._leader = data.game.leader;
 
         this._cardsLeftLabel.text(data.cards_left);
+        this._setsCountLabel.text(data.game.sets_count);
 
         //chat
         var messages = data.chat.splice(0, 10);
