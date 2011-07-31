@@ -2,6 +2,7 @@
 import uuid
 from annoying.decorators import render_to
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.contrib.auth.models import User

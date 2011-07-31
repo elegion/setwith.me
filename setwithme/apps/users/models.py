@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -14,7 +15,25 @@ class WaitingUser(models.Model):
         return self
 
     def serialize(self):
-        return {'username': self.user.username}
+        return get_user_json(self.user)
 
     def __unicode__(self):
-        return u"%s" % (self.user.username)
+        return self.user.username
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    user_pic = models.CharField(max_length=300, default='')
+
+
+def get_user_json(user):
+    profile = UserProfile.objects.get_or_create(user=user)[0]
+    if user.first_name or user.last_name:
+        name = u"%s %s" % (user.first_name, user.last_name)
+    else:
+        name = user.username
+    pic = profile.user_pic if profile.user_pic else settings.DEFAULT_PROFILE_PIC
+    return {'id': user.id,
+            'username': user.username,
+            'name': name,
+            'pic': pic}

@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 
 from game import constants
 from setwithme.apps.game.utils import is_set, Card
+from users.models import get_user_json
 
 
 get_uid = lambda : unicode(uuid.uuid4().hex)
@@ -200,7 +201,8 @@ class GameSession(models.Model):
                 'sets_found': self.sets_found,
                 'failures': self.failures,
                 'score': self.score,
-                'user_name': self.name}
+                'user_name': self.name,
+                'user_data': get_user_json(self.user)}
 
     def update(self):
         self.last_access = datetime.datetime.now()

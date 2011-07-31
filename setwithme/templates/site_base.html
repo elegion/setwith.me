@@ -11,6 +11,7 @@
                 <div>{{ request.user.username }}</div>
                 <div>{{ request.user.first_name }}</div>
                 <div>{{ request.user.last_name }}</div>
+                <div class="photo"><div><img src="{{ user_profile.user_pic }}"></div></div>
                 <form action="{% url core.views.logout %}" method="POST">
                   {% csrf_token %}
                   <button type="submit">Logout</button>

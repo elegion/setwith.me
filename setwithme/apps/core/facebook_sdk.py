@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 
 import facebook
 from django_facebook.middleware import FacebookMiddleware
+from users.models import UserProfile
 
 
 def get_access_token(application_id, application_secret, code, redirect_url):
@@ -162,15 +163,20 @@ class FacebookProfileBackend(ModelBackend):
         """ If we receive a facebook uid then the cookie has already been validated. """
         if fb_uid and fb_graphtoken:
             user, created = User.objects.get_or_create(username=fb_uid)
-            if created:
+            profile = UserProfile.objects.get_or_create(user=user)[0]
+            #if created:
+            if True:
                 # It would be nice to replace this with an asynchronous request
-                graph = facebook.GraphAPI(fb_graphtoken)
+                graph = GraphAPI(fb_graphtoken)
                 me = graph.get_object('me')
                 if me:
+                    print me
                     if me.get('first_name'): user.first_name = me['first_name']
                     if me.get('last_name'): user.last_name = me['last_name']
                     if me.get('email'): user.email = me['email']
-                    # TODO: load profile picture from facebook
+                    pic = GraphAPI().get_connections('%s' % fb_uid, 'picture', type='square')
+                    profile.user_pic = pic.get('url', '')
+                    profile.save()
                     user.save()
             return user
         return None
