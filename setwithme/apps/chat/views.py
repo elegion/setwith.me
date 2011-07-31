@@ -6,12 +6,14 @@ from annoying.decorators import ajax_request
 from django.contrib.auth.models import User
 
 from game.models import Game
+from game.views import update_cache
 from chat.models import ChatMessage
 
 
 @login_required
 @require_POST
 @ajax_request
+@update_cache
 def put_message(request, game_id):
     message = request.POST.get('message', '')
     if not message:

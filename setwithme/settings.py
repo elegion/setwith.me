@@ -208,3 +208,9 @@ try:
     from settings_local import *
 except ImportError:
     pass
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}

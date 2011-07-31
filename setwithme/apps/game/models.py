@@ -130,14 +130,7 @@ class Game(models.Model):
         return cards_to_pop
 
     def has_sets(self):
-        #FIXME: cache that and update on cards removal
-        cards = sorted(self.desk_cards_list)
-        for ncard1, card1 in enumerate(cards):
-            for ncard2, card2 in enumerate(cards[ncard1+1:]):
-                for ncard3, card3 in enumerate(cards[ncard2+ncard1+1+1:]):
-                    if is_set(Card(id=card1), Card(id=card2), Card(id=card3)):
-                        return True
-        return False
+        return self.count_sets() > 0
 
     def count_sets(self):
         cnt = 0
@@ -244,42 +237,11 @@ class GameSession(models.Model):
         self.client_state = ClientConnectionState.ACTIVE
         self.save()
 
-    def _fix_game_state(self):
-        now = datetime.datetime.now()
-        state_pressed = self.state == GameSessionState.SET_PRESSED
-        if state_pressed:
-            if not self.set_pressed_dt or (self.set_pressed_dt and\
-                ((now > self.set_pressed_dt + constants.PRESSED_SET_TIMEOUT))):
-                for gs in self.game.gamesession_set.filter(state=GameSessionState.SET_ANOTHER_USER):
-                    gs.state = GameSessionState.NORMAL
-                    gs.save()
-                self.state = GameSessionState.SET_PENALTY
-                self.failures += 1
-                self.save()
-
-        if not self.game.gamesession_set.exclude(state=GameSessionState.SET_PENALTY).count():
-            self.game.gamesession_set.all().update(state=GameSessionState.NORMAL)
-
-        self.game.gamesession_set\
-            .filter(state=GameSessionState.SET_PENALTY,
-                    set_pressed_dt__lte=now-constants.CLIENT_PENALTY_TIMEOUT)\
-            .update(state=GameSessionState.NORMAL)
-
     def _get_game_state(self):
-        self._fix_game_state()
         return self.state
 
     def _get_client_state(self):
-        now = datetime.datetime.now()
-        if self.last_access + constants.CLIENT_LOST_TIMEOUT < now:
-            self.client_state = ClientConnectionState.LOST
-            self.save()
-            return self.client_state
-        if self.last_access + constants.CLIENT_IDLE_TIMEOUT < now:
-            self.client_state = ClientConnectionState.IDLE
-            self.save()
-            return self.client_state
-        return ClientConnectionState.ACTIVE
+        return self.client_state
 
     @property
     def name(self):
