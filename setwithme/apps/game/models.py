@@ -65,6 +65,22 @@ class Game(models.Model):
         cards.remove(third)
         self.desk_cards_list = cards
 
+    def replace_cards(self, *cards_to_remove):
+        cards = self.desk_cards_list
+        assert len(cards) >= len(cards_to_remove)
+        left_cards = self.rem_cards_list
+        for card in cards_to_remove:
+            try:
+                new_card = random.choice(left_cards)
+            except IndexError:
+                cards.remove(card)
+            else:
+                left_cards.remove(new_card)
+                cards[cards.index(card)] = new_card
+        self.rem_cards_list = left_cards
+        self.desk_cards_list = cards
+
+
     def pop_cards(self, quantity=3):
         cards = self.rem_cards_list
         indexes = []

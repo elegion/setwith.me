@@ -139,8 +139,8 @@ def check_set(request, game_id):
             gs.state = GameSessionState.NORMAL
             gs.sets_found += 1
             gs.save()
-            # Remove cards from desc list
-            game.drop_cards(*ids_lst)
+            # Remove cards from desc list and replace with new, if any
+            game.replace_cards(*ids_lst)
             result = {'success': True, 'msg': 'SET!', 'sets_found': gs.sets_found}
             return add_stat(gs, result)
     else:
