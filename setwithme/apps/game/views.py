@@ -43,7 +43,9 @@ def start_game(request):
         join_timeout = request.session['game_join_timeout'] = now
 
     if join_timeout + constants.GAME_JOIN_WAIT_TIMEOUT > now:
+        time_left = join_timeout + constants.GAME_JOIN_WAIT_TIMEOUT - now
         return {'status': 'polling',
+                'timeout': time_left.seconds,
                 'opponents': [op.serialize() for op in opponents]}
 
     game_id = get_uid()

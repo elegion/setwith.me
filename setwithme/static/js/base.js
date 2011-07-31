@@ -113,6 +113,10 @@ SetWithMe.searchGame = function() {
             }
             $players_list.html(opponents.join(''));
         }
+        if (data.timeout) {
+            $('#countdown').show();
+            $('#countdown .timer').text(data.timeout);
+        }
     };
     poller.start();
 };
