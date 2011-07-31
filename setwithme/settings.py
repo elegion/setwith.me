@@ -205,15 +205,14 @@ LOGIN_URL = '/'
 
 DEFAULT_PROFILE_PIC = os.path.join(STATIC_URL, '/static/images/nophoto.png')
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cache_table',
+    }
+}
+
 try:
     from settings_local import *
 except ImportError:
     pass
-
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/var/tmp/django_cache',
-    }
-}

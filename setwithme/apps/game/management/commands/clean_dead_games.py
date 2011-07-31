@@ -5,13 +5,11 @@ from django.core.management.base import BaseCommand
 from game.models import Game, ClientConnectionState
 
 
-LAST_SESSION_UPDATE_TIMEOUT = datetime.timedelta(minutes=2)
+LAST_SESSION_UPDATE_TIMEOUT = datetime.timedelta(minutes=5)
 
 
 class Command(BaseCommand):
-    help = """ Obtains twitter_id by screen_name for users from old DB
-     and updates twitter_id field """
-    args = 'old_db_name'
+    help = """ Cleans zombie games """
 
     def handle(self, *args, **options):
         cleaned_cnt = 0
@@ -26,8 +24,7 @@ class Command(BaseCommand):
                 for gs in game.gamesession_set.all():
                     gs.client_state = ClientConnectionState.LOST
                     gs.save()
-                game.finished = True
-                game.save()
+                game.finish()
                 cleaned_cnt += 1
         if cleaned_cnt:
             print "Cleaned %s zombie games" % cleaned_cnt

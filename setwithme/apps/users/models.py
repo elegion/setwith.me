@@ -25,6 +25,9 @@ class WaitingUser(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     user_pic = models.CharField(max_length=300, default='')
+    games_total = models.PositiveIntegerField(default=0)
+    games_win = models.PositiveIntegerField(default=0)
+    games_loss = models.PositiveIntegerField(default=0)
 
 
 def get_user_json(user):

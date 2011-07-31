@@ -154,9 +154,21 @@ class Game(models.Model):
             .exclude(state=GameSessionState.LEFT).count()
         is_finished = (active_players < 2) or (not has_cards and not has_sets)
         if is_finished:
-            self.finished = True
-            self.save()
+            self.finish()
         return is_finished
+
+    def finish(self):
+        if self.finished:
+            return
+        for gs in self.gamesession_set.all():
+            if gs.user.pk == self.leader:
+                gs.user.userprofile.games_win += 1
+            else:
+                gs.user.userprofile.games_loss += 1
+            gs.user.userprofile.games_total += 1
+            gs.user.userprofile.save()
+        self.finished = True
+        self.save()
 
     @property
     def leader(self):
