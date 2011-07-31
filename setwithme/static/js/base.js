@@ -154,6 +154,7 @@ SetWithMe.Game = {
             this._setButton.removeClass('disabled');
             this._markingSet = false;
             this._countDownLabel.text('');
+            this._cardsContainer.removeClass('active');
         }
 
         if (newStatus == this.statuses.PENALTY) {
@@ -281,6 +282,12 @@ SetWithMe.Game = {
         })
     },
 
+    _onSendSet: function(data) {
+        if (data.success === true) {
+            this._changeStatus(this.statuses.NORMAL);
+        }
+    },
+
     _sendSet: function(data) {
         this._stopCountDown();
         $.ajax({
@@ -290,6 +297,7 @@ SetWithMe.Game = {
             headers: {
                 'X-CSRFToken': this._CSRFToken
             },
+            success: this._onSendSet.bind(this),
             url: '/game/check_set/' + this._id,
             type: 'POST'
         });
@@ -421,6 +429,9 @@ SetWithMe.Game = {
         }
         if (this._user.state == 'NORMAL') {
             this._changeStatus(this.statuses.NORMAL);
+        }
+        if (this._user.state == 'SET_PRESSED') {
+            this._changeStatus(this.statuses.SET_CHOOSE);
         }
         if (data.game.is_finished) {
             this._changeStatus(this.statuses.GAME_END);
