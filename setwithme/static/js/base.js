@@ -283,7 +283,6 @@ SetWithMe.Game = {
                 attrs[i].push(props[i]);
             }
         });
-        console.debug(attrs);
         for(var i=0; i<attrs.length && valid; i++) {
             $.unique(attrs[i]);
             if (attrs[i].length == 2) {
@@ -316,6 +315,10 @@ SetWithMe.Game = {
 
     _onSendSet: function(data) {
         if (data.success === true) {
+            var $activeCards = $('.active', SetWithMe.Game._cardsContainer);
+            $activeCards.animate({opacity: '0'}, 1000);
+            $activeCards.removeClass('.active');
+            this._updateScore(data);
             this._changeStatus(this.statuses.NORMAL);
         }
     },
@@ -345,6 +348,7 @@ SetWithMe.Game = {
         for (i = 0; i < this._cards.length; i++) {
             if (this._cards[i].id !== newCards[i].id) {
                 changedCards[i] = newCards[i];
+                changedCards[i].oldId = this._cards[i].id;
             }
         }
         return changedCards;
@@ -396,11 +400,29 @@ SetWithMe.Game = {
                 }
                 $player = $('#p' + player.user_id);
             }
-            $player.find('.points .count').text(player.score);
-            $player.find('.sets .count').text(player.sets_found);
-            $player.find('.failures .count').text(player.failures);
+            this._updateScore(player.user_id, player);
+
             $player[0].className =
                     ['player', player.client_state.toLowerCase(), player.state.toLowerCase()].join(' ')
+        }
+    },
+
+    _updateScore: function(user_id, data) {
+        if (data) {
+            var $player = $('#p' + user_id);
+
+            var $p = $player.find('.points .count');
+            var $s = $player.find('.sets .count');
+            var $f = $player.find('.failures .count');
+
+    //        if ($p.text() != data.score) $p.parent().coolfade();
+            $p.text(data.score);
+
+    //        if ($s.text() != data.sets_found) $s.parent().coolfade();
+            $s.text(data.sets_found);
+
+    //        if ($f.text() != data.failures) $f.parent().coolfade();
+            $f.text(data.failures);
         }
     },
 
@@ -420,8 +442,6 @@ SetWithMe.Game = {
             if (setIds = SetWithMe.Game._checkSet($activeCards)) {
                 SetWithMe.Game._sendSet(setIds);
             } else {
-                //SetWithMe.Game._setButtonLabel.text('The cards you are checked is not a set');
-                //SetWithMe.Game._stopCountDown();
                 $activeCards.vibrate();
                 $activeCards.removeClass('active');
             }
@@ -434,9 +454,23 @@ SetWithMe.Game = {
      */
     _onStatusReceived: function(data) {
         if (this._cards) {
-            if (!$.isEmptyObject(this._getChangedCards(data.cards))) {
+            var changed = this._getChangedCards(data.cards);
+            if (!$.isEmptyObject(changed)) {
+                console.debug(changed);
+                for (key in changed) {
+                    if(changed.hasOwnProperty(key)) {
+                        var card = changed[key];
+                        var $place = this._cardsContainer.find('#' + card.oldId);
+                        if ($place.css('opacity') == 0) {
+                            $place.animate({opacity: '0'}, 1000);
+                        }
+                        $place.attr('class', 'card ' + card['class']);
+                        $place.attr('id', card['id'])
+                        $place.animate({opacity: '1'}, 1000);
+                    }
+                }
                 this._cards = data.cards;
-                this._renderCards();
+                //this._renderCards();
                 // TODO re-render changed cards
             }
         } else {
@@ -573,3 +607,7 @@ jQuery.fn.vibrate = function (conf) {
     });
 };
 
+jQuery.fn.coolfade = function() {
+    var self = this;
+    this.fadeOut(function() {self.fadeIn()});
+}
