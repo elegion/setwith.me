@@ -23,6 +23,7 @@ def home(request):
 def lobby(request):
     qs = GameSession.objects.\
         filter(user=request.user,
+               left=False,
                game__finished=False).\
         exclude(client_state=ClientConnectionState.LOST)
     if qs.count():

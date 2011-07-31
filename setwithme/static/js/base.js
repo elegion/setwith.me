@@ -468,7 +468,6 @@ SetWithMe.Game = {
                     if (changed.hasOwnProperty(key)) {
                         var card = changed[key];
                         var $place = this._cardsContainer.find('#' + card.oldId);
-                        console.debug(card)
                         if ($place.length) {
                             if ($place.css('opacity') == 0) {
                                 $place.animate({opacity: '0'}, 1000);
@@ -478,7 +477,6 @@ SetWithMe.Game = {
                             this._bindCardEvents($place);
                             this._cardsContainer.append($place);
                         }
-                        console.debug($place);
                         $place.attr('class', 'card ' + card['class']);
                         $place.attr('id', card['id']);
                         $place.animate({opacity: '1'}, 1000);

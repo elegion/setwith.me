@@ -39,12 +39,17 @@
     </div>
 
     <div class="winner_plate">
-    <h1>Game over. And winner is...</h1>
-    <div id="js_user_place"></div>
-    <div class="share_game">
-        {% include 'game/include/sharing.html' %}
+        <h1>Game over. And winner is...</h1>
+        <div></div>
+        <div id="js_user_place"></div>
+        <div class="share_game">
+            {% include 'game/include/sharing.html' %}
+        </div>
+        <a href="{% url lobby %}" class="playagain">Play one more time</a>
     </div>
-    <a href="{% url lobby %}" class="playagain">Play one more time</a>
+
+    <div>
+        <a href="{% url leave_game game_id %}">Leave game</a>
     </div>
     </div>
 

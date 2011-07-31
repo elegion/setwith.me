@@ -150,7 +150,9 @@ class Game(models.Model):
     def is_finished(self):
         has_cards = len(self.remaining_cards) > 0
         has_sets = self.has_sets()
-        active_players = self.gamesession_set.exclude(client_state=ClientConnectionState.LOST).count()
+        active_players = self.gamesession_set\
+            .exclude(client_state=ClientConnectionState.LOST)\
+            .exclude(state=GameSessionState.LEFT).count()
         is_finished = (active_players < 2) or (not has_cards and not has_sets)
         if is_finished:
             self.finished = True
@@ -161,12 +163,14 @@ class Game(models.Model):
     def leader(self):
         """Determines leading user, can be user after game end for determining winner"""
         scores = self.gamesession_set.exclude(client_state=ClientConnectionState.LOST)\
+            .exclude(state=GameSessionState.LEFT)\
             .values_list('sets_found', 'failures', 'user')
         return max([(score[0] - score[1], score[2]) for score in scores])[1]
 
 
 class GameSessionState:
     NORMAL = "NORMAL"
+    LEFT = "LEFT"
     SET_PRESSED = "SET_PRESSED"
     SET_PENALTY = "SET_PENALTY"
     SET_ANOTHER_USER = "SET_ANOTHER_USER"
@@ -174,6 +178,7 @@ class GameSessionState:
 
 GameSessionStateChoices = (
     (GameSessionState.NORMAL, 'Normal'),
+    (GameSessionState.LEFT, 'Left'),
     (GameSessionState.SET_PRESSED, 'Set pressed'),
     (GameSessionState.SET_PENALTY, 'Set penalty'),
     (GameSessionState.SET_ANOTHER_USER, 'Set another user'),
@@ -208,6 +213,7 @@ class GameSession(models.Model):
     sets_found = models.IntegerField(default=0)
     failures = models.IntegerField(default=0)
     last_access = models.DateTimeField(default=datetime.datetime.now)
+    left = models.BooleanField(default=False)
 
     def press_set(self):
         self.set_pressed_dt = datetime.datetime.now()

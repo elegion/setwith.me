@@ -551,6 +551,9 @@ a.pseudo:hover {
 .players .player.lost {
     opacity: 0.2;
 }
+.players .player.left {
+    opacity: 0.2;
+}
 
 .player {
     overflow: hidden;

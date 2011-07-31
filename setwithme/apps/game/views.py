@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 import datetime
 import json
-from django.contrib.auth.decorators import login_required
 
-from django.core.urlresolvers import reverse
 from annoying.decorators import ajax_request, render_to
+from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404, redirect
 
-from game.models import Game, GameSession, GameSessionState, ClientConnectionState, get_uid
+from chat.models import ChatMessage
+from game import constants
+from game.models import ClientConnectionState, Game, GameSession, GameSessionState, get_uid
 from game.utils import Card, is_set
 from users.models import WaitingUser
-from game import constants
-from chat.models import ChatMessage
 
 
 @render_to('game/game_screen.html')
@@ -37,7 +37,9 @@ def game_screen(request, game_id):
 def start_game(request):
     user = request.user
     qs = GameSession.objects.\
-        filter(user=user, game__finished=False).exclude(client_state=ClientConnectionState.LOST)
+        filter(user=user,
+               left=False,
+               game__finished=False).exclude(client_state=ClientConnectionState.LOST)
     if qs.count():
         gs = qs.all()[0]
         return {'status': 302,
@@ -167,3 +169,12 @@ def check_set(request, game_id):
         gs.save()
         return add_stat(gs, {'success': False, 'msg': 'Not in time!'})
 
+
+def leave_game(request, game_id):
+    gs = get_object_or_404(request.user.gamesession_set, game=game_id, left=False)
+    gs.state = GameSessionState.LEFT
+    gs.left = True
+    gs.save()
+    gs.game.finished = True
+    gs.game.save()
+    return redirect('/')

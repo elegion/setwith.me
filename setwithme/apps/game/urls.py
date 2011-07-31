@@ -8,4 +8,5 @@ urlpatterns = patterns('game.views',
     url(r'^get_status/(?P<game_id>[\w]+)$', 'get_status'),
     url(r'^put_set_mark/(?P<game_id>[\w]+)$', 'put_set_mark'),
     url(r'^check_set/(?P<game_id>[\w]+)$', 'check_set'),
+    url(r'^leave/(?P<game_id>[\w]+)$', 'leave_game', name='leave_game'),
 )
