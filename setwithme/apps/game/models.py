@@ -111,12 +111,14 @@ class GameSessionState:
     NORMAL = "NORMAL"
     SET_PRESSED = "SET_PRESSED"
     SET_PENALTY = "SET_PENALTY"
+    SET_ANOTHER_USER = "SET_ANOTHER_USER"
 
 
 GameSessionStateChoices = (
     (GameSessionState.NORMAL, 'Normal'),
     (GameSessionState.SET_PRESSED, 'Set pressed'),
     (GameSessionState.SET_PENALTY, 'Set penalty'),
+    (GameSessionState.SET_ANOTHER_USER, 'Set another user'),
 )
 
 
@@ -181,6 +183,9 @@ class GameSession(models.Model):
         if state_pressed:
             if not self.set_pressed_dt or (self.set_pressed_dt and\
                 ((now > self.set_pressed_dt + constants.PRESSED_SET_TIMEOUT))):
+                for gs in self.game.gamesession_set.filter(state=GameSessionState.SET_ANOTHER_USER):
+                    gs.state = GameSessionState.NORMAL
+                    gs.save()
                 self.state = GameSessionState.SET_PENALTY
                 self.save()
 
