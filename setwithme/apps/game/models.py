@@ -21,10 +21,19 @@ attributes = {'color': ('red', 'green', 'purple'),
               'shading': ('solid', 'open', 'striped')}
 
 
-def default_remaining_cards():
+def initial_cards(desk=True):
     ids = range(81)
     random.shuffle(ids)
-    return ','.join(map(str, ids))
+    def get_desk():
+        return ','.join(
+            map(str,
+                ids[:constants.CARDS_ON_DESK]))
+    def get_remaining():
+        return ','.join(
+            map(str,
+                ids[constants.CARDS_ON_DESK:]))
+    return get_desk if desk else get_remaining
+
 
 
 class Game(models.Model):
@@ -33,8 +42,10 @@ class Game(models.Model):
     start = models.DateTimeField(default=datetime.datetime.now)
     end = models.DateTimeField(null=True, default=None)
     remaining_cards = models.CommaSeparatedIntegerField(
-        max_length=250, default=default_remaining_cards)
-    desk_cards = models.CommaSeparatedIntegerField(max_length=250, default='')
+        max_length=250, default=initial_cards(desk=False))
+    desk_cards = models.CommaSeparatedIntegerField(
+        max_length=250,
+        default=initial_cards(desk=True))
 
     @property
     def rem_cards_list(self):
@@ -125,6 +136,16 @@ class Game(models.Model):
                     if is_set(Card(id=card1), Card(id=card2), Card(id=card3)):
                         return True
         return False
+
+    def count_sets(self):
+        cnt = 0
+        cards = sorted(self.desk_cards_list)
+        for ncard1, card1 in enumerate(cards):
+            for ncard2, card2 in enumerate(cards[ncard1+1:]):
+                for ncard3, card3 in enumerate(cards[ncard2+ncard1+1+1:]):
+                    if is_set(Card(id=card1), Card(id=card2), Card(id=card3)):
+                        cnt += 1
+        return cnt
 
     def is_finished(self):
         has_cards = len(self.remaining_cards) > 0

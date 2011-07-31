@@ -222,7 +222,9 @@ SetWithMe.Game = {
         this._poller = new SetWithMe.Poller('/game/get_status/' + this._id);
         this._poller.onSuccess = this._onStatusReceived.bind(this);
         this._poller.onError = this._poller.onSuccess.bind(this);
-        this._poller.start();
+        this._onStatusReceived(SetWithMe.gameInitialStatus);
+        window.setTimeout(this._poller.start.bind(this._poller), 1000);
+
 
         this._status = this.statuses.NORMAL;
         this._statusInterval = setInterval(SetWithMe.Game._updateStatus, 1000);

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+import json
 from django.contrib.auth.decorators import login_required
 
 from django.core.urlresolvers import reverse
@@ -14,7 +15,22 @@ from chat.models import ChatMessage
 
 @render_to('game/game_screen.html')
 def game_screen(request, game_id):
-    return {'game_id': game_id}
+    game = Game.objects.get(id=game_id)
+    users = [gs.serialize(request.user.id) for gs in \
+        game.gamesession_set.all()]
+    desc_cards = game.desk_cards_list
+    rem_cards_cnt = len(game.rem_cards_list)
+    initial_status= {'users': users,
+                     'cards': [{'id': card_id,
+                                'class': Card(id=card_id).as_text()} \
+                                    for card_id in desc_cards],
+                     'cards_left': rem_cards_cnt,
+                     'game': {
+                         'is_finished': game.is_finished(),
+                         'leader': game.leader},
+                     'chat': []}
+    return {'game_id': game_id,
+            'initial_status': json.dumps(initial_status, separators=(',',':'))}
 
 
 @ajax_request
@@ -80,6 +96,8 @@ def get_status(request, game_id):
                         for card_id in desc_cards],
             'cards_left': rem_cards_cnt,
             'game': {
+                'has_sets': game.has_sets(),
+                'sets_count': game.count_sets(),
                 'is_finished': game.is_finished(),
                 'leader': game.leader},
             'chat': [cm.get_serialized(request.user) for cm in chat_qs]}

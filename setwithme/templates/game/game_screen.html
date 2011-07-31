@@ -11,6 +11,7 @@
             SetWithMe.Game.init('{{ game_id }}');
             $('#js_set_button').click(SetWithMe.Game.markSet.bind(SetWithMe.Game));
         });
+        SetWithMe.gameInitialStatus = {{ initial_status|safe }};
     </script>
 {% endblock %}
 
