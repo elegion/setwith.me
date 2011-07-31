@@ -105,7 +105,12 @@ def check_set(request, game_id):
         if not all(card_id in desk_cards_lst for card_id in ids_lst):
             return {'success': False, 'msg': 'Not all card were on desk'}
         cards = [Card(id=card_id) for card_id in ids_lst]
-        if not is_set(*cards):
+        def is_set_wrapper(*args):
+            if constants.CANCEL_SET_CHECK:
+                return True
+            else:
+                return is_set(*args)
+        if not is_set_wrapper(*cards):
             gs.state = GameSessionState.SET_PENALTY
             gs.failures += 1
             gs.save()

@@ -26,3 +26,8 @@ CARDS_ON_DESK = getattr(
     settings,
     "CARDS_ON_DESK",
     16)
+
+CANCEL_SET_CHECK = getattr(
+    settings,
+    "CANCEL_SET_CHECK",
+    False)
