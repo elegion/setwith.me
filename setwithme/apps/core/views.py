@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from annoying.decorators import render_to
+import datetime
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
@@ -14,7 +15,10 @@ from users.models import WaitingUser
 
 @render_to('core/index.html')
 def home(request):
-    return {'players': User.objects.count(),
+    ONLINE_TIMEOUT = datetime.timedelta(minutes=30)
+    now = datetime.datetime.now()
+    guard = now - ONLINE_TIMEOUT
+    return {'players': User.objects.filter(last_login__gt=guard).count(),
             'games_online': Game.objects.filter(finished=False).count()}
 
 
