@@ -194,6 +194,7 @@ SetWithMe.Game = {
             $('#p' + this._leader).clone().appendTo($('#js_user_place'));
             this.uninit();
             $('.winner_plate').show();
+            $('.hideall').show();
         }
 
         if (newStatus == this.statuses.SET_ANOTHER_USER) {
@@ -469,6 +470,7 @@ SetWithMe.Game = {
     },
 
     _updateCardsContainerWidth: function data(cards) {
+        return false;
         //fix layout to cards
         var $gf = $('.gamefield');
         var baseWidth = parseInt($gf.css('width'));

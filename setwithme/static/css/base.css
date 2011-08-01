@@ -291,9 +291,10 @@ a.pseudo:hover {
         font-style: italic;
         font-weight: bold;
         text-shadow: #5b6064 0 -1px 0;
-        width: 60em;
+        width: 30em;
         margin: 0 auto;
         text-align: center;
+        line-height: 150%;
     }
 .tape {
     width: 400px;
@@ -539,13 +540,13 @@ a.pseudo:hover {
 .game .inner_wrapper {
     margin: 0 auto;
     width: 90%;
-    min-width: 850px;
-    max-width: 1000px;
+    min-width: 1000px;
+    max-width: 1100px;
     overflow: auto;
 }
 
 .game .gamefield {
-    width: 600px;
+    width: 676px;
     overflow: hidden;
 }
     .game .set_button {
