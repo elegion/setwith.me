@@ -64,7 +64,7 @@
     <ul class="top_users">
         {% for user in top_users %}
         <li class="top_user">
-            <img class="photo" src="{{ user_profile.user_pic }}">
+            <img class="photo" src="{{ user.get_user_pic }}">
             <div class="info">
                 <div class="name">{{ user.user.first_name }} {{ user.user.last_name }}</div>
                 <div class="stats">win {{ user.games_win }}, loss {{ user.games_loss }}</div>

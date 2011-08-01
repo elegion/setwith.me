@@ -29,15 +29,18 @@ class UserProfile(models.Model):
     games_win = models.PositiveIntegerField(default=0)
     games_loss = models.PositiveIntegerField(default=0)
 
+    def get_user_pic(self):
+        return self.user_pic if self.user_pic \
+            else settings.DEFAULT_PROFILE_PIC
+
 
 def get_user_json(user):
     profile = UserProfile.objects.get_or_create(user=user)[0]
+    pic = profile.get_user_pic()
     if user.first_name or user.last_name:
         name = u"%s %s" % (user.first_name, user.last_name)
     else:
         name = user.username
-    pic = profile.user_pic if profile.user_pic \
-        else settings.DEFAULT_PROFILE_PIC
     return {'id': user.id,
             'username': user.username,
             'name': name,
