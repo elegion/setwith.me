@@ -34,7 +34,7 @@ class GameModelTestCase(TestCase):
         return game
 
     def test_game_drop_cards(self):
-        game = Game.objects.create()
+        game = Game.create()
         shown_cards = game.pop_cards()
         self.assertEqual(len(game.rem_cards_list), 81 - 3 - 12)
         self.assertEqual(len(game.desk_cards_list), 3 + 12)
@@ -53,7 +53,7 @@ class GameModelTestCase(TestCase):
         self.assertEqual(False, game.has_sets())
 
     def test_game_rem_cards(self):
-        game = Game.objects.create()
+        game = Game.create()
         rem_lst = game.rem_cards_list
         self.assertEqual(len(rem_lst), 81 - 12)
         desk_lst = game.desk_cards_list
@@ -71,6 +71,17 @@ class GameModelTestCase(TestCase):
             username=user_uuid,
             defaults={'first_name': 'Anon %s' % (user_uuid[:4],)})
         return user
+
+    def test_game_init_random_cards(self):
+        game_1 = Game.create(id='game_1')
+        self.assertIsNotNone(game_1)
+        game_2 = Game.create(id='game_2')
+        self.assertIsNotNone(game_2)
+        desk_1 = game_1.desk_cards_list
+        desk_2 = game_2.desk_cards_list
+        self.assertEqual(len(desk_1), constants.CARDS_ON_DESK)
+        self.assertEqual(len(desk_2), constants.CARDS_ON_DESK)
+        self.assertNotEqual(desk_1, desk_2)
 
 
 class UtilsTestCase(TestCase):

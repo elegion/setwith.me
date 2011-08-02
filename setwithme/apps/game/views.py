@@ -72,7 +72,7 @@ def start_game(request):
                 'opponents': [op.serialize() for op in opponents]}
 
     game_id = get_uid()
-    game = Game.objects.create(id=game_id)
+    game = Game.create(id=game_id)
     GameSession.objects.create(game=game, user=user)
     wu.delete()
     for op in opponents:
