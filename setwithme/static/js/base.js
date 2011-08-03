@@ -190,6 +190,7 @@ SetWithMe.Game = {
         }
 
         if (newStatus == this.statuses.GAME_END) {
+            // TODO: handle games without leader
             $('#js_user_place').text('');
             $('#p' + this._leader).clone().appendTo($('#js_user_place'));
             this.uninit();

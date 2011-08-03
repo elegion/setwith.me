@@ -155,9 +155,10 @@ class Game(models.Model):
         if self.finished:
             return
         for gs in self.gamesession_set.all():
+            # If there is no leader - do not count win/loss
             if gs.user.pk == self.leader:
                 gs.user.userprofile.games_win += 1
-            else:
+            elif self.leader:
                 gs.user.userprofile.games_loss += 1
             gs.user.userprofile.games_total += 1
             gs.user.userprofile.save()
@@ -172,6 +173,8 @@ class Game(models.Model):
             exclude(client_state=ClientConnectionState.LOST)\
             .exclude(state=GameSessionState.LEFT)\
             .values_list('sets_found', 'failures', 'user')
+        if not scores:
+            return None
         return max([(score[0] - score[1], score[2]) for score in scores])[1]
 
 
