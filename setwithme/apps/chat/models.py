@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-import time
 import datetime
+import time
 
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 from game.models import Game
 

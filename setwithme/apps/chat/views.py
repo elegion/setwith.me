@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-
+from annoying.decorators import ajax_request
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from annoying.decorators import ajax_request
-from django.contrib.auth.models import User
 
 from game.models import Game
 from game.views import update_cache

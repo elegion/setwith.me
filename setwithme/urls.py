@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
 
+    url(r'^', include('auth.urls')),
     url(r'^', include('core.urls')),
     url(r'^users/', include('users.urls')),
     url(r'^game/', include('game.urls')),

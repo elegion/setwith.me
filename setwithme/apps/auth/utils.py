@@ -2,12 +2,7 @@
 import urllib
 import urllib2
 
-from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth.models import User
-
 import facebook
-from django_facebook.middleware import FacebookMiddleware
-from users.models import UserProfile
 
 
 def get_access_token(application_id, application_secret, code, redirect_url):
@@ -133,53 +128,3 @@ class GraphAPI(facebook.GraphAPI):
             return super(GraphAPI, self).fql(query, args, post_args)
         except urllib2.HTTPError as error:
             handle_error(error)
-
-
-class DjangoFacebook(object):
-    """ Simple accessor object for the Facebook user.
-     Uses tweaked GraphAPI class
-    """
-    def __init__(self, user):
-        self.user = user
-        self.uid = user['uid']
-        self.access_token = user['access_token']
-        self.graph = GraphAPI(user['access_token'])
-
-
-class SetWithMeFacebookMiddleware(FacebookMiddleware):
-    """
-    We don't need auth_login action at every request
-    That's why we re-implement middleware
-    """
-
-    def process_request(self, request):
-        fb_user = self.get_fb_user(request)
-        request.facebook = DjangoFacebook(fb_user) if fb_user else None
-        return None
-
-
-class FacebookProfileBackend(ModelBackend):
-    """ Authenticate a facebook user and autopopulate facebook data into the users profile. """
-    def authenticate(self, fb_uid=None, fb_graphtoken=None):
-        """ If we receive a facebook uid then the cookie has already been validated. """
-        if fb_uid and fb_graphtoken:
-            user, created = User.objects.get_or_create(username=fb_uid)
-            profile = UserProfile.objects.get_or_create(user=user)[0]
-            #if created:
-            if True:
-                # It would be nice to replace this with an asynchronous request
-                graph = GraphAPI(fb_graphtoken)
-                me = graph.get_object('me')
-                if me:
-                    print me
-                    if me.get('first_name'): user.first_name = me['first_name']
-                    if me.get('last_name'): user.last_name = me['last_name']
-                    if me.get('email'): user.email = me['email']
-                    pic = GraphAPI().get_connections('%s' % fb_uid,
-                                                     'picture',
-                                                     type='square')
-                    profile.user_pic = pic.get('url', '')
-                    profile.save()
-                    user.save()
-            return user
-        return None

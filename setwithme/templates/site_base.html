@@ -13,7 +13,7 @@
                 <div class="name">{{ request.user.first_name }} {{ request.user.last_name }}</div>
                 <div class="stat">win {{ request.user.userprofile.games_win }} | lose {{ request.user.userprofile.games_loss }}</div>
                   </div>
-                <form class="logout" action="{% url core.views.logout %}" method="POST">
+                <form class="logout" action="{% url logout %}" method="POST">
                   {% csrf_token %}
                   <button type="submit">Logout</button>
                 </form>

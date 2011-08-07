@@ -7,14 +7,41 @@ $.extend(SetWithMe, {
 
 SetWithMe.initFacebookLogin = function() {
     var $login_form = $('#js_facebook_login'),
-    $login_button = $login_form.find('.js_submit');
+    $login_button = $login_form.find('.js_submit', $login_form);
     $login_button.click(function(event) {
         event.preventDefault();
         FB.login(function(response) {
             if (response && response.status == 'connected') {
-                window.location.replace('/login/facebook/');
+                $login_form.submit();
             }
         });
+    });
+};
+
+SetWithMe.initVkontakteLogin = function(apiKey) {
+    VK.init({
+        apiId: apiKey
+    });
+
+    var $form = $('#js_vk_login'),
+        $vkBtn = $('.js_submit', $form),
+        doLogin = function() {
+            VK.Auth.login(function(response) {
+                if (response && response.status === 'connected') {
+                    $form.submit();
+                }
+            })
+        };
+
+    $vkBtn.click(function(event) {
+        event.preventDefault();
+        VK.Auth.getLoginStatus(function(response) {
+            if (response.session) {
+                $form.submit();
+            } else {
+                doLogin();
+            }
+        })
     });
 };
 

@@ -111,14 +111,15 @@ MIDDLEWARE_CLASSES = (
     'core.middleware.CsrfFixMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'core.facebook_sdk.SetWithMeFacebookMiddleware',
-    'core.middleware.UserOnlineMiddleware',
+    'auth.middleware.FacebookMiddleware',
+    'auth.middleware.VkontakteMiddleware',
+    'users.middleware.UserOnlineMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.request',
-    'core.context_processors.user_profile',
+    'users.context_processors.user_profile',
 )
 
 
@@ -146,6 +147,7 @@ INSTALLED_APPS = (
     'django_facebook',
 
     # Our apps
+    'auth',
     'core',
     'users',
     'game',
@@ -195,13 +197,24 @@ SESSION_SAVE_EVERY_REQUEST = True
 FACEBOOK_APP_ID = '259283820765276'
 FACEBOOK_SECRET_KEY = '4920c31ec084157c03a22f2089812039'
 
+# setwithme.loc:8000
+#VK_APP_ID = '2433440'
+#VK_SECRET_KEY = 'd3NJUTrYacWLt8sXag9H'
+
+# setwith.me
+VK_APP_ID = '2434483'
+VK_SECRET_KEY = '5PT6SMT3r3WWt5YQ60b5'
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'core.facebook_sdk.FacebookProfileBackend',
-    'core.anon_backend.AnonymousBackend',
+    'auth.backends.FacebookBackend',
+    'auth.backends.VkontakteBackend',
+    'auth.backends.AnonymousBackend',
 )
 
 LOGIN_URL = '/'
+REDIRECT_AFTER_LOGIN = '/lobby/'
+REDIRECT_AFTER_LOGOUT = '/'
 
 DEFAULT_PROFILE_PIC = os.path.join(STATIC_URL, '/static/images/nophoto.png')
 
