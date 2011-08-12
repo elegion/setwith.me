@@ -226,6 +226,24 @@ CACHES = {
     }
 }
 
+# For django-celery:
+import djcelery
+djcelery.setup_loader()
+
+# Celery settings:
+
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "setwithme"
+BROKER_PASSWORD = "setiwthme"
+BROKER_VHOST = "setiwthme"
+
+CELERY_RESULT_BACKEND = "amqp"
+CELERY_SEND_TASK_ERROR_EMAILS = True
+TASK_RESULT_EXPIRES = 300 # Task result expires in five minutes
+CELERYD_CONCURRENCY = 0
+
+
 try:
     from settings_local import *
 except ImportError:
