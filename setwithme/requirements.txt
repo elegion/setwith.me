@@ -6,6 +6,7 @@ South==0.7.3
 django-annoying==0.7.6
 vkontakte==0.9.5
 Unidecode==0.04.7
+celery==2.3.1
 
 # For Facebook integration
 -e git://github.com/pythonforfacebook/facebook-sdk.git@b5ee678115391885a00cfd1ee114c6b5b22f7a55#egg=facebook_sdk-dev
