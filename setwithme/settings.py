@@ -145,7 +145,7 @@ INSTALLED_APPS = (
     # Third-party apps
     'south',
     'django_facebook',
-    'celery',
+    'djcelery',
 
     # Our apps
     'auth',
